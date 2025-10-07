@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { GameProvider } from '@/contexts/GameContext'
 
 export const metadata: Metadata = {
   title: 'Guess Player - Jeu de devinettes football',
@@ -13,7 +15,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body>
+        <AuthProvider>
+          <GameProvider>
+            {children}
+          </GameProvider>
+        </AuthProvider>
+      </body>
     </html>
   )
 }

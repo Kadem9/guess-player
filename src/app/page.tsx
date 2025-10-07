@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-base-200">
@@ -8,16 +10,16 @@ export default function Home() {
               Guess Player
             </h1>
             <p className="text-xl mb-8">
-              Devinez les joueurs de football !
+              Devinez les joueurs de football en mode tour par tour avec vos amis !
             </p>
             
             <div className="flex gap-4 justify-center flex-wrap">
-              <button className="btn btn-primary btn-lg">
+              <Link href="/login" className="btn btn-primary btn-lg">
                 Connexion
-              </button>
-              <button className="btn btn-secondary btn-lg">
+              </Link>
+              <Link href="/register" className="btn btn-secondary btn-lg">
                 Inscription
-              </button>
+              </Link>
             </div>
           </div>
         </div>
