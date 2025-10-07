@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "nom": "Mbappé",
+    "equipe": "Real Madrid",
+    "position": "Attaquant",
+    "nationalite": "Française",
+    "image": "/images/mbappe.jpg",
+    "indice": "Il a marqué en finale de Coupe du Monde à 19 ans"
+  },
+  {
+    "id": "2", 
+    "nom": "Messi",
+    "equipe": "Inter Miami",
+    "position": "Attaquant",
+    "nationalite": "Argentine",
+    "image": "/images/messi.jpg",
+    "indice": "Il a 8 Ballons d'Or"
+  },
+  {
+    "id": "3",
+    "nom": "Benzema",
+    "equipe": "Al-Ittihad",
+    "position": "Attaquant", 
+    "nationalite": "Française",
+    "image": "/images/benzema.jpg",
+    "indice": "Il a remporté le Ballon d'Or en 2022"
+  },
+  {
+    "id": "4",
+    "nom": "Haaland",
+    "equipe": "Manchester City",
+    "position": "Attaquant",
+    "nationalite": "Norvégienne",
+    "image": "/images/haaland.jpg", 
+    "indice": "Il mesure 1m94 et joue pour Manchester City"
+  },
+  {
+    "id": "5",
+    "nom": "Neymar",
+    "equipe": "Al-Hilal",
+    "position": "Attaquant",
+    "nationalite": "Brésilienne",
+    "image": "/images/neymar.jpg",
+    "indice": "Il a été transféré pour 222M€ au PSG"
+  }
+]
