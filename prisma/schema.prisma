@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  nom           String
+  prenom        String
+  email         String   @unique
+  username      String   @unique
+  password      String
+  isEmailVerified Boolean @default(false)
+  emailToken    String?  @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  hostedGames   Game[]   @relation("HostedGames")
+  gamePlayers   GamePlayer[]
+  scores        Score[]
+
+  @@map("users")
+}
+
+model Game {
+  id                String      @id @default(cuid())
+  hostId            String
+  currentPlayerIndex Int        @default(0)
+  status            GameStatus  @default(WAITING)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  winner            String?
+
+  // Relations
+  host              User        @relation("HostedGames", fields: [hostId], references: [id], onDelete: Cascade)
+  players           GamePlayer[]
+  questions         Question[]
+
+  @@map("games")
+}
+
+model GamePlayer {
+  id            String @id @default(cuid())
+  gameId        String
+  userId        String
+  username      String
+  score         Int    @default(0)
+  isHost        Boolean @default(false)
+  isCurrentPlayer Boolean @default(false)
+
+  // Relations
+  game          Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([gameId, userId])
+  @@map("game_players")
+}
+
+model Question {
+  id        String @id @default(cuid())
+  gameId    String
+  playerId  String
+  question  String
+  answer    String
+  isAnswered Boolean @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  game      Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@map("questions")
+}
+
+model Score {
+  id        String @id @default(cuid())
+  userId    String
+  gameId    String
+  score     Int
+  rank      Int
+  playedAt  DateTime @default(now())
+
+  // Relations
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("scores")
+}
+
+enum GameStatus {
+  WAITING
+  PLAYING
+  FINISHED
+}
