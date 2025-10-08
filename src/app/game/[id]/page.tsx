@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FaArrowLeft, FaUsers, FaPlay, FaClock, FaTrophy } from 'react-icons/fa';
 import Link from 'next/link';
 
@@ -50,15 +50,8 @@ export default function GamePage({ params }: { params: { id: string } }) {
     }
   }, [user, isLoading, router]);
 
-  useEffect(() => {
-    if (user && params.id) {
-      fetchGame();
-    }
-  }, [user, params.id]);
-
-  const fetchGame = async () => {
+  const fetchGame = useCallback(async () => {
     try {
-      setLoading(true);
       const response = await fetch(`/api/games/${params.id}`, {
         credentials: 'include',
       });
@@ -71,12 +64,24 @@ export default function GamePage({ params }: { params: { id: string } }) {
 
       setGame(data.game);
       setIsHost(data.isHost);
+      
+      if (data.game.status === 'IN_PROGRESS') {
+        router.push(`/game/${params.id}/play`);
+      }
     } catch (error: any) {
       setError(error.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id, router]);
+
+  useEffect(() => {
+    if (user && params.id) {
+      fetchGame();
+      const interval = setInterval(fetchGame, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [user, params.id, fetchGame]);
 
   const handleStartGame = async () => {
     setStarting(true);

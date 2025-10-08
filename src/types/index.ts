@@ -60,7 +60,11 @@ export interface GameContextType {
   joinGame: (gameId: string) => Promise<void>;
   createGame: () => Promise<string>;
   leaveGame: () => void;
-  makeGuess: (guess: string) => Promise<boolean>;
+  makeGuess: (guess: string, playerId: string) => Promise<boolean>;
+  emitNewTurn: (gameId: string, currentPlayerId: string, turn: number) => void;
+  emitScoreUpdate: (gameId: string, playerId: string, score: number) => void;
+  emitNewQuestion: (gameId: string, playerData: any) => void;
+  emitGameEnded: (gameId: string, winner: any, finalScores: any[]) => void;
 }
 
 // Types pour les scores
