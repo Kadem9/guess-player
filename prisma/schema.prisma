@@ -16,11 +16,12 @@ model User {
   password      String
   isEmailVerified Boolean @default(false)
   emailToken    String?  @unique
+  resetPasswordToken String? @unique
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   // Relations
-  hostedGames   Game[]   @relation("HostedGames")
+  gamesCreated  Game[]   @relation("GameCreator")
   gamePlayers   GamePlayer[]
   scores        Score[]
 
@@ -28,70 +29,66 @@ model User {
 }
 
 model Game {
-  id                String      @id @default(cuid())
-  hostId            String
-  currentPlayerIndex Int        @default(0)
-  status            GameStatus  @default(WAITING)
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  winner            String?
+  id          String       @id @default(cuid())
+  creatorId   String
+  status      GameStatus   @default(WAITING)
+  currentTurn Int          @default(0)
+  maxPlayers  Int          @default(2)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
-  // Relations
-  host              User        @relation("HostedGames", fields: [hostId], references: [id], onDelete: Cascade)
-  players           GamePlayer[]
-  questions         Question[]
+  creator     User         @relation("GameCreator", fields: [creatorId], references: [id])
+  players     GamePlayer[]
+  questions   Question[]
+  scores      Score[]
 
   @@map("games")
 }
 
 model GamePlayer {
-  id            String @id @default(cuid())
-  gameId        String
-  userId        String
-  username      String
-  score         Int    @default(0)
-  isHost        Boolean @default(false)
-  isCurrentPlayer Boolean @default(false)
+  id        String   @id @default(cuid())
+  gameId    String
+  userId    String
+  joinedAt  DateTime @default(now())
+  isHost    Boolean  @default(false)
+  score     Int      @default(0)
 
-  // Relations
-  game          Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game      Game     @relation(fields: [gameId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@unique([gameId, userId])
   @@map("game_players")
 }
 
 model Question {
-  id        String @id @default(cuid())
+  id        String   @id @default(cuid())
   gameId    String
-  playerId  String
-  question  String
-  answer    String
-  isAnswered Boolean @default(false)
+  playerId  String // The player to guess
+  round     Int
   createdAt DateTime @default(now())
 
-  // Relations
-  game      Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  game      Game     @relation(fields: [gameId], references: [id])
 
   @@map("questions")
 }
 
 model Score {
-  id        String @id @default(cuid())
-  userId    String
+  id        String   @id @default(cuid())
   gameId    String
+  userId    String
   score     Int
-  rank      Int
-  playedAt  DateTime @default(now())
+  won       Boolean
+  createdAt DateTime @default(now())
 
-  // Relations
-  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game      Game     @relation(fields: [gameId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("scores")
 }
 
 enum GameStatus {
   WAITING
-  PLAYING
+  IN_PROGRESS
   FINISHED
+  CANCELLED
 }

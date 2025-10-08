@@ -33,6 +33,42 @@ export function verifyToken(token: string): any {
   }
 }
 
+export async function verifyTokenFromRequest(request: any): Promise<User | null> {
+  try {
+    const token = request.cookies.get('auth-token')?.value;
+
+    if (!token) {
+      return null;
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      return null;
+    }
+
+    // Import dynamique de prisma pour éviter les problèmes de circular import
+    const { prisma } = await import('@/lib/prisma');
+    
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      select: {
+        id: true,
+        nom: true,
+        prenom: true,
+        email: true,
+        username: true,
+        isEmailVerified: true,
+        createdAt: true,
+      }
+    });
+
+    return user;
+  } catch (error) {
+    console.error('Erreur lors de la vérification du token:', error);
+    return null;
+  }
+}
+
 export function generateEmailToken(): string {
   return Math.random().toString(36).substring(2, 15) + 
          Math.random().toString(36).substring(2, 15);

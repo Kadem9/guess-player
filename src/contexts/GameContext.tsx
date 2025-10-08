@@ -10,12 +10,20 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const joinGame = async (gameId: string): Promise<void> => {
     try {
-      // TODO: Appel API pour rejoindre la partie
-      console.log('Tentative de rejoindre la partie:', gameId);
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      throw new Error('API non implémentée encore');
+      const response = await fetch('/api/games/join', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId }),
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de la connexion');
+      }
+
+      setCurrentGame(data.game);
     } catch (error) {
       console.error('Erreur lors de la connexion à la partie:', error);
       throw error;
@@ -24,12 +32,19 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const createGame = async (): Promise<string> => {
     try {
-      // TODO: Appel API pour créer une partie
-      console.log('Création d\'une nouvelle partie...');
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      throw new Error('API non implémentée encore');
+      const response = await fetch('/api/games/create', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de la création');
+      }
+
+      setCurrentGame(data.game);
+      return data.game.id;
     } catch (error) {
       console.error('Erreur lors de la création de la partie:', error);
       throw error;
