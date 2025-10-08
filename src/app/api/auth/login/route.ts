@@ -64,7 +64,8 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json(
       { 
         message: 'Connexion réussie',
-        user: userResponse 
+        user: userResponse,
+        token: token
       },
       { status: 200 }
     );

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaArrowLeft, FaGamepad } from 'react-icons/fa';
 import Link from 'next/link';
+import { gameApi } from '@/lib/api';
 
 export default function CreateGamePage() {
   const { user, isLoading } = useAuth();
@@ -23,17 +24,7 @@ export default function CreateGamePage() {
     setError('');
 
     try {
-      const response = await fetch('/api/games/create', {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la création');
-      }
-
+      const data = await gameApi.create();
       router.push(`/game/${data.game.id}`);
     } catch (error: any) {
       setError(error.message);

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaArrowLeft, FaUsers } from 'react-icons/fa';
 import Link from 'next/link';
+import { gameApi } from '@/lib/api';
 
 export default function JoinGamePage() {
   const { user, isLoading } = useAuth();
@@ -25,19 +26,7 @@ export default function JoinGamePage() {
     setError('');
 
     try {
-      const response = await fetch('/api/games/join', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId: gameCode.trim() }),
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la connexion');
-      }
-
+      const data = await gameApi.join(gameCode.trim());
       router.push(`/game/${gameCode.trim()}`);
     } catch (error: any) {
       setError(error.message);

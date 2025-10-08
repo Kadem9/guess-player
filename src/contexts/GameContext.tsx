@@ -3,12 +3,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Game, GameContextType } from '@/types';
 import { useSocket } from '@/hooks/useSocket';
+import { useAuth } from './AuthContext';
+import { gameApi } from '@/lib/api';
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
+  const { token } = useAuth();
   const [currentGame, setCurrentGame] = useState<Game | null>(null);
-  const { socket, joinGame, leaveGame, emitNewTurn, emitScoreUpdate, emitNewQuestion, emitGuessSubmitted, emitGameEnded } = useSocket();
+  const { socket, joinGame, leaveGame, emitNewTurn, emitScoreUpdate, emitNewQuestion, emitGuessSubmitted, emitGameEnded } = useSocket(token);
 
   useEffect(() => {
     if (!socket) return;
@@ -51,19 +54,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const joinGameSocket = async (gameId: string): Promise<void> => {
     try {
-      const response = await fetch('/api/games/join', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId }),
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la connexion');
-      }
-
+      const data = await gameApi.join(gameId);
       setCurrentGame(data.game);
       // Rejoindre la room Socket.IO
       joinGame(gameId);
@@ -75,17 +66,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const createGameSocket = async (): Promise<string> => {
     try {
-      const response = await fetch('/api/games/create', {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la création');
-      }
-
+      const data = await gameApi.create();
       setCurrentGame(data.game);
       // Rejoindre la room Socket.IO
       joinGame(data.game.id);

@@ -2,14 +2,20 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, AuthContextType, RegisterData } from '@/types';
+import { setAuthToken } from '@/lib/api';
 
 // contexte d'authent
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
+
+  useEffect(() => {
+    setAuthToken(token);
+  }, [token]);
 
   // on vérifie si l'utilisateur est connecté au chargement
   useEffect(() => {
@@ -20,6 +26,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkAuth = async () => {
     try {
+      const cookieToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('auth-token='))
+        ?.split('=')[1];
+
+      if (cookieToken) {
+        setToken(cookieToken);
+      }
+
       const response = await fetch('/api/auth/verify', {
         credentials: 'include',
       });
@@ -30,10 +45,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         // Pas de token ou token invalide, c'est normal si pas connecté
         setUser(null);
+        setToken(null);
       }
     } catch (error) {
       console.error('Erreur lors de la vérification auth:', error);
       setUser(null);
+      setToken(null);
     } finally {
       setIsLoading(false);
       setHasCheckedAuth(true);
@@ -57,6 +74,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       setUser(data.user);
+      
+      if (data.token) {
+        setToken(data.token);
+      }
     } catch (error: any) {
       console.error('Erreur de connexion:', error);
       throw error;
@@ -101,11 +122,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error('Erreur lors de la déconnexion:', error);
     } finally {
       setUser(null);
+      setToken(null);
     }
   };
 
   const value: AuthContextType = {
     user,
+    token,
     login,
     register,
     logout,

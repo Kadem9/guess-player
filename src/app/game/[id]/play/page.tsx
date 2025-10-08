@@ -58,7 +58,6 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
-  const [lastTurn, setLastTurn] = useState(0);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -78,11 +77,11 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
         throw new Error(data.error || 'Erreur lors du chargement');
       }
 
-      const previousTurn = game?.currentTurn || 0;
+      const tourAChange = game && data.game.currentTurn !== game.currentTurn;
+      
       setGame(data.game);
       
-      if (data.game.currentTurn !== previousTurn && data.game.currentTurn !== lastTurn) {
-        setLastTurn(data.game.currentTurn);
+      if (tourAChange) {
         const randomPlayer = playersData[Math.floor(Math.random() * playersData.length)];
         setCurrentPlayer(randomPlayer as Player);
         setGuess('');
@@ -91,39 +90,70 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
         setTimeLeft(30);
       }
 
-      if (!currentPlayer && data.game.status === 'IN_PROGRESS') {
+      if (!currentPlayer && data.game.status === 'IN_PROGRESS' && !game) {
         const randomPlayer = playersData[Math.floor(Math.random() * playersData.length)];
         setCurrentPlayer(randomPlayer as Player);
-        setLastTurn(data.game.currentTurn);
+        setTimeLeft(30);
       }
     } catch (error: any) {
       setError(error.message);
     } finally {
       setLoading(false);
     }
-  }, [params.id, game?.currentTurn, currentPlayer, lastTurn]);
+  }, [params.id, game, currentPlayer]);
+
+  const getCurrentPlayerTurn = useCallback(() => {
+    if (!game) return null;
+    const currentIndex = game.currentTurn % game.players.length;
+    return game.players[currentIndex];
+  }, [game]);
+
+  const handleNextPlayer = async () => {
+    if (!game || !user) return;
+    
+    const nextTurn = game.currentTurn + 1;
+    
+    try {
+      await fetch(`/api/games/${params.id}/turn`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ turn: nextTurn }),
+        credentials: 'include',
+      });
+      
+      await fetchGame();
+    } catch (error) {
+      console.error('Erreur changement de tour:', error);
+    }
+  };
 
   useEffect(() => {
     if (user && params.id) {
       fetchGame();
-      const interval = setInterval(fetchGame, 2000);
+      const interval = setInterval(fetchGame, 4000);
       return () => clearInterval(interval);
     }
-  }, [user, params.id]);
+  }, [user, params.id, fetchGame]);
 
   useEffect(() => {
-    if (!game || game.status !== 'IN_PROGRESS' || showResult) return;
+    if (!game || game.status !== 'IN_PROGRESS' || showResult || !user) {
+      return;
+    }
 
-    const currentTurnPlayer = getCurrentPlayerTurn();
-    const isMyTurn = currentTurnPlayer?.userId === user?.id;
+    const currentIndex = game.currentTurn % game.players.length;
+    const currentTurnPlayer = game.players[currentIndex];
+    const isMyTurn = currentTurnPlayer?.userId === user.id;
 
     if (!isMyTurn) {
-      setTimeLeft(30);
       return;
     }
 
     if (timeLeft <= 0) {
-      handleTimeout();
+      setShowResult(true);
+      setIsCorrect(false);
+      setTimeout(() => {
+        handleNextPlayer();
+      }, 2000);
       return;
     }
 
@@ -132,18 +162,7 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [timeLeft, game, showResult, user]);
-
-  const handleTimeout = async () => {
-    if (!game || !user) return;
-    
-    setShowResult(true);
-    setIsCorrect(false);
-    
-    setTimeout(() => {
-      handleNextPlayer();
-    }, 2000);
-  };
+  }, [timeLeft, game?.currentTurn, game?.status, showResult, user, handleNextPlayer]);
 
   const handleSubmitGuess = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,31 +188,6 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
     }
     
     setSubmitting(false);
-  };
-
-  const handleNextPlayer = async () => {
-    if (!game || !user) return;
-    
-    const nextTurn = game.currentTurn + 1;
-    
-    try {
-      await fetch(`/api/games/${params.id}/turn`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ turn: nextTurn }),
-        credentials: 'include',
-      });
-      
-      await fetchGame();
-    } catch (error) {
-      console.error('Erreur changement de tour:', error);
-    }
-  };
-
-  const getCurrentPlayerTurn = () => {
-    if (!game) return null;
-    const currentIndex = game.currentTurn % game.players.length;
-    return game.players[currentIndex];
   };
 
   if (isLoading || loading) {

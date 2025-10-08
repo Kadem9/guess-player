@@ -1,76 +1,91 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-export function useSocket(gameId?: string) {
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+
+export function useSocket(token: string | null) {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socketInstance = io(process.env.NODE_ENV === 'production' 
-      ? process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-      : 'http://localhost:3000', {
-      path: '/api/socketio',
-      autoConnect: true,
+    if (!token) {
+      if (socket) {
+        socket.disconnect();
+        setSocket(null);
+      }
+      return;
+    }
+
+    const newSocket = io(BACKEND_URL, {
+      auth: {
+        token
+      }
     });
 
-    socketInstance.on('connect', () => {
-      console.log('Connecté à Socket.IO');
+    newSocket.on('connect', () => {
+      console.log('Connecté au serveur WebSocket');
       setIsConnected(true);
     });
 
-    socketInstance.on('disconnect', () => {
-      console.log('Déconnecté de Socket.IO');
+    newSocket.on('disconnect', () => {
+      console.log('Déconnecté du serveur WebSocket');
       setIsConnected(false);
     });
 
-    setSocket(socketInstance);
+    newSocket.on('connect_error', (error) => {
+      console.error('Erreur de connexion WebSocket:', error);
+    });
+
+    setSocket(newSocket);
 
     return () => {
-      socketInstance.disconnect();
+      newSocket.disconnect();
     };
-  }, []);
+  }, [token]);
 
-  const joinGame = (gameId: string) => {
+  const joinGame = useCallback((gameId: string) => {
     if (socket) {
       socket.emit('join-game', gameId);
     }
-  };
+  }, [socket]);
 
-  const leaveGame = (gameId: string) => {
+  const leaveGame = useCallback((gameId: string) => {
     if (socket) {
       socket.emit('leave-game', gameId);
     }
-  };
+  }, [socket]);
 
-  const emitNewTurn = (gameId: string, currentPlayerId: string, turn: number) => {
+  const emitNewTurn = useCallback((gameId: string, currentPlayerId: string, turn: number) => {
     if (socket) {
       socket.emit('new-turn', { gameId, currentPlayerId, turn });
     }
-  };
+  }, [socket]);
 
-  const emitScoreUpdate = (gameId: string, playerId: string, score: number) => {
+  const emitScoreUpdate = useCallback((gameId: string, playerId: string, score: number) => {
     if (socket) {
-      socket.emit('score-updated', { gameId, playerId, score });
+      socket.emit('score-update', { gameId, playerId, score });
     }
-  };
+  }, [socket]);
 
-  const emitNewQuestion = (gameId: string, playerData: any) => {
+  const emitNewQuestion = useCallback((gameId: string, playerData: any) => {
     if (socket) {
       socket.emit('new-question', { gameId, playerData });
     }
-  };
+  }, [socket]);
 
-  const emitGuessSubmitted = (gameId: string, playerId: string, guess: string, isCorrect: boolean) => {
+  const emitGuessSubmitted = useCallback((gameId: string, playerId: string, guess: string, isCorrect: boolean) => {
     if (socket) {
       socket.emit('guess-submitted', { gameId, playerId, guess, isCorrect });
     }
-  };
+  }, [socket]);
 
-  const emitGameEnded = (gameId: string, winner: any, finalScores: any[]) => {
+  const emitGameEnded = useCallback((gameId: string, winner: any, finalScores: any[]) => {
     if (socket) {
       socket.emit('game-ended', { gameId, winner, finalScores });
     }
-  };
+  }, [socket]);
 
   return {
     socket,
@@ -81,6 +96,6 @@ export function useSocket(gameId?: string) {
     emitScoreUpdate,
     emitNewQuestion,
     emitGuessSubmitted,
-    emitGameEnded,
+    emitGameEnded
   };
 }
