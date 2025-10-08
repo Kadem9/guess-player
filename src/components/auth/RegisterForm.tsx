@@ -16,6 +16,7 @@ export default function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string>('');
   
   const { register } = useAuth();
 
@@ -76,10 +77,21 @@ export default function RegisterForm() {
     setErrors({});
     
     try {
-      await register(formData);
-      // TODO: redirection ou message de succès
+      const result = await register(formData);
+      setSuccessMessage(result.message);
+      setErrors({});
+      // je reset le formulaire
+      setFormData({
+        nom: '',
+        prenom: '',
+        email: '',
+        username: '',
+        password: '',
+      });
+      setConfirmPassword('');
     } catch (error: any) {
       setErrors({ general: error.message || 'Erreur lors de l\'inscription' });
+      setSuccessMessage('');
     } finally {
       setIsLoading(false);
     }
@@ -91,6 +103,12 @@ export default function RegisterForm() {
         <h2 className="card-title text-2xl mb-6">Inscription</h2>
         
         <form onSubmit={handleSubmit} className="space-y-4">
+          {successMessage && (
+            <div className="alert alert-success">
+              <span>{successMessage}</span>
+            </div>
+          )}
+          
           {errors.general && (
             <div className="alert alert-error">
               <span>{errors.general}</span>

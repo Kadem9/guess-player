@@ -70,12 +70,14 @@ export default function Navbar() {
 
       <div className="navbar-end">
         <div className="flex items-center gap-2">
-          <button
+          <button 
             onClick={toggleTheme}
             className="btn btn-ghost btn-circle"
             title={isDark ? 'Mode clair' : 'Mode sombre'}
           >
-            {isDark ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
+            <span className="text-lg">
+              {isDark ? '☀️' : '🌙'}
+            </span>
           </button>
 
           {user ? (
