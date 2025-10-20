@@ -29,18 +29,21 @@ model User {
 }
 
 model Game {
-  id          String       @id @default(cuid())
-  creatorId   String
-  status      GameStatus   @default(WAITING)
-  currentTurn Int          @default(0)
-  maxPlayers  Int          @default(2)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id              String       @id @default(cuid())
+  creatorId       String
+  status          GameStatus   @default(WAITING)
+  currentTurn     Int          @default(0)
+  maxPlayers      Int          @default(2)
+  maxTurns        Int          @default(10)
+  difficulty      Difficulty   @default(MEDIUM)
+  timePerTurn     Int          @default(30) // en secondes
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
-  creator     User         @relation("GameCreator", fields: [creatorId], references: [id])
-  players     GamePlayer[]
-  questions   Question[]
-  scores      Score[]
+  creator         User         @relation("GameCreator", fields: [creatorId], references: [id])
+  players         GamePlayer[]
+  questions       Question[]
+  scores          Score[]
 
   @@map("games")
 }
@@ -91,4 +94,10 @@ enum GameStatus {
   IN_PROGRESS
   FINISHED
   CANCELLED
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
 }

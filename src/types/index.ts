@@ -27,6 +27,8 @@ export interface RegisterData {
 }
 
 // Types pour le jeu
+export type Difficulty = 'EASY' | 'MEDIUM' | 'HARD';
+
 export interface Player {
   id: string;
   nom: string;
@@ -35,25 +37,41 @@ export interface Player {
   nationalite: string;
   image?: string;
   indice?: string;
+  difficulte: Difficulty;
 }
 
 export interface Game {
   id: string; // UUID
-  hostId: string;
+  creatorId: string;
   players: GamePlayer[];
-  currentPlayerIndex: number;
-  currentQuestion: Player | null;
-  status: 'waiting' | 'playing' | 'finished';
+  currentTurn: number;
+  status: 'WAITING' | 'IN_PROGRESS' | 'FINISHED' | 'CANCELLED';
+  maxPlayers: number;
+  maxTurns: number;
+  difficulty: Difficulty;
+  timePerTurn: number;
   createdAt: Date;
   winner?: string;
 }
 
 export interface GamePlayer {
+  id: string;
   userId: string;
-  username: string;
+  user: {
+    id: string;
+    nom: string;
+    prenom: string;
+    username: string;
+  };
   score: number;
   isHost: boolean;
-  isCurrentPlayer: boolean;
+}
+
+export interface GameSettings {
+  maxPlayers: number;
+  maxTurns: number;
+  difficulty: Difficulty;
+  timePerTurn: number;
 }
 
 export interface GameContextType {
