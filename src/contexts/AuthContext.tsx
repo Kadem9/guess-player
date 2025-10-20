@@ -78,6 +78,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (data.token) {
         setToken(data.token);
       }
+      
+      // On refait une vérif complète après la connexion
+      await checkAuth();
     } catch (error: any) {
       console.error('Erreur de connexion:', error);
       throw error;

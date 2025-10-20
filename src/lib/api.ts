@@ -13,6 +13,7 @@ export async function apiCall(endpoint: string, options: RequestInit = {}) {
   };
 
   if (authToken) {
+    // @ts-ignore
     headers['Authorization'] = `Bearer ${authToken}`;
   }
 
@@ -30,7 +31,10 @@ export async function apiCall(endpoint: string, options: RequestInit = {}) {
 }
 
 export const gameApi = {
-  create: () => apiCall('/api/games/create', { method: 'POST' }),
+  create: (settings?: any) => apiCall('/api/games/create', { 
+    method: 'POST',
+    body: JSON.stringify(settings || {}),
+  }),
   
   join: (gameId: string) => apiCall('/api/games/join', {
     method: 'POST',
