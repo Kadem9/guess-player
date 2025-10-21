@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 import { FaArrowLeft, FaCheck, FaTimes, FaClock, FaTrophy } from 'react-icons/fa';
 import Link from 'next/link';
-import playersData from '@/data/players.json';
+import { getRandomPlayer } from '@/utils/gameUtils';
+import { useTimerSound } from '@/hooks/useTimerSound';
 
 interface GamePlayer {
   id: string;
@@ -58,12 +59,19 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
+  const { playWarning } = useTimerSound();
 
   useEffect(() => {
     if (!isLoading && !user) {
       router.push('/login');
     }
   }, [user, isLoading, router]);
+
+  useEffect(() => {
+    if (game?.timePerTurn && typeof game.timePerTurn === 'number') {
+      setTimeLeft(game.timePerTurn);
+    }
+  }, [game?.timePerTurn]);
 
   const fetchGame = useCallback(async () => {
     try {
@@ -82,18 +90,20 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
       setGame(data.game);
       
       if (tourAChange) {
-        const randomPlayer = playersData[Math.floor(Math.random() * playersData.length)];
-        setCurrentPlayer(randomPlayer as Player);
+        const difficulty = data.game.difficulty || 'MEDIUM';
+        const randomPlayer = getRandomPlayer(difficulty);
+        setCurrentPlayer(randomPlayer);
         setGuess('');
         setShowResult(false);
         setIsCorrect(false);
-        setTimeLeft(30);
+        setTimeLeft(data.game.timePerTurn || 30);
       }
-
-      if (!currentPlayer && data.game.status === 'IN_PROGRESS' && !game) {
-        const randomPlayer = playersData[Math.floor(Math.random() * playersData.length)];
-        setCurrentPlayer(randomPlayer as Player);
-        setTimeLeft(30);
+      
+      if (!currentPlayer && data.game.status === 'IN_PROGRESS') {
+        const difficulty = data.game.difficulty || 'MEDIUM';
+        const randomPlayer = getRandomPlayer(difficulty);
+        setCurrentPlayer(randomPlayer);
+        setTimeLeft(data.game.timePerTurn || 30);
       }
     } catch (error: any) {
       setError(error.message);
@@ -108,7 +118,7 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
     return game.players[currentIndex];
   }, [game]);
 
-  const handleNextPlayer = async () => {
+  const handleNextPlayer = useCallback(async () => {
     if (!game || !user) return;
     
     const nextTurn = game.currentTurn + 1;
@@ -125,7 +135,7 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
     } catch (error) {
       console.error('Erreur changement de tour:', error);
     }
-  };
+  }, [game, user, params.id, fetchGame]);
 
   useEffect(() => {
     if (user && params.id) {
@@ -158,11 +168,23 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
     }
 
     const timer = setTimeout(() => {
-      setTimeLeft(prev => prev - 1);
+      setTimeLeft(prev => {
+        const newTime = prev - 1;
+        return isNaN(newTime) ? (game?.timePerTurn || 30) : newTime;
+      });
     }, 1000);
 
-    return () => clearTimeout(timer);
-  }, [timeLeft, game?.currentTurn, game?.status, showResult, user, handleNextPlayer]);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [timeLeft, game?.currentTurn, game?.status, showResult, user?.id]);
+
+  // on met le son d'alerte a 10 secondes
+  useEffect(() => {
+    if (timeLeft === 10 && !showResult) {
+      playWarning();
+    }
+  }, [timeLeft, showResult, playWarning]);
 
   const handleSubmitGuess = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -261,11 +283,9 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {/* Zone de jeu principale */}
           <div className="lg:col-span-2">
             <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
-                {/* Tour actuel */}
                 <div className="text-center mb-6">
                   <h2 className="text-2xl font-bold mb-2">
                     {isMyTurn ? 'Votre tour !' : `Tour de ${currentTurnPlayer?.user.prenom}`}
@@ -278,19 +298,18 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
                     <div className="mt-4">
                       <div className={`text-4xl font-bold ${timeLeft <= 10 ? 'text-error' : 'text-primary'}`}>
                         <FaClock className="inline mr-2" />
-                        {timeLeft}s
+                        {isNaN(timeLeft) ? '--' : `${timeLeft}s`}
                       </div>
                       <progress 
                         className="progress progress-primary w-full mt-2" 
-                        value={timeLeft} 
-                        max="30"
+                        value={isNaN(timeLeft) ? 0 : timeLeft} 
+                        max={game?.timePerTurn || 30}
                       ></progress>
                     </div>
                   )}
                 </div>
 
-                {/* Joueur à deviner */}
-                {currentPlayer && (
+                {currentPlayer ? (
                   <div className="space-y-6">
                     <div className="bg-base-200 p-6 rounded-lg">
                       <h3 className="text-lg font-semibold mb-4">Indice :</h3>
@@ -304,7 +323,6 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
                       </div>
                     </div>
 
-                    {/* Formulaire de devinette */}
                     {isMyTurn && !showResult && (
                       <form onSubmit={handleSubmitGuess} className="space-y-4">
                         <div className="form-control">
@@ -331,7 +349,6 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
                       </form>
                     )}
 
-                    {/* Résultat */}
                     {showResult && (
                       <div className="space-y-4">
                         <div className={`alert ${isCorrect ? 'alert-success' : 'alert-error'}`}>
@@ -365,7 +382,6 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
                       </div>
                     )}
 
-                    {/* Attente du tour */}
                     {!isMyTurn && !showResult && (
                       <div className="alert alert-info">
                         <FaClock />
@@ -373,14 +389,16 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
                       </div>
                     )}
                   </div>
+                ) : (
+                  <div className="alert alert-warning">
+                    <span>Chargement du joueur à deviner...</span>
+                  </div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Panneau latéral */}
           <div>
-            {/* Scores */}
             <div className="card bg-base-100 shadow-xl mb-6">
               <div className="card-body">
                 <h3 className="card-title mb-4">
@@ -412,7 +430,6 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
               </div>
             </div>
 
-            {/* Règles */}
             <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
                 <h3 className="card-title mb-4">Règles</h3>
