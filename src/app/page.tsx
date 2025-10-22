@@ -4,7 +4,17 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="hero min-h-[calc(100vh-200px)]">
+        <div className="hero-content text-center">
+          <div className="loading loading-spinner loading-lg"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="hero min-h-[calc(100vh-200px)]">
