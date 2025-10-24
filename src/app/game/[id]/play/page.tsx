@@ -27,6 +27,9 @@ interface Game {
   status: 'WAITING' | 'IN_PROGRESS' | 'FINISHED' | 'CANCELLED';
   currentTurn: number;
   maxPlayers: number;
+  maxTurns: number;
+  timePerTurn: number;
+  difficulty?: string;
   createdAt: string;
   creator: {
     id: string;
@@ -85,6 +88,11 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
         throw new Error(data.error || 'Erreur lors du chargement');
       }
 
+      if (data.game.status === 'FINISHED') {
+        router.push(`/game/${params.id}/results`);
+        return;
+      }
+
       const tourAChange = game && data.game.currentTurn !== game.currentTurn;
       
       setGame(data.game);
@@ -96,6 +104,7 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
         setGuess('');
         setShowResult(false);
         setIsCorrect(false);
+        setSubmitting(false);
         setTimeLeft(data.game.timePerTurn || 30);
       }
       
@@ -110,7 +119,7 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
     } finally {
       setLoading(false);
     }
-  }, [params.id, game, currentPlayer]);
+  }, [params.id, game, currentPlayer, router]);
 
   const getCurrentPlayerTurn = useCallback(() => {
     if (!game) return null;
@@ -122,6 +131,24 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
     if (!game || !user) return;
     
     const nextTurn = game.currentTurn + 1;
+    
+    if (nextTurn >= game.maxTurns) {
+      try {
+        await fetch(`/api/games/${params.id}/finish`, {
+          method: 'POST',
+          credentials: 'include',
+        });
+        router.push(`/game/${params.id}/results`);
+        return;
+      } catch (error) {
+        console.error('Erreur fin de partie:', error);
+      }
+    }
+    
+    // reset
+    setShowResult(false);
+    setIsCorrect(false);
+    setGuess('');
     
     try {
       await fetch(`/api/games/${params.id}/turn`, {
@@ -135,7 +162,7 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
     } catch (error) {
       console.error('Erreur changement de tour:', error);
     }
-  }, [game, user, params.id, fetchGame]);
+  }, [game, user, params.id, fetchGame, router]);
 
   useEffect(() => {
     if (user && params.id) {
@@ -178,6 +205,18 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
       clearTimeout(timer);
     };
   }, [timeLeft, game?.currentTurn, game?.status, showResult, user?.id]);
+
+  useEffect(() => {
+    if (!showResult && game && game.status === 'IN_PROGRESS') {
+      const currentIndex = game.currentTurn % game.players.length;
+      const currentTurnPlayer = game.players[currentIndex];
+      const isMyTurn = currentTurnPlayer?.userId === user?.id;
+      
+      if (isMyTurn) {
+        setTimeLeft(game.timePerTurn || 30);
+      }
+    }
+  }, [showResult, game?.currentTurn, game?.timePerTurn, game?.status, game?.players, user?.id]);
 
   // on met le son d'alerte a 10 secondes
   useEffect(() => {

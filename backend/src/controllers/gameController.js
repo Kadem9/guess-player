@@ -103,7 +103,33 @@ async function joinGame(req, res) {
     // on vérifie si le joueur est déjà dans la partie
     const alreadyJoined = game.players.some(p => p.userId === userId);
     if (alreadyJoined) {
-      return res.status(400).json({ error: 'Vous êtes déjà dans cette partie' });
+      // le joueur est déjà dans la partie, on le redirige simplement
+      const fullGame = await prisma.game.findUnique({
+        where: { id: game.id },
+        include: {
+          creator: {
+            select: {
+              id: true,
+              nom: true,
+              prenom: true,
+              username: true,
+            }
+          },
+          players: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  nom: true,
+                  prenom: true,
+                  username: true,
+                }
+              }
+            }
+          }
+        }
+      });
+      return res.json({ game: fullGame, alreadyInGame: true });
     }
 
     // et on véirfie si la partie est déjà pleine
@@ -365,6 +391,100 @@ async function updateTurn(req, res) {
   }
 }
 
+// terminer une partie
+async function finishGame(req, res) {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    // on cherche la partie
+    const game = await prisma.game.findFirst({
+      where: {
+        OR: [
+          { id: id },
+          { id: { startsWith: id } }
+        ]
+      }
+    });
+
+    if (!game) {
+      return res.status(404).json({ error: 'Partie non trouvée' });
+    }
+
+    // on termine la partie
+    await prisma.game.update({
+      where: { id: game.id },
+      data: {
+        status: 'FINISHED'
+      }
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Erreur fin de partie:', error);
+    res.status(500).json({ error: 'Erreur lors de la fin de partie' });
+  }
+}
+
+// Exclure un joueur d'une partie
+async function removePlayer(req, res) {
+  try {
+    const { id } = req.params;
+    const { playerId } = req.body;
+    const userId = req.user.id;
+
+    // on cherche la partie
+    const game = await prisma.game.findFirst({
+      where: {
+        OR: [
+          { id: id },
+          { id: { startsWith: id } }
+        ]
+      },
+      include: {
+        players: true
+      }
+    });
+
+    if (!game) {
+      return res.status(404).json({ error: 'Partie non trouvée' });
+    }
+
+    // on vérifie que la partie n'est pas déjà commencée
+    if (game.status !== 'WAITING') {
+      return res.status(400).json({ error: 'Impossible de retirer un joueur d\'une partie en cours' });
+    }
+
+    // on vérifie que l'utilisateur est l'hôte
+    const isHost = game.players.some(p => p.userId === userId && p.isHost);
+    if (!isHost) {
+      return res.status(403).json({ error: 'Seul l\'hôte peut retirer un joueur' });
+    }
+
+    // on vérifie que le joueur à retirer n'est pas l'hôte
+    const playerToRemove = game.players.find(p => p.userId === playerId);
+    if (!playerToRemove) {
+      return res.status(404).json({ error: 'Joueur non trouvé dans cette partie' });
+    }
+
+    if (playerToRemove.isHost) {
+      return res.status(400).json({ error: 'L\'hôte ne peut pas être retiré' });
+    }
+
+    // on retire le joueur
+    await prisma.gamePlayer.delete({
+      where: {
+        id: playerToRemove.id
+      }
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Erreur retrait joueur:', error);
+    res.status(500).json({ error: 'Erreur lors du retrait du joueur' });
+  }
+}
+
 // j'exporte les fonctions
 module.exports = {
   createGame,
@@ -372,7 +492,9 @@ module.exports = {
   getGame,
   startGame,
   updateScore,
-  updateTurn
+  updateTurn,
+  finishGame,
+  removePlayer
 };
 
 
