@@ -9,12 +9,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('auth-token');
+    }
+    return null;
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
   useEffect(() => {
     setAuthToken(token);
+    if (token) {
+      localStorage.setItem('auth-token', token);
+    } else {
+      localStorage.removeItem('auth-token');
+    }
   }, [token]);
 
   // on vérifie si l'utilisateur est connecté au chargement
@@ -26,13 +36,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkAuth = async () => {
     try {
-      const cookieToken = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('auth-token='))
-        ?.split('=')[1];
-
-      if (cookieToken) {
-        setToken(cookieToken);
+      const storedToken = typeof window !== 'undefined' ? localStorage.getItem('auth-token') : null;
+      
+      if (storedToken && !token) {
+        setToken(storedToken);
       }
 
       const response = await fetch('/api/auth/verify', {
@@ -42,6 +49,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
+        
+        if (data.token) {
+          setToken(data.token);
+        }
       } else {
         // Pas de token ou token invalide, c'est normal si pas connecté
         setUser(null);
