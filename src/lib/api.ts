@@ -54,6 +54,11 @@ export const gameApi = {
     method: 'POST',
     body: JSON.stringify({ turn }),
   }),
+  
+  removePlayer: (id: string, playerId: string) => apiCall(`/api/games/${id}/remove-player`, {
+    method: 'POST',
+    body: JSON.stringify({ playerId }),
+  }),
 };
 
 

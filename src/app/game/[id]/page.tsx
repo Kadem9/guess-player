@@ -3,8 +3,9 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
-import { FaArrowLeft, FaUsers, FaPlay, FaClock, FaTrophy } from 'react-icons/fa';
+import { FaArrowLeft, FaUsers, FaPlay, FaClock, FaTrophy, FaTimes } from 'react-icons/fa';
 import Link from 'next/link';
+import { gameApi } from '@/lib/api';
 
 interface GamePlayer {
   id: string;
@@ -102,6 +103,19 @@ export default function GamePage({ params }: { params: { id: string } }) {
     } catch (error: any) {
       setError(error.message);
       setStarting(false);
+    }
+  };
+
+  const handleRemovePlayer = async (playerId: string) => {
+    if (!confirm('Êtes-vous sûr de vouloir retirer ce joueur ?')) {
+      return;
+    }
+
+    try {
+      await gameApi.removePlayer(params.id, playerId);
+      await fetchGame();
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
@@ -241,6 +255,15 @@ export default function GamePage({ params }: { params: { id: string } }) {
                           <div className="badge badge-outline">
                             <FaTrophy className="mr-1" /> {player.score}
                           </div>
+                          {isHost && !player.isHost && game.status === 'WAITING' && (
+                            <button
+                              onClick={() => handleRemovePlayer(player.userId)}
+                              className="btn btn-ghost btn-sm btn-circle text-error"
+                              title="Retirer ce joueur"
+                            >
+                              <FaTimes />
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))}
