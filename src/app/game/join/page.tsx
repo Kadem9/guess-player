@@ -27,7 +27,19 @@ export default function JoinGamePage() {
 
     try {
       const data = await gameApi.join(gameCode.trim());
-      router.push(`/game/${gameCode.trim()}`);
+      
+      if (data.alreadyInGame) {
+        const gameStatus = data.game.status;
+        if (gameStatus === 'IN_PROGRESS') {
+          router.push(`/game/${data.game.id}/play`);
+        } else if (gameStatus === 'FINISHED') {
+          router.push(`/game/${data.game.id}/results`);
+        } else {
+          router.push(`/game/${data.game.id}`);
+        }
+      } else {
+        router.push(`/game/${gameCode.trim()}`);
+      }
     } catch (error: any) {
       setError(error.message);
       setJoining(false);
