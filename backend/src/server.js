@@ -10,7 +10,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3003',
+    origin: ['http://localhost:3000', 'http://localhost:3003'],
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 3001;
 
 // mdlwr
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3003',
+  origin: ['http://localhost:3000', 'http://localhost:3003'],
   credentials: true
 }));
 app.use(express.json());
