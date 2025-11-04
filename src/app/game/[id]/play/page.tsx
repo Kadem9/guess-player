@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { FaArrowLeft, FaCheck, FaTimes, FaClock, FaTrophy } from 'react-icons/fa';
 import Link from 'next/link';
 import { getRandomPlayer } from '@/utils/gameUtils';
@@ -172,6 +172,20 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
     }
   }, [user, params.id, fetchGame]);
 
+// reset du chrono
+useEffect(() => {
+    if (game && game.status === 'IN_PROGRESS' && !showResult) {
+      const currentIndex = game.currentTurn % game.players.length;
+      const currentTurnPlayer = game.players[currentIndex];
+      const isMyTurn = currentTurnPlayer?.userId === user?.id;
+      
+      if (isMyTurn) {
+        const initialTime = game.timePerTurn || 30;
+        setTimeLeft(initialTime);
+      }
+    }
+  }, [game?.currentTurn, showResult]);
+
   useEffect(() => {
     if (!game || game.status !== 'IN_PROGRESS' || showResult || !user) {
       return;
@@ -188,35 +202,17 @@ export default function PlayGamePage({ params }: { params: { id: string } }) {
     if (timeLeft <= 0) {
       setShowResult(true);
       setIsCorrect(false);
-      setTimeout(() => {
-        handleNextPlayer();
-      }, 2000);
       return;
     }
 
     const timer = setTimeout(() => {
-      setTimeLeft(prev => {
-        const newTime = prev - 1;
-        return isNaN(newTime) ? (game?.timePerTurn || 30) : newTime;
-      });
+      setTimeLeft(prev => prev - 1);
     }, 1000);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [timeLeft, game?.currentTurn, game?.status, showResult, user?.id]);
-
-  useEffect(() => {
-    if (!showResult && game && game.status === 'IN_PROGRESS') {
-      const currentIndex = game.currentTurn % game.players.length;
-      const currentTurnPlayer = game.players[currentIndex];
-      const isMyTurn = currentTurnPlayer?.userId === user?.id;
-      
-      if (isMyTurn) {
-        setTimeLeft(game.timePerTurn || 30);
-      }
-    }
-  }, [showResult, game?.currentTurn, game?.timePerTurn, game?.status, game?.players, user?.id]);
+  }, [timeLeft, game?.status, game?.currentTurn, showResult, user?.id]);
 
   // on met le son d'alerte a 10 secondes
   useEffect(() => {
