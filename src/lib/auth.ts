@@ -35,7 +35,15 @@ export function verifyToken(token: string): any {
 
 export async function verifyTokenFromRequest(request: any): Promise<User | null> {
   try {
-    const token = request.cookies.get('auth-token')?.value;
+    const authHeader = request.headers.get('authorization');
+    let token: string | null = null;
+
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
+    } else {
+      // sinn depuis les cookies car on l'enregistre aussi
+      token = request.cookies.get('auth-token')?.value || null;
+    }
 
     if (!token) {
       return null;
@@ -46,7 +54,6 @@ export async function verifyTokenFromRequest(request: any): Promise<User | null>
       return null;
     }
 
-    // Import dynamique de prisma pour éviter les problèmes de circular import
     const { prisma } = await import('@/lib/prisma');
     
     const user = await prisma.user.findUnique({
@@ -62,7 +69,7 @@ export async function verifyTokenFromRequest(request: any): Promise<User | null>
       }
     });
 
-    return user;
+    return user as User | null;
   } catch (error) {
     console.error('Erreur lors de la vérification du token:', error);
     return null;

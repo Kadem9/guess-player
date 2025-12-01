@@ -1,0 +1,270 @@
+@import '../variables';
+@import '../mixins';
+
+.leaderboard {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: $spacing-2xl $spacing-lg;
+
+  &__back {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    background: none;
+    border: none;
+    color: $color-slate-600;
+    cursor: pointer;
+    margin-bottom: $spacing-xl;
+    font-size: $font-size-base;
+    @include transition(color, $transition-base);
+    @include focus-visible;
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+    
+    &:hover {
+      color: $color-slate-900;
+      
+      @include dark-mode {
+        color: $color-white;
+      }
+    }
+    
+    &-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  &__card {
+    @include card-base;
+    padding: $spacing-xl;
+    border: 1px solid $color-slate-200;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-lg;
+    @include transition(background-color border-color, $transition-base);
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+    }
+  }
+  
+  &__title {
+    color: $color-slate-900;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-xl;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__player {
+    border-radius: $radius-xl;
+    padding: $spacing-lg;
+    @include transition(all, $transition-base);
+    
+    &--first {
+      @include gradient-bg(rgba(#f59e0b, 0.1), rgba(#d97706, 0.1));
+      border: 2px solid rgba(#f59e0b, 0.3);
+      
+      @include dark-mode {
+        @include gradient-bg(rgba(#f59e0b, 0.2), rgba(#d97706, 0.2));
+        border-color: rgba(#f59e0b, 0.4);
+      }
+    }
+    
+    &--second {
+      @include gradient-bg(rgba($color-slate-500, 0.1), rgba($color-slate-400, 0.1));
+      border: 1px solid rgba($color-slate-500, 0.3);
+      
+      @include dark-mode {
+        @include gradient-bg(rgba($color-slate-500, 0.2), rgba($color-slate-400, 0.2));
+        border-color: rgba($color-slate-500, 0.4);
+      }
+    }
+    
+    &--default {
+      background-color: $color-slate-50;
+      border: 1px solid $color-slate-200;
+      
+      @include dark-mode {
+        background-color: rgba($color-gray-700, 0.5);
+        border-color: $color-gray-700;
+      }
+    }
+  }
+  
+  &__player-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__player-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+  }
+  
+  &__rank-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  &__rank-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    
+    &--gold {
+      color: #f59e0b;
+      
+      @include dark-mode {
+        color: #fbbf24;
+      }
+    }
+    
+    &--silver {
+      color: $color-slate-500;
+      
+      @include dark-mode {
+        color: $color-slate-400;
+      }
+    }
+    
+    &--bronze {
+      color: #b45309;
+      
+      @include dark-mode {
+        color: #d97706;
+      }
+    }
+  }
+  
+  &__rank-number {
+    color: $color-slate-600;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &__player-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__player-name {
+    color: $color-slate-900;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    margin-bottom: $spacing-xs;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__player-username {
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+
+  &__player-stats {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    
+    @include respond-to(md) {
+      gap: 2rem;
+    }
+  }
+  
+  &__stat {
+    text-align: center;
+  }
+  
+  &__stat-label {
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-xs;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &__stat-value {
+    color: $color-slate-900;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+
+  &__loading {
+    @include flex-center;
+    padding: $spacing-2xl 0;
+  }
+  
+  &__empty {
+    text-align: center;
+    padding: $spacing-2xl 0;
+    
+    &-icon {
+      width: 4rem;
+      height: 4rem;
+      margin: 0 auto $spacing-lg;
+      opacity: 0.2;
+      color: $color-slate-400;
+    }
+    
+    &-title {
+      color: $color-slate-900;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-semibold;
+      margin-bottom: $spacing-sm;
+      @include transition(color, $transition-base);
+      
+      @include dark-mode {
+        color: $color-white;
+      }
+    }
+    
+    &-text {
+      color: $color-slate-600;
+      font-size: $font-size-base;
+      @include transition(color, $transition-base);
+      
+      @include dark-mode {
+        color: $color-slate-400;
+      }
+    }
+  }
+}
+

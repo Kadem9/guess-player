@@ -38,7 +38,7 @@ export default function RegisterForm() {
     }
     
     if (!formData.username.trim()) {
-      newErrors.username = 'Nom d\'utilisateur requis';
+      newErrors.username = 'Nom d&apos;utilisateur requis';
     } else if (formData.username.length < 3) {
       newErrors.username = 'Au moins 3 caractères';
     }
@@ -176,7 +176,7 @@ export default function RegisterForm() {
           
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Nom d'utilisateur</span>
+              <span className="label-text">Nom d&apos;utilisateur</span>
             </label>
             <input
               type="text"

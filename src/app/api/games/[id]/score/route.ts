@@ -42,16 +42,34 @@ export async function POST(
       return NextResponse.json({ error: 'Partie introuvable' }, { status: 404 });
     }
 
-    const gamePlayer = await prisma.gamePlayer.updateMany({
+    if (!isCorrect) {
+      return NextResponse.json({
+        success: true,
+        message: 'Réponse incorrecte'
+      });
+    }
+
+    const gamePlayer = await prisma.gamePlayer.findFirst({
       where: {
         gameId: game.id,
-        userId: playerId,
-      },
+        userId: playerId
+      }
+    });
+
+    if (!gamePlayer) {
+      return NextResponse.json(
+        { error: 'Joueur non trouvé dans la partie' },
+        { status: 404 }
+      );
+    }
+
+    await prisma.gamePlayer.update({
+      where: { id: gamePlayer.id },
       data: {
         score: {
-          increment: isCorrect ? 1 : 0,
-        },
-      },
+          increment: 1
+        }
+      }
     });
 
     const updatedGame = await prisma.game.findUnique({

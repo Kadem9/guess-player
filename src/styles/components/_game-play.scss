@@ -1,0 +1,636 @@
+@import '../variables';
+@import '../mixins';
+
+.game-play {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: $spacing-2xl $spacing-lg;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-xl;
+  }
+  
+  &__back {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    background: none;
+    border: none;
+    color: $color-slate-600;
+    cursor: pointer;
+    font-size: $font-size-base;
+    @include transition(color, $transition-base);
+    @include focus-visible;
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+    
+    &:hover {
+      color: $color-slate-900;
+      
+      @include dark-mode {
+        color: $color-white;
+      }
+    }
+    
+    &-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+  
+  &__turn-badge {
+    background-color: $color-white;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-md;
+    border: 1px solid $color-slate-200;
+    color: $color-slate-900;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    @include transition(all, $transition-base);
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+      color: $color-white;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+    
+    @include respond-to(lg) {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  &__main {
+  }
+  
+  &__card {
+    @include card-base;
+    padding: $spacing-xl;
+    border: 1px solid $color-slate-200;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-lg;
+    @include transition(background-color border-color, $transition-base);
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+    }
+  }
+
+  &__turn-section {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+  }
+  
+  &__turn-title {
+    color: $color-slate-900;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-md;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__turn-player {
+    display: inline-block;
+    background-color: $color-slate-100;
+    padding: $spacing-xs $spacing-md;
+    border-radius: $radius-md;
+    color: $color-slate-900;
+    font-size: $font-size-base;
+    @include transition(all, $transition-base);
+    
+    @include dark-mode {
+      background-color: $color-gray-700;
+      color: $color-white;
+    }
+  }
+
+  &__timer {
+    margin-bottom: $spacing-xl;
+  }
+  
+  &__timer-display {
+    text-align: center;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__timer-value {
+    font-size: $font-size-5xl;
+    font-weight: $font-weight-bold;
+    color: $color-slate-900;
+    margin-bottom: $spacing-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+    
+    &--warning {
+      color: $color-red-600;
+      
+      @include dark-mode {
+        color: $color-red-400;
+      }
+    }
+  }
+  
+  &__timer-progress {
+    position: relative;
+    width: 100%;
+    height: 8px;
+    background-color: $color-slate-200;
+    border-radius: $radius-full;
+    overflow: hidden;
+    
+    @include dark-mode {
+      background-color: $color-gray-700;
+    }
+  }
+  
+  &__timer-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    @include gradient-bg($color-blue-500, $color-purple-600);
+    @include transition(width, 1s linear);
+  }
+
+  &__clue {
+    background-color: $color-slate-50;
+    border-radius: $radius-xl;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-lg;
+    
+    @include dark-mode {
+      background-color: rgba($color-gray-700, 0.5);
+    }
+  }
+  
+  &__clue-photo-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__clue-photo {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border-radius: $radius-md;
+    background-color: $color-white;
+    padding: $spacing-sm;
+    box-shadow: $shadow-md;
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+    }
+  }
+  
+  &__clue-title {
+    color: $color-slate-900;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-md;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__clue-text {
+    color: $color-slate-700;
+    font-size: $font-size-base;
+    margin-bottom: $spacing-md;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-300;
+    }
+  }
+  
+  &__clue-details {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+  
+  &__field {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__label {
+    display: block;
+    margin-bottom: $spacing-sm;
+    color: $color-slate-900;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__input {
+    width: 100%;
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    border: 1px solid $color-slate-300;
+    background-color: $color-white;
+    color: $color-slate-900;
+    font-size: $font-size-base;
+    @include transition(all, $transition-base);
+    @include focus-visible;
+    
+    @include dark-mode {
+      border-color: $color-gray-600;
+      background-color: $color-gray-700;
+      color: $color-white;
+    }
+    
+    &::placeholder {
+      color: $color-slate-400;
+      
+      @include dark-mode {
+        color: $color-slate-500;
+      }
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: $color-blue-500;
+      box-shadow: 0 0 0 3px rgba($color-blue-500, 0.1);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+  
+  &__submit-button {
+    @include button-base;
+    width: 100%;
+    padding: $spacing-md;
+    border-radius: $radius-xl;
+    font-weight: $font-weight-medium;
+    box-shadow: $shadow-lg;
+    
+    &--primary {
+      @include gradient-bg($color-blue-600, $color-blue-700);
+      color: $color-white;
+      
+      &:hover:not(:disabled) {
+        @include gradient-bg($color-blue-700, $color-blue-800);
+        box-shadow: $shadow-xl;
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__result {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+  
+  &__result-alert {
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-weight: $font-weight-semibold;
+    
+    &--success {
+      background-color: rgba(#059669, 0.1);
+      border: 1px solid rgba(#059669, 0.2);
+      color: #059669;
+      
+      @include dark-mode {
+        background-color: rgba(#10b981, 0.2);
+        border-color: rgba(#10b981, 0.3);
+        color: #10b981;
+      }
+    }
+    
+    &--error {
+      background-color: rgba($color-red-600, 0.1);
+      border: 1px solid rgba($color-red-600, 0.2);
+      color: $color-red-600;
+      
+      @include dark-mode {
+        background-color: rgba($color-red-600, 0.2);
+        border-color: rgba($color-red-600, 0.3);
+        color: $color-red-400;
+      }
+    }
+    
+    &-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+  
+  &__result-player {
+    background-color: $color-slate-50;
+    border-radius: $radius-xl;
+    padding: $spacing-lg;
+    
+    @include dark-mode {
+      background-color: rgba($color-gray-700, 0.5);
+    }
+  }
+  
+  &__result-player-photo-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__result-player-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: $radius-md;
+    background-color: $color-white;
+    padding: $spacing-sm;
+    box-shadow: $shadow-md;
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+    }
+  }
+  
+  &__result-player-title {
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-sm;
+    color: $color-slate-900;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__result-player-name {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-blue-600;
+    margin-bottom: $spacing-xs;
+    
+    @include dark-mode {
+      color: $color-blue-400;
+    }
+  }
+  
+  &__result-player-details {
+    font-size: $font-size-sm;
+    color: $color-slate-600;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &__next-button {
+    @include button-base;
+    width: 100%;
+    padding: $spacing-md;
+    border-radius: $radius-xl;
+    font-weight: $font-weight-medium;
+    background-color: $color-slate-600;
+    color: $color-white;
+    
+    &:hover:not(:disabled) {
+      background-color: $color-slate-700;
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__waiting {
+    padding: $spacing-md;
+    background-color: rgba($color-blue-600, 0.1);
+    border: 1px solid rgba($color-blue-600, 0.2);
+    border-radius: $radius-md;
+    color: $color-blue-800;
+    font-size: $font-size-sm;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    
+    @include dark-mode {
+      background-color: rgba($color-blue-600, 0.2);
+      border-color: rgba($color-blue-600, 0.3);
+      color: $color-blue-400;
+    }
+    
+    &-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__scores-title {
+    color: $color-slate-900;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-lg;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__scores-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+  
+  &__score-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    
+    &--current {
+      background-color: rgba($color-blue-600, 0.1);
+      
+      @include dark-mode {
+        background-color: rgba($color-blue-600, 0.2);
+      }
+    }
+    
+    &--default {
+      background-color: $color-white;
+      
+      @include dark-mode {
+        background-color: $color-gray-700;
+      }
+    }
+  }
+  
+  &__score-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+  
+  &__score-rank {
+    width: 2rem;
+    height: 2rem;
+    border-radius: $radius-md;
+    @include flex-center;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-white;
+    background-color: $color-blue-600;
+    
+    @include dark-mode {
+      background-color: $color-blue-500;
+    }
+  }
+  
+  &__score-name {
+    color: $color-slate-900;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__score-value {
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-md;
+    border: 1px solid $color-slate-200;
+    color: $color-slate-900;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    @include transition(all, $transition-base);
+    
+    @include dark-mode {
+      border-color: $color-gray-600;
+      color: $color-white;
+    }
+  }
+
+  &__rules-title {
+    color: $color-slate-900;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-lg;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__rules-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    color: $color-slate-700;
+    font-size: $font-size-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-300;
+    }
+  }
+  
+  &__rules-item {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-sm;
+    
+    &-icon {
+      width: 1rem;
+      height: 1rem;
+      margin-top: 0.125rem;
+      color: $color-blue-600;
+      flex-shrink: 0;
+      
+      @include dark-mode {
+        color: $color-blue-400;
+      }
+    }
+    
+    &-bullet {
+      color: $color-blue-600;
+      margin-top: 0.25rem;
+      flex-shrink: 0;
+      
+      @include dark-mode {
+        color: $color-blue-400;
+      }
+    }
+  }
+
+  &__loading {
+    padding: $spacing-md;
+    background-color: rgba(#f59e0b, 0.1);
+    border: 1px solid rgba(#f59e0b, 0.2);
+    border-radius: $radius-md;
+    color: #b45309;
+    font-size: $font-size-sm;
+    
+    @include dark-mode {
+      background-color: rgba(#f59e0b, 0.2);
+      border-color: rgba(#f59e0b, 0.3);
+      color: #fbbf24;
+    }
+  }
+}
+

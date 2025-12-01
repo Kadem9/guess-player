@@ -1,0 +1,338 @@
+@import '../variables';
+@import '../mixins';
+
+.auth {
+  min-height: calc(100vh - 200px);
+  @include flex-center;
+  padding: $spacing-2xl $spacing-lg;
+  
+  &__container {
+    width: 100%;
+    max-width: 28rem;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+  }
+  
+  &__logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    @include gradient-bg($color-blue-500, $color-purple-600, to bottom right);
+    border-radius: $radius-xl;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__logo-text {
+    color: $color-white;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-lg;
+  }
+  
+  &__title {
+    color: $color-slate-900;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__subtitle {
+    color: $color-slate-600;
+    font-size: $font-size-base;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+
+  &__card {
+    @include card-base;
+    padding: $spacing-xl;
+    border: 1px solid $color-slate-200;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-lg;
+    @include transition(background-color border-color, $transition-base);
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__label {
+    display: block;
+    margin-bottom: $spacing-sm;
+    color: $color-slate-900;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__input-wrapper {
+    position: relative;
+  }
+  
+  &__input-icon {
+    position: absolute;
+    left: $spacing-md;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.25rem;
+    height: 1.25rem;
+    color: $color-slate-400;
+    pointer-events: none;
+  }
+  
+  &__input {
+    width: 100%;
+    padding: $spacing-md $spacing-md $spacing-md 2.75rem;
+    border-radius: $radius-md;
+    border: 1px solid $color-slate-300;
+    background-color: $color-white;
+    color: $color-slate-900;
+    font-size: $font-size-base;
+    @include transition(all, $transition-base);
+    @include focus-visible;
+    
+    @include dark-mode {
+      border-color: $color-gray-600;
+      background-color: $color-gray-700;
+      color: $color-white;
+    }
+    
+    &::placeholder {
+      color: $color-slate-400;
+      
+      @include dark-mode {
+        color: $color-slate-500;
+      }
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: $color-blue-500;
+      box-shadow: 0 0 0 3px rgba($color-blue-500, 0.1);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    &--error {
+      border-color: $color-red-600;
+      
+      @include dark-mode {
+        border-color: $color-red-400;
+      }
+    }
+  }
+  
+  &__error {
+    margin-top: $spacing-xs;
+    color: $color-red-600;
+    font-size: $font-size-xs;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-red-400;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+  }
+
+  &__forgot-password {
+    text-align: right;
+  }
+  
+  &__forgot-link {
+    background: none;
+    border: none;
+    color: $color-blue-600;
+    cursor: pointer;
+    font-size: $font-size-sm;
+    text-decoration: underline;
+    @include transition(color, $transition-base);
+    @include focus-visible;
+    
+    @include dark-mode {
+      color: $color-blue-400;
+    }
+    
+    &:hover {
+      color: $color-blue-700;
+      
+      @include dark-mode {
+        color: $color-blue-300;
+      }
+    }
+  }
+
+  &__checkbox-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-sm;
+  }
+  
+  &__checkbox {
+    margin-top: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+  }
+  
+  &__checkbox-label {
+    font-size: $font-size-sm;
+    color: $color-slate-600;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &__checkbox-link {
+    background: none;
+    border: none;
+    color: $color-blue-600;
+    cursor: pointer;
+    text-decoration: underline;
+    @include transition(color, $transition-base);
+    @include focus-visible;
+    
+    @include dark-mode {
+      color: $color-blue-400;
+    }
+    
+    &:hover {
+      color: $color-blue-700;
+      
+      @include dark-mode {
+        color: $color-blue-300;
+      }
+    }
+  }
+
+  &__submit {
+    @include button-base;
+    width: 100%;
+    padding: $spacing-md;
+    border-radius: $radius-xl;
+    font-weight: $font-weight-medium;
+    box-shadow: $shadow-lg;
+    
+    &--primary {
+      @include gradient-bg($color-blue-600, $color-blue-700);
+      color: $color-white;
+      
+      &:hover:not(:disabled) {
+        @include gradient-bg($color-blue-700, $color-blue-800);
+        box-shadow: $shadow-xl;
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__alert {
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-md;
+    
+    &--success {
+      background-color: rgba(#059669, 0.1);
+      border: 1px solid rgba(#059669, 0.2);
+      color: #059669;
+      
+      @include dark-mode {
+        background-color: rgba(#10b981, 0.2);
+        border-color: rgba(#10b981, 0.3);
+        color: #10b981;
+      }
+    }
+    
+    &--error {
+      background-color: rgba($color-red-600, 0.1);
+      border: 1px solid rgba($color-red-600, 0.2);
+      color: $color-red-600;
+      
+      @include dark-mode {
+        background-color: rgba($color-red-600, 0.2);
+        border-color: rgba($color-red-600, 0.3);
+        color: $color-red-400;
+      }
+    }
+  }
+
+  &__footer {
+    margin-top: $spacing-lg;
+    text-align: center;
+  }
+  
+  &__footer-text {
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &__footer-link {
+    background: none;
+    border: none;
+    color: $color-blue-600;
+    cursor: pointer;
+    font-weight: $font-weight-medium;
+    text-decoration: underline;
+    @include transition(color, $transition-base);
+    @include focus-visible;
+    
+    @include dark-mode {
+      color: $color-blue-400;
+    }
+    
+    &:hover {
+      color: $color-blue-700;
+      
+      @include dark-mode {
+        color: $color-blue-300;
+      }
+    }
+  }
+}
+

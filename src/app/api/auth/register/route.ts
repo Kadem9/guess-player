@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { hashPassword, generateEmailToken } from '@/lib/auth';
 import { RegisterData } from '@/types';
 import { isValidEmail, isValidPassword } from '@/utils';
+import { EmailService } from '@/services/email';
 
 async function checkDatabaseConnection() {
   try {
@@ -89,8 +90,16 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // TODO: Envoyer l'email de vérification
-    console.log('Token de vérification email:', emailToken);
+    const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email?token=${emailToken}`;
+    
+    const emailResult = await EmailService.sendVerificationEmail(email, {
+      name: `${prenom} ${nom}`,
+      verificationUrl,
+    });
+
+    if (!emailResult.success) {
+      console.error('Erreur envoi email de vérification:', emailResult.error);
+    }
 
     return NextResponse.json(
       { 

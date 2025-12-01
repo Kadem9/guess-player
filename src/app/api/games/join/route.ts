@@ -73,10 +73,38 @@ export async function POST(request: NextRequest) {
     // Vérifier que l'utilisateur n'est pas déjà dans la partie
     const existingPlayer = game.players.find(player => player.userId === user.id);
     if (existingPlayer) {
-      return NextResponse.json(
-        { error: 'Vous êtes déjà dans cette partie' },
-        { status: 400 }
-      );
+      // Le joueur est déjà dans la partie, on retourne la partie complète
+      const fullGame = await prisma.game.findUnique({
+        where: { id: game.id },
+        include: {
+          creator: {
+            select: {
+              id: true,
+              nom: true,
+              prenom: true,
+              username: true,
+            }
+          },
+          players: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  nom: true,
+                  prenom: true,
+                  username: true,
+                }
+              }
+            }
+          }
+        }
+      });
+      return NextResponse.json({
+        success: true,
+        game: fullGame,
+        alreadyInGame: true,
+        message: 'Vous êtes déjà dans cette partie'
+      });
     }
 
     // Vérifier le nombre maximum de joueurs

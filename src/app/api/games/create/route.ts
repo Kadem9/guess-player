@@ -21,13 +21,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Récupérer les paramètres de la requête
+    const body = await request.json();
+    const { 
+      maxPlayers = 4, 
+      maxTurns = 10, 
+      difficulty = 'MEDIUM', 
+      timePerTurn = 30 
+    } = body;
+
     // Créer une nouvelle partie
     const game = await prisma.game.create({
       data: {
         creatorId: user.id,
         status: 'WAITING',
         currentTurn: 0,
-        maxPlayers: 6, // Maximum 6 joueurs
+        maxPlayers,
+        maxTurns,
+        difficulty,
+        timePerTurn,
       },
       include: {
         creator: {

@@ -130,9 +130,50 @@ export async function GET(
     // Déterminer si l'utilisateur est l'hôte
     const isHost = userInGame.isHost;
 
+    // Calculer les victoires pour chaque joueur
+    // Récupérer toutes les parties terminées pour calculer les victoires
+    const finishedGames = await prisma.game.findMany({
+      where: {
+        status: 'FINISHED'
+      },
+      include: {
+        players: true
+      }
+    });
+
+    // Calculer les victoires pour chaque joueur de la partie actuelle
+    const playersWithStats = await Promise.all(
+      game.players.map(async (player) => {
+        let victories = 0;
+
+        finishedGames.forEach(finishedGame => {
+          const playerInGame = finishedGame.players.find(p => p.userId === player.userId);
+          if (playerInGame) {
+            // Trier les joueurs par score pour déterminer le gagnant
+            const sortedPlayers = [...finishedGame.players].sort((a, b) => b.score - a.score);
+            const winner = sortedPlayers[0];
+            if (winner && winner.userId === player.userId) {
+              victories++;
+            }
+          }
+        });
+
+        return {
+          ...player,
+          victories
+        };
+      })
+    );
+
+    // Remplacer les joueurs par ceux avec les statistiques
+    const gameWithStats = {
+      ...game,
+      players: playersWithStats
+    };
+
     return NextResponse.json({
       success: true,
-      game,
+      game: gameWithStats,
       isHost,
       currentUser: {
         id: user.id,

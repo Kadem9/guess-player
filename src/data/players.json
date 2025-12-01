@@ -1,62 +1,1502 @@
 [
   {
     "id": "1",
-    "nom": "Mbappé",
+    "nom": "Kylian Mbappé",
     "equipe": "Real Madrid",
     "position": "Attaquant",
     "nationalite": "Française",
     "image": "/images/mbappe.jpg",
-    "indice": "Il a marqué en finale de Coupe du Monde à 19 ans",
+    "indice": "Il est le premier joueur depuis 1966 à inscrire un triplé en finale de Coupe du Monde.",
     "difficulte": "EASY"
   },
   {
-    "id": "2", 
-    "nom": "Messi",
+    "id": "2",
+    "nom": "Lionel Messi",
     "equipe": "Inter Miami",
     "position": "Attaquant",
     "nationalite": "Argentine",
     "image": "/images/messi.jpg",
-    "indice": "Il a 8 Ballons d'Or",
+    "indice": "Formé à La Masia, il détient le record absolu de buts dans l'histoire de la Liga espagnole.",
     "difficulte": "EASY"
   },
   {
     "id": "3",
-    "nom": "Benzema",
-    "equipe": "Al-Ittihad",
-    "position": "Attaquant", 
-    "nationalite": "Française",
-    "image": "/images/benzema.jpg",
-    "indice": "Il a remporté le Ballon d'Or en 2022",
-    "difficulte": "MEDIUM"
+    "nom": "Cristiano Ronaldo",
+    "equipe": "Al-Nassr",
+    "position": "Attaquant",
+    "nationalite": "Portugaise",
+    "image": "/images/ronaldo.jpg",
+    "indice": "Meilleur buteur de l'histoire du Real Madrid et des sélections nationales.",
+    "difficulte": "EASY"
   },
   {
     "id": "4",
-    "nom": "Haaland",
+    "nom": "Erling Haaland",
     "equipe": "Manchester City",
     "position": "Attaquant",
     "nationalite": "Norvégienne",
-    "image": "/images/haaland.jpg", 
-    "indice": "Il mesure 1m94 et joue pour Manchester City",
+    "image": "/images/haaland.jpg",
+    "indice": "Il a marqué 9 buts en un seul match lors de la Coupe du Monde U20 contre le Honduras.",
     "difficulte": "MEDIUM"
   },
   {
     "id": "5",
-    "nom": "Neymar",
+    "nom": "Kevin De Bruyne",
+    "equipe": "Manchester City",
+    "position": "Milieu",
+    "nationalite": "Belge",
+    "image": "/images/kdb.jpg",
+    "indice": "Rejeté par José Mourinho à Chelsea, il est devenu le meilleur passeur de l'histoire de City.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "6",
+    "nom": "Jude Bellingham",
+    "equipe": "Real Madrid",
+    "position": "Milieu",
+    "nationalite": "Anglaise",
+    "image": "/images/bellingham.jpg",
+    "indice": "Birmingham City a retiré son numéro 22 alors qu'il n'avait que 17 ans lors de son départ.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "7",
+    "nom": "Vinícius Júnior",
+    "equipe": "Real Madrid",
+    "position": "Attaquant",
+    "nationalite": "Brésilienne",
+    "image": "/images/vinicius.jpg",
+    "indice": "Unique buteur de la finale de la Ligue des Champions 2022 au Stade de France.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "8",
+    "nom": "Robert Lewandowski",
+    "equipe": "FC Barcelone",
+    "position": "Attaquant",
+    "nationalite": "Polonaise",
+    "image": "/images/lewandowski.jpg",
+    "indice": "Il est célèbre pour avoir marqué un quintuplé en 9 minutes contre Wolfsburg.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "9",
+    "nom": "Mohamed Salah",
+    "equipe": "Liverpool",
+    "position": "Attaquant",
+    "nationalite": "Égyptienne",
+    "image": "/images/salah.jpg",
+    "indice": "Surnommé le Pharaon, il a échoué à Chelsea avant d'exploser en Italie puis en Angleterre.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "10",
+    "nom": "Luka Modrić",
+    "equipe": "Real Madrid",
+    "position": "Milieu",
+    "nationalite": "Croate",
+    "image": "/images/modric.jpg",
+    "indice": "Il a brisé l'hégémonie Messi-Ronaldo en remportant le Ballon d'Or 2018 après une finale de Mondial.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "11",
+    "nom": "Harry Kane",
+    "equipe": "Bayern Munich",
+    "position": "Attaquant",
+    "nationalite": "Anglaise",
+    "image": "/images/kane.jpg",
+    "indice": "Meilleur buteur de l'histoire de Tottenham, il n'a pourtant jamais remporté de trophée majeur avec ce club.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "12",
+    "nom": "Antoine Griezmann",
+    "equipe": "Atlético Madrid",
+    "position": "Attaquant",
+    "nationalite": "Française",
+    "image": "/images/griezmann.jpg",
+    "indice": "Formé à la Real Sociedad car aucun centre de formation français ne voulait de lui à cause de sa taille.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "13",
+    "nom": "Neymar Jr",
     "equipe": "Al-Hilal",
     "position": "Attaquant",
     "nationalite": "Brésilienne",
     "image": "/images/neymar.jpg",
-    "indice": "Il a été transféré pour 222M€ au PSG",
+    "indice": "Vainqueur de la Copa Libertadores avec Santos avant de former la 'MSN'.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "14",
+    "nom": "Virgil van Dijk",
+    "equipe": "Liverpool",
+    "position": "Défenseur",
+    "nationalite": "Néerlandaise",
+    "image": "/images/vandijk.jpg",
+    "indice": "En 2019, aucun joueur n'a réussi à le dribbler sur l'ensemble de la saison.",
     "difficulte": "HARD"
   },
   {
-    "id": "6",
-    "nom": "Rivaldo",
+    "id": "15",
+    "nom": "Rodri",
+    "equipe": "Manchester City",
+    "position": "Milieu",
+    "nationalite": "Espagnole",
+    "image": "/images/rodri.jpg",
+    "indice": "Sentinelle de Guardiola, il a marqué le but du sacre en C1 contre l'Inter Milan.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "16",
+    "nom": "Son Heung-min",
+    "equipe": "Tottenham",
+    "position": "Attaquant",
+    "nationalite": "Sud-Coréenne",
+    "image": "/images/son.jpg",
+    "indice": "Il a remporté le Prix Puskás pour un but en solitaire incroyable contre Burnley traversant tout le terrain.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "17",
+    "nom": "Karim Benzema",
+    "equipe": "Al-Ittihad",
+    "position": "Attaquant",
+    "nationalite": "Française",
+    "image": "/images/benzema.jpg",
+    "indice": "Banni de sa sélection pendant plus de 5 ans, il revient pour gagner la Ligue des Nations.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "18",
+    "nom": "Thibaut Courtois",
+    "equipe": "Real Madrid",
+    "position": "Gardien",
+    "nationalite": "Belge",
+    "image": "/images/courtois.jpg",
+    "indice": "Il a été élu Homme du Match lors de la finale de Ligue des Champions 2022 grâce à ses 9 arrêts.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "19",
+    "nom": "Jamal Musiala",
+    "equipe": "Bayern Munich",
+    "position": "Milieu",
+    "nationalite": "Allemande",
+    "image": "/images/musiala.jpg",
+    "indice": "Né à Stuttgart, il a joué pour les équipes de jeunes de l'Angleterre avant de choisir la Mannschaft.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "20",
+    "nom": "Bukayo Saka",
+    "equipe": "Arsenal",
+    "position": "Attaquant",
+    "nationalite": "Anglaise",
+    "image": "/images/saka.jpg",
+    "indice": "Il a manqué le penalty décisif en finale de l'Euro 2020 mais est revenu plus fort pour devenir le visage d'Arsenal.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "21",
+    "nom": "Lautaro Martínez",
+    "equipe": "Inter Milan",
+    "position": "Attaquant",
+    "nationalite": "Argentine",
+    "image": "/images/lautaro.jpg",
+    "indice": "Surnommé 'El Toro', il est le capitaine de l'Inter Milan.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "22",
+    "nom": "Florian Wirtz",
+    "equipe": "Bayer Leverkusen",
+    "position": "Milieu",
+    "nationalite": "Allemande",
+    "image": "/images/wirtz.jpg",
+    "indice": "Pièce maîtresse de l'équipe de Xabi Alonso restée invaincue toute une saison en Bundesliga.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "23",
+    "nom": "Cole Palmer",
+    "equipe": "Chelsea",
+    "position": "Milieu",
+    "nationalite": "Anglaise",
+    "image": "/images/palmer.jpg",
+    "indice": "Formé à City, il rejoint Chelsea et célèbre ses buts en frottant ses bras comme s'il avait froid.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "24",
+    "nom": "Alisson Becker",
+    "equipe": "Liverpool",
+    "position": "Gardien",
+    "nationalite": "Brésilienne",
+    "image": "/images/alisson.jpg",
+    "indice": "Gardien de but, il a marqué un but de la tête sur corner à la dernière minute contre West Bromwich.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "25",
+    "nom": "Khvicha Kvaratskhelia",
+    "equipe": "Naples",
+    "position": "Attaquant",
+    "nationalite": "Géorgienne",
+    "image": "/images/kvara.jpg",
+    "indice": "Surnommé 'Kvaradona', il a mené Naples au titre de champion après 33 ans d'attente.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "26",
+    "nom": "Phil Foden",
+    "equipe": "Manchester City",
+    "position": "Milieu",
+    "nationalite": "Anglaise",
+    "image": "/images/foden.jpg",
+    "indice": "Pep Guardiola a dit de lui qu'il était le joueur le plus talentueux qu'il ait jamais vu à son âge, même devant Messi.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "27",
+    "nom": "Zlatan Ibrahimović",
+    "equipe": "Retraité",
+    "position": "Attaquant",
+    "nationalite": "Suédoise",
+    "image": "/images/zlatan.jpg",
+    "indice": "Il a joué pour les trois grands clubs d'Italie (Juve, Inter, Milan) et a marqué un retourné de 40 mètres contre l'Angleterre.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "28",
+    "nom": "Mike Maignan",
+    "equipe": "AC Milan",
+    "position": "Gardien",
+    "nationalite": "Française",
+    "image": "/images/maignan.jpg",
+    "indice": "Successeur d'Hugo Lloris, il a remporté le titre de champion de France avec Lille devant le PSG.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "29",
+    "nom": "Rafael Leão",
+    "equipe": "AC Milan",
+    "position": "Attaquant",
+    "nationalite": "Portugaise",
+    "image": "/images/leao.jpg",
+    "indice": "Surnommé le Mbappé portugais à ses débuts, il joue souvent avec le sourire aux lèvres.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "30",
+    "nom": "Toni Kroos",
+    "equipe": "Retraité",
+    "position": "Milieu",
+    "nationalite": "Allemande",
+    "image": "/images/kroos.jpg",
+    "indice": "Il a pris sa retraite en 2024 au sommet, juste après avoir gagné une dernière Ligue des Champions.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "31",
+    "nom": "Bernardo Silva",
+    "equipe": "Manchester City",
+    "position": "Milieu",
+    "nationalite": "Portugaise",
+    "image": "/images/bernardosilva.jpg",
+    "indice": "Champion de France avec Monaco en 2017, ce petit gaucher est surnommé 'Bubblegum' pour sa conduite de balle.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "32",
+    "nom": "Manuel Neuer",
+    "equipe": "Bayern Munich",
+    "position": "Gardien",
+    "nationalite": "Allemande",
+    "image": "/images/neuer.jpg",
+    "indice": "Il a révolutionné son poste en jouant comme un libéro, sortant loin de sa surface. Champion du Monde 2014.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "33",
+    "nom": "Sergio Ramos",
+    "equipe": "Sans club",
+    "position": "Défenseur",
+    "nationalite": "Espagnole",
+    "image": "/images/ramos.jpg",
+    "indice": "Légendaire pour son but égalisateur à la 93e minute en finale de la Ligue des Champions 2014 (La Décima).",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "34",
+    "nom": "Sadio Mané",
+    "equipe": "Al-Nassr",
+    "position": "Attaquant",
+    "nationalite": "Sénégalaise",
+    "image": "/images/mane.jpg",
+    "indice": "Il détient le record du triplé le plus rapide de l'histoire de la Premier League (2 minutes 56 secondes).",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "35",
+    "nom": "Ousmane Dembélé",
+    "equipe": "PSG",
+    "position": "Attaquant",
+    "nationalite": "Française",
+    "image": "/images/dembele.jpg",
+    "indice": "Joueur ambidextre incapable de dire quel est son meilleur pied lors d'une interview célèbre.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "36",
+    "nom": "Bruno Fernandes",
+    "equipe": "Manchester United",
+    "position": "Milieu",
+    "nationalite": "Portugaise",
+    "image": "/images/bruno.jpg",
+    "indice": "Arrivé du Sporting, il a transformé le jeu de Manchester United et est un spécialiste des penaltys avec son petit saut.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "37",
+    "nom": "Lamine Yamal",
+    "equipe": "FC Barcelone",
+    "position": "Attaquant",
+    "nationalite": "Espagnole",
+    "image": "/images/yamal.jpg",
+    "indice": "À 16 ans et 362 jours, il est devenu le plus jeune buteur de l'histoire de l'Euro (2024).",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "38",
+    "nom": "Trent Alexander-Arnold",
+    "equipe": "Liverpool",
+    "position": "Défenseur",
+    "nationalite": "Anglaise",
+    "image": "/images/trent.jpg",
+    "indice": "Célèbre pour son 'Corner joué vite' (Corner taken quickly) qui a éliminé le Barça en 2019.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "39",
+    "nom": "Achraf Hakimi",
+    "equipe": "PSG",
+    "position": "Défenseur",
+    "nationalite": "Marocaine",
+    "image": "/images/hakimi.jpg",
+    "indice": "Latéral ultra rapide formé au Real Madrid, il a marqué une Panenka décisive en 8e de finale du Mondial 2022.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "40",
+    "nom": "Victor Osimhen",
+    "equipe": "Galatasaray",
+    "position": "Attaquant",
+    "nationalite": "Nigériane",
+    "image": "/images/osimhen.jpg",
+    "indice": "Il joue avec un masque de protection noir et a ramené le Scudetto à Naples après l'ère Maradona.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "41",
+    "nom": "Angel Di Maria",
+    "equipe": "Benfica",
+    "position": "Attaquant",
+    "nationalite": "Argentine",
+    "image": "/images/dimaria.jpg",
+    "indice": "L'homme des finales : buteur en finale des JO, de la Copa América et de la Coupe du Monde 2022.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "42",
+    "nom": "Declan Rice",
+    "equipe": "Arsenal",
+    "position": "Milieu",
+    "nationalite": "Anglaise",
+    "image": "/images/rice.jpg",
+    "indice": "Il a quitté West Ham pour plus de 100M£ après avoir soulevé la Ligue Europa Conférence en tant que capitaine.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "43",
+    "nom": "William Saliba",
+    "equipe": "Arsenal",
+    "position": "Défenseur",
+    "nationalite": "Française",
+    "image": "/images/saliba.jpg",
+    "indice": "Prêté trois fois (St Etienne, Nice, OM) avant de s'imposer comme le patron de la défense d'Arsenal.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "44",
+    "nom": "Pedri",
+    "equipe": "FC Barcelone",
+    "position": "Milieu",
+    "nationalite": "Espagnole",
+    "image": "/images/pedri.jpg",
+    "indice": "Comparé à Iniesta, il a joué 73 matchs lors de sa première saison pro (Club + Euro + JO).",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "45",
+    "nom": "Federico Valverde",
+    "equipe": "Real Madrid",
+    "position": "Milieu",
+    "nationalite": "Uruguayenne",
+    "image": "/images/valverde.jpg",
+    "indice": "Surnommé 'El Halcón' (le Faucon), il est devenu un héros en taclant Morata par derrière en finale de Supercoupe.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "46",
+    "nom": "Joshua Kimmich",
+    "equipe": "Bayern Munich",
+    "position": "Milieu",
+    "nationalite": "Allemande",
+    "image": "/images/kimmich.jpg",
+    "indice": "Successeur de Philipp Lahm, il peut jouer aussi bien latéral droit que milieu défensif avec une mentalité de guerrier.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "47",
+    "nom": "Gianluigi Donnarumma",
+    "equipe": "PSG",
+    "position": "Gardien",
+    "nationalite": "Italienne",
+    "image": "/images/donnarumma.jpg",
+    "indice": "Il a débuté en Serie A à 16 ans et a été élu meilleur joueur de l'Euro 2020 (chose rare pour un gardien).",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "48",
+    "nom": "Ilkay Gündogan",
+    "equipe": "Manchester City",
+    "position": "Milieu",
+    "nationalite": "Allemande",
+    "image": "/images/gundogan.jpg",
+    "indice": "Capitaine de Manchester City lors de leur triplé historique, il a fait un court passage au Barça avant de revenir.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "49",
+    "nom": "Marcus Rashford",
+    "equipe": "Manchester United",
+    "position": "Attaquant",
+    "nationalite": "Anglaise",
+    "image": "/images/rashford.jpg",
+    "indice": "Il a marqué un doublé pour ses débuts en Europe et en Premier League. Très engagé contre la pauvreté infantile.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "50",
+    "nom": "Theo Hernandez",
+    "equipe": "AC Milan",
+    "position": "Défenseur",
+    "nationalite": "Française",
+    "image": "/images/theo.jpg",
+    "indice": "Latéral gauche au style très offensif, son frère Lucas joue aussi en équipe de France.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "51",
+    "nom": "Martin Ødegaard",
+    "equipe": "Arsenal",
+    "position": "Milieu",
+    "nationalite": "Norvégienne",
+    "image": "/images/odegaard.jpg",
+    "indice": "Recruté par le Real Madrid à seulement 16 ans, il a trouvé la stabilité et le brassard de capitaine à Arsenal.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "52",
+    "nom": "Paulo Dybala",
+    "equipe": "AS Roma",
+    "position": "Attaquant",
+    "nationalite": "Argentine",
+    "image": "/images/dybala.jpg",
+    "indice": "Surnommé 'La Joya', il a quitté la Juve en pleurs pour être accueilli comme un empereur à Rome.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "53",
+    "nom": "Ederson",
+    "equipe": "Manchester City",
+    "position": "Gardien",
+    "nationalite": "Brésilienne",
+    "image": "/images/ederson.jpg",
+    "indice": "Gardien connu pour avoir un jeu au pied digne d'un milieu de terrain et délivrer des passes décisives.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "54",
+    "nom": "Alphonso Davies",
+    "equipe": "Bayern Munich",
+    "position": "Défenseur",
+    "nationalite": "Canadienne",
+    "image": "/images/davies.jpg",
+    "indice": "Né dans un camp de réfugiés au Ghana, il est devenu le latéral le plus rapide du monde.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "55",
+    "nom": "Julián Álvarez",
+    "equipe": "Atlético Madrid",
+    "position": "Attaquant",
+    "nationalite": "Argentine",
+    "image": "/images/alvarez.jpg",
+    "indice": "Surnommé 'L'Araignée', il a tout gagné (CDM, Copa, LDC, PL) à seulement 23 ans.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "56",
+    "nom": "Frenkie de Jong",
+    "equipe": "FC Barcelone",
+    "position": "Milieu",
+    "nationalite": "Néerlandaise",
+    "image": "/images/dejong.jpg",
+    "indice": "Révélé avec l'Ajax lors de l'épopée 2019, il est le métronome du milieu barcelonais.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "57",
+    "nom": "N'Golo Kanté",
+    "equipe": "Al-Ittihad",
+    "position": "Milieu",
+    "nationalite": "Française",
+    "image": "/images/kante.jpg",
+    "indice": "On dit de lui que '70% de la Terre est couverte par l'eau, le reste par lui'.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "58",
+    "nom": "Thomas Müller",
+    "equipe": "Bayern Munich",
+    "position": "Attaquant",
+    "nationalite": "Allemande",
+    "image": "/images/muller.jpg",
+    "indice": "Il s'est inventé son propre rôle : le 'Raumdeuter' (l'interprète d'espaces).",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "59",
+    "nom": "Eduardo Camavinga",
+    "equipe": "Real Madrid",
+    "position": "Milieu",
+    "nationalite": "Française",
+    "image": "/images/camavinga.jpg",
+    "indice": "Carlo Ancelotti l'utilise partout : milieu, latéral gauche... Il a été le plus jeune joueur à jouer pour la France depuis 1914.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "60",
+    "nom": "Gavi",
+    "equipe": "FC Barcelone",
+    "position": "Milieu",
+    "nationalite": "Espagnole",
+    "image": "/images/gavi.jpg",
+    "indice": "Connu pour sa hargne sur le terrain et le fait qu'il joue souvent avec ses lacets défaits.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "61",
+    "nom": "Pelé",
     "equipe": "Légende",
     "position": "Attaquant",
     "nationalite": "Brésilienne",
-    "image": "/images/neymar.jpg",
-    "indice": "Brésilien Ri",
+    "image": "/images/pele.jpg",
+    "indice": "Le Roi. Il est le seul joueur de l'histoire à avoir remporté 3 Coupes du Monde.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "62",
+    "nom": "Diego Maradona",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Argentine",
+    "image": "/images/maradona.jpg",
+    "indice": "Auteur de la 'Main de Dieu' et du 'But du Siècle' dans le même match contre l'Angleterre en 1986.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "63",
+    "nom": "Zinédine Zidane",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Française",
+    "image": "/images/zidane.jpg",
+    "indice": "Célèbre pour sa reprise de volée en finale de C1 2002 et son coup de tête sur Materazzi en 2006.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "64",
+    "nom": "Ronaldinho",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Brésilienne",
+    "image": "/images/ronaldinho.jpg",
+    "indice": "Le sourire du football. Il a été applaudi debout par les supporters du Real Madrid alors qu'il jouait au Barça.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "65",
+    "nom": "Thierry Henry",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Française",
+    "image": "/images/henry.jpg",
+    "indice": "Meilleur buteur de l'histoire d'Arsenal, il a sa statue devant l'Emirates Stadium.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "66",
+    "nom": "Ronaldo Nazário",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Brésilienne",
+    "image": "/images/r9.jpg",
+    "indice": "Surnommé 'O Fenomeno', il a marqué 2 buts en finale du Mondial 2002 avec une coupe de cheveux triangle horrible.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "67",
+    "nom": "Paolo Maldini",
+    "equipe": "Légende",
+    "position": "Défenseur",
+    "nationalite": "Italienne",
+    "image": "/images/maldini.jpg",
+    "indice": "Symbole de fidélité, il a joué 25 saisons uniquement à l'AC Milan et remporté 5 Ligues des Champions.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "68",
+    "nom": "Johan Cruyff",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Néerlandaise",
+    "image": "/images/cruyff.jpg",
+    "indice": "Inventeur du 'Football Total' et père spirituel du jeu du FC Barcelone moderne.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "69",
+    "nom": "Andrés Iniesta",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Espagnole",
+    "image": "/images/iniesta.jpg",
+    "indice": "L'homme qui a offert la première Coupe du Monde à l'Espagne d'un but à la 116ème minute.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "70",
+    "nom": "Gianluigi Buffon",
+    "equipe": "Légende",
+    "position": "Gardien",
+    "nationalite": "Italienne",
+    "image": "/images/buffon.jpg",
+    "indice": "Légende de la Juventus, il a joué jusqu'à 45 ans mais n'a jamais réussi à gagner la Ligue des Champions.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "71",
+    "nom": "Kaká",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Brésilienne",
+    "image": "/images/kaka.jpg",
+    "indice": "Le dernier être humain à avoir gagné le Ballon d'Or (2007) avant le duopole Messi-Ronaldo.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "72",
+    "nom": "Xavi Hernández",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Espagnole",
+    "image": "/images/xavi.jpg",
+    "indice": "Le cerveau du 'Tiki-Taka', il ne perdait quasiment jamais le ballon.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "73",
+    "nom": "Wayne Rooney",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Anglaise",
+    "image": "/images/rooney.jpg",
+    "indice": "Meilleur buteur de l'histoire de Manchester United, célèbre pour son retourné acrobatique contre City.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "74",
+    "nom": "Steven Gerrard",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Anglaise",
+    "image": "/images/gerrard.jpg",
+    "indice": "Capitaine courage de Liverpool lors du 'Miracle d'Istanbul' en 2005, mais il a glissé (the slip) perdant le titre en 2014.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "75",
+    "nom": "Luis Suárez",
+    "equipe": "Inter Miami",
+    "position": "Attaquant",
+    "nationalite": "Uruguayenne",
+    "image": "/images/suarez.jpg",
+    "indice": "Buteur prolifique (El Pistolero), aussi connu pour avoir mordu trois adversaires différents en plein match.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "76",
+    "nom": "Gareth Bale",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Galloise",
+    "image": "/images/bale.jpg",
+    "indice": "Il a posé avec un drapeau : 'Wales. Golf. Madrid. In that order'.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "77",
+    "nom": "David Beckham",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Anglaise",
+    "image": "/images/beckham.jpg",
+    "indice": "Icone de la mode et spécialiste des coups francs brossés, il est aujourd'hui propriétaire de l'Inter Miami.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "78",
+    "nom": "Andrea Pirlo",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Italienne",
+    "image": "/images/pirlo.jpg",
+    "indice": "Le Maestro. Il a couru le moins possible mais a dicté le jeu comme personne. Adore le vin.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "79",
+    "nom": "Sergio Agüero",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Argentine",
+    "image": "/images/aguero.jpg",
+    "indice": "AGUEROOOO ! Son but à la 93:20 a offert à Manchester City son premier titre de PL depuis 44 ans.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "80",
+    "nom": "Francesco Totti",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Italienne",
+    "image": "/images/totti.jpg",
+    "indice": "Il Re di Roma (Le Roi de Rome). Il a refusé le Real Madrid pour rester dans son club de toujours : l'AS Roma.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "81",
+    "nom": "Didier Drogba",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Ivoirienne",
+    "image": "/images/drogba.jpg",
+    "indice": "Il a marqué le penalty décisif de la Ligue des Champions 2012 pour Chelsea et a aidé à stopper une guerre civile dans son pays.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "82",
+    "nom": "Franck Ribéry",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Française",
+    "image": "/images/ribery.jpg",
+    "indice": "Kaiser Franck. Légende du Bayern Munich, il estime s'être fait voler le Ballon d'Or 2013.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "83",
+    "nom": "Arjen Robben",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Néerlandaise",
+    "image": "/images/robben.jpg",
+    "indice": "Tout le monde savait qu'il allait rentrer sur son pied gauche et tirer, mais personne ne pouvait l'arrêter.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "84",
+    "nom": "Samuel Eto'o",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Camerounaise",
+    "image": "/images/etoo.jpg",
+    "indice": "Le seul joueur à avoir réalisé deux triplés (Championnat-Coupe-C1) consécutifs avec deux clubs différents (Barça et Inter).",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "85",
+    "nom": "Roberto Carlos",
+    "equipe": "Légende",
+    "position": "Défenseur",
+    "nationalite": "Brésilienne",
+    "image": "/images/robertocarlos.jpg",
+    "indice": "Latéral gauche aux cuisses énormes, célèbre pour son coup franc 'banane' contre la France défiant la physique.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "86",
+    "nom": "Eric Cantona",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Française",
+    "image": "/images/cantona.jpg",
+    "indice": "'The King'. Il jouait le col relevé à Manchester United et a donné un coup de pied de Kung-fu à un spectateur.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "87",
+    "nom": "George Weah",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Libérienne",
+    "image": "/images/weah.jpg",
+    "indice": "Légende du PSG et du Milan AC, il est le seul Africain Ballon d'Or et est devenu Président de la République du Liberia.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "88",
+    "nom": "Oliver Kahn",
+    "equipe": "Légende",
+    "position": "Gardien",
+    "nationalite": "Allemande",
+    "image": "/images/kahn.jpg",
+    "indice": "Le Titan. Seul gardien de l'histoire à avoir été élu Meilleur Joueur d'une Coupe du Monde (2002).",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "89",
+    "nom": "Eden Hazard",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Belge",
+    "image": "/images/hazard.jpg",
+    "indice": "Magicien du dribble à Chelsea, sa carrière s'est malheureusement effondrée après son transfert de rêve au Real Madrid.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "90",
+    "nom": "Cafu",
+    "equipe": "Légende",
+    "position": "Défenseur",
+    "nationalite": "Brésilienne",
+    "image": "/images/cafu.jpg",
+    "indice": "Le seul joueur de l'histoire à avoir disputé trois finales de Coupe du Monde consécutives (1994, 1998, 2002).",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "91",
+    "nom": "Iker Casillas",
+    "equipe": "Légende",
+    "position": "Gardien",
+    "nationalite": "Espagnole",
+    "image": "/images/casillas.jpg",
+    "indice": "Surnommé 'San Iker', il a soulevé la Coupe du Monde 2010 après un arrêt décisif du pied face à Robben.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "92",
+    "nom": "Emiliano Martínez",
+    "equipe": "Aston Villa",
+    "position": "Gardien",
+    "nationalite": "Argentine",
+    "image": "/images/dibu.jpg",
+    "indice": "Surnommé 'Dibu', son arrêt à la 123ème minute contre Kolo Muani a sauvé l'Argentine.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "93",
+    "nom": "Carles Puyol",
+    "equipe": "Légende",
+    "position": "Défenseur",
+    "nationalite": "Espagnole",
+    "image": "/images/puyol.jpg",
+    "indice": "Capitaine emblématique du grand Barça, connu pour sa longue chevelure bouclée et son engagement total.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "94",
+    "nom": "Olivier Giroud",
+    "equipe": "LAFC",
+    "position": "Attaquant",
+    "nationalite": "Française",
+    "image": "/images/giroud.jpg",
+    "indice": "Meilleur buteur de l'histoire de l'Équipe de France, il a même fini un match dans les buts avec l'AC Milan.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "95",
+    "nom": "Marco van Basten",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Néerlandaise",
+    "image": "/images/vanbasten.jpg",
+    "indice": "Sa carrière s'est brisée à 28 ans à cause des blessures, mais il a marqué une volée impossible en finale de l'Euro 88.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "96",
+    "nom": "Luís Figo",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Portugaise",
+    "image": "/images/figo.jpg",
+    "indice": "Traître suprême pour les Catalans, une tête de cochon a été jetée sur le terrain lors de son retour au Camp Nou avec le Real.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "97",
+    "nom": "Paul Pogba",
+    "equipe": "Sans club / Suspendu",
+    "position": "Milieu",
+    "nationalite": "Française",
+    "image": "/images/pogba.jpg",
+    "indice": "Connu pour ses coupes de cheveux et son 'Dab', il a marqué en finale du Mondial 2018.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "98",
+    "nom": "Lev Yachine",
+    "equipe": "Légende",
+    "position": "Gardien",
+    "nationalite": "Soviétique",
+    "image": "/images/yachine.jpg",
+    "indice": "L'Araignée Noire. À ce jour, il est le seul gardien de l'histoire à avoir remporté le Ballon d'Or.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "99",
+    "nom": "Michel Platini",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Française",
+    "image": "/images/platini.jpg",
+    "indice": "Le Roi Michel. Il a remporté 3 Ballons d'Or consécutifs et a marqué 9 buts lors du seul Euro 1984.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "100",
+    "nom": "Fabio Cannavaro",
+    "equipe": "Légende",
+    "position": "Défenseur",
+    "nationalite": "Italienne",
+    "image": "/images/cannavaro.jpg",
+    "indice": "Dernier défenseur à avoir remporté le Ballon d'Or (2006) après un Mondial impérial.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "101",
+    "nom": "Sergio Busquets",
+    "equipe": "Inter Miami",
+    "position": "Milieu",
+    "nationalite": "Espagnole",
+    "image": "/images/busquets.jpg",
+    "indice": "Vicente del Bosque a dit : 'Si vous regardez le match, vous ne le voyez pas. Si vous le regardez lui, vous voyez tout le match'.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "102",
+    "nom": "Philipp Lahm",
+    "equipe": "Légende",
+    "position": "Défenseur",
+    "nationalite": "Allemande",
+    "image": "/images/lahm.jpg",
+    "indice": "Défenseur le plus intelligent de sa génération, il n'a jamais reçu un seul carton rouge dans toute sa carrière.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "103",
+    "nom": "George Best",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Nord-Irlandaise",
+    "image": "/images/best.jpg",
+    "indice": "Le '5ème Beatles'. Génie détruit par l'alcool, il a dit : 'J'ai claqué beaucoup d'argent dans l'alcool, les filles et les voitures. Le reste, je l'ai gaspillé'.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "104",
+    "nom": "Antonio Rüdiger",
+    "equipe": "Real Madrid",
+    "position": "Défenseur",
+    "nationalite": "Allemande",
+    "image": "/images/rudiger.jpg",
+    "indice": "Défenseur au style de course atypique (genoux hauts), réputé pour sa folie douce et son agressivité.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "105",
+    "nom": "Dennis Bergkamp",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Néerlandaise",
+    "image": "/images/bergkamp.jpg",
+    "indice": "Il avait une peur panique de l'avion ('Non-Flying Dutchman'). Son but contre Newcastle est l'un des plus beaux de la PL.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "106",
+    "nom": "Thiago Silva",
+    "equipe": "Fluminense",
+    "position": "Défenseur",
+    "nationalite": "Brésilienne",
+    "image": "/images/thiagosilva.jpg",
+    "indice": "Surnommé 'O Monstro', il a brillé au Milan, au PSG et à Chelsea avant de rentrer au Brésil à près de 40 ans.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "107",
+    "nom": "Frank Lampard",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Anglaise",
+    "image": "/images/lampard.jpg",
+    "indice": "Bien que milieu de terrain, il est le meilleur buteur de l'histoire de Chelsea (211 buts).",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "108",
+    "nom": "Patrick Vieira",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Française",
+    "image": "/images/vieira.jpg",
+    "indice": "Capitaine des 'Invincibles' d'Arsenal, ses duels avec Roy Keane sont légendaires.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "109",
+    "nom": "Mario Balotelli",
+    "equipe": "Genoa",
+    "position": "Attaquant",
+    "nationalite": "Italienne",
+    "image": "/images/balotelli.jpg",
+    "indice": "Il a mis le feu à sa propre maison avec des feux d'artifice et a dévoilé un t-shirt 'Why Always Me?' après un but.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "110",
+    "nom": "Romário",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Brésilienne",
+    "image": "/images/romario.jpg",
+    "indice": "Renard des surfaces, il prétend avoir marqué plus de 1000 buts en carrière.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "111",
+    "nom": "Marc-André ter Stegen",
+    "equipe": "FC Barcelone",
+    "position": "Gardien",
+    "nationalite": "Allemande",
+    "image": "/images/terstegen.jpg",
+    "indice": "Gardien allemand, il est le mur du Barça depuis une décennie mais reste l'éternel numéro 2 en sélection.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "112",
+    "nom": "Gennaro Gattuso",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Italienne",
+    "image": "/images/gattuso.jpg",
+    "indice": "Pitbull du milieu de terrain, il a dit un jour : 'Quand je vois jouer Pirlo, je me demande si je suis vraiment footballeur'.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "113",
+    "nom": "Alexis Sánchez",
+    "equipe": "Udinese",
+    "position": "Attaquant",
+    "nationalite": "Chilienne",
+    "image": "/images/sanchez.jpg",
+    "indice": "El Niño Maravilla. Il a offert la première Copa América au Chili d'une Panenka.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "114",
+    "nom": "Yaya Touré",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Ivoirienne",
+    "image": "/images/yaya.jpg",
+    "indice": "Monstre physique et technique à City, son agent s'est plaint un jour que le club n'avait pas fêté son anniversaire.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "115",
+    "nom": "Ferenc Puskás",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Hongroise",
+    "image": "/images/puskas.jpg",
+    "indice": "Le prix du plus beau but de l'année porte son nom. Légende du Real Madrid avec un physique pourtant rondouillard.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "116",
+    "nom": "Rivaldo",
+    "equipe": "Légende",
+    "position": "Milieu",
+    "nationalite": "Brésilienne",
+    "image": "/images/rivaldo.jpg",
+    "indice": "Ballon d'Or 1999, célèbre pour son retourné acrobatique contre Valence et sa simulation grotesque au poteau de corner en 2002.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "117",
+    "nom": "Romelu Lukaku",
+    "equipe": "Naples",
+    "position": "Attaquant",
+    "nationalite": "Belge",
+    "image": "/images/lukaku.jpg",
+    "indice": "Meilleur buteur de l'histoire de la Belgique, il a généré des montants de transferts cumulés astronomiques.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "118",
+    "nom": "Peter Schmeichel",
+    "equipe": "Légende",
+    "position": "Gardien",
+    "nationalite": "Danoise",
+    "image": "/images/schmeichel.jpg",
+    "indice": "Le père de Kasper. Gardien légendaire de Manchester United, il montait souvent sur les corners.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "119",
+    "nom": "Pepe",
+    "equipe": "Retraité",
+    "position": "Défenseur",
+    "nationalite": "Portugaise",
+    "image": "/images/pepe.jpg",
+    "indice": "Boucher du Real Madrid à ses débuts, il est devenu avec l'âge un défenseur impérial, jouant l'Euro à 41 ans.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "120",
+    "nom": "Eusébio",
+    "equipe": "Légende",
+    "position": "Attaquant",
+    "nationalite": "Portugaise",
+    "image": "/images/eusebio.jpg",
+    "indice": "La Panthère Noire. Premier grand joueur africain/portugais, il a marqué 9 buts lors de la Coupe du Monde 1966.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "121",
+    "nom": "Endrick",
+    "equipe": "Real Madrid",
+    "position": "Attaquant",
+    "nationalite": "Brésilienne",
+    "image": "/images/endrick.jpg",
+    "indice": "Recruté par le Real Madrid à 16 ans, il a marqué à Wembley avec le Brésil avant même d'être majeur.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "122",
+    "nom": "Warren Zaïre-Emery",
+    "equipe": "PSG",
+    "position": "Milieu",
+    "nationalite": "Française",
+    "image": "/images/wze.jpg",
+    "indice": "Titulaire indiscutable au PSG alors qu'il passait encore son baccalauréat.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "123",
+    "nom": "Nico Williams",
+    "equipe": "Athletic Bilbao",
+    "position": "Attaquant",
+    "nationalite": "Espagnole",
+    "image": "/images/nicowilliams.jpg",
+    "indice": "Révélation de l'Euro 2024, il joue dans le même club que son grand frère Iñaki.",
+    "difficulte": "EASY"
+  },
+  {
+    "id": "124",
+    "nom": "Alejandro Garnacho",
+    "equipe": "Manchester United",
+    "position": "Attaquant",
+    "nationalite": "Argentine",
+    "image": "/images/garnacho.jpg",
+    "indice": "Bien qu'Argentin, son idole absolue est Cristiano Ronaldo. Il a marqué un retourné acrobatique légendaire contre Everton.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "125",
+    "nom": "Xavi Simons",
+    "equipe": "RB Leipzig",
+    "position": "Milieu",
+    "nationalite": "Néerlandaise",
+    "image": "/images/simons.jpg",
+    "indice": "Star d'Instagram depuis ses 7 ans à la Masia, il a explosé au PSV avant de briller en Allemagne.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "126",
+    "nom": "Kobbie Mainoo",
+    "equipe": "Manchester United",
+    "position": "Milieu",
+    "nationalite": "Anglaise",
+    "image": "/images/mainoo.jpg",
+    "indice": "Jeune milieu formé au club, il a marqué le but de la victoire en finale de FA Cup contre City lors de sa première saison pro.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "127",
+    "nom": "Arda Güler",
+    "equipe": "Real Madrid",
+    "position": "Milieu",
+    "nationalite": "Turque",
+    "image": "/images/guler.jpg",
+    "indice": "Surnommé le 'Messi Turc', il a marqué un but sensationnel de loin contre la Géorgie à l'Euro.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "128",
+    "nom": "Pau Cubarsí",
+    "equipe": "FC Barcelone",
+    "position": "Défenseur",
+    "nationalite": "Espagnole",
+    "image": "/images/cubarsi.jpg",
+    "indice": "Lancé à 16 ans, il a été élu homme du match en Ligue des Champions pour avoir muselé Victor Osimhen.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "129",
+    "nom": "Bradley Barcola",
+    "equipe": "PSG",
+    "position": "Attaquant",
+    "nationalite": "Française",
+    "image": "/images/barcola.jpg",
+    "indice": "Formé à Lyon, cet ailier rapide a pris la place de Neymar sur le flanc gauche parisien.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "130",
+    "nom": "Viktor Gyökeres",
+    "equipe": "Sporting CP",
+    "position": "Attaquant",
+    "nationalite": "Suédoise",
+    "image": "/images/gyokeres.jpg",
+    "indice": "La machine à buts du Portugal. Il célèbre ses buts en croisant les mains sur son visage comme un masque.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "131",
+    "nom": "Michael Olise",
+    "equipe": "Bayern Munich",
+    "position": "Attaquant",
+    "nationalite": "Française",
+    "image": "/images/olise.jpg",
+    "indice": "Gaucher élégant, il a brillé à Crystal Palace et aux JO avec la France avant de rejoindre le Bayern.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "132",
+    "nom": "João Neves",
+    "equipe": "PSG",
+    "position": "Milieu",
+    "nationalite": "Portugaise",
+    "image": "/images/joaoneves.jpg",
+    "indice": "Petit milieu de terrain hyperactif, il joue toujours avec le maillot rentré dans le short.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "133",
+    "nom": "Leny Yoro",
+    "equipe": "Manchester United",
+    "position": "Défenseur",
+    "nationalite": "Française",
+    "image": "/images/yoro.jpg",
+    "indice": "Phénomène de précocité à Lille, le Real Madrid le voulait mais il a choisi Manchester United.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "134",
+    "nom": "Jérémy Doku",
+    "equipe": "Manchester City",
+    "position": "Attaquant",
+    "nationalite": "Belge",
+    "image": "/images/doku.jpg",
+    "indice": "Probablement le meilleur dribbleur actuel en un contre un, capable d'éliminer n'importe qui sur son côté.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "135",
+    "nom": "Rasmus Højlund",
+    "equipe": "Manchester United",
+    "position": "Attaquant",
+    "nationalite": "Danoise",
+    "image": "/images/hojlund.jpg",
+    "indice": "Souvent comparé à Haaland à cause de son nom et de sa nationalité scandinave, mais il est gaucher.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "136",
+    "nom": "Kenan Yildiz",
+    "equipe": "Juventus",
+    "position": "Attaquant",
+    "nationalite": "Turque",
+    "image": "/images/yildiz.jpg",
+    "indice": "Il porte le numéro 10 à la Juventus et célèbre ses buts en tirant la langue comme Del Piero.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "137",
+    "nom": "Mathys Tel",
+    "equipe": "Bayern Munich",
+    "position": "Attaquant",
+    "nationalite": "Française",
+    "image": "/images/tel.jpg",
+    "indice": "Quittant Rennes très jeune, il est devenu un 'Super Sub' redoutable en Bundesliga.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "138",
+    "nom": "Savinho",
+    "equipe": "Manchester City",
+    "position": "Attaquant",
+    "nationalite": "Brésilienne",
+    "image": "/images/savinho.jpg",
+    "indice": "Révélation totale de la saison incroyable de Gérone, il a rejoint City dans la foulée.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "139",
+    "nom": "Riccardo Calafiori",
+    "equipe": "Arsenal",
+    "position": "Défenseur",
+    "nationalite": "Italienne",
+    "image": "/images/calafiori.jpg",
+    "indice": "Défenseur central aux cheveux longs et au style élégant, il a crevé l'écran lors de l'Euro 2024 avec l'Italie.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "140",
+    "nom": "Fermín López",
+    "equipe": "FC Barcelone",
+    "position": "Milieu",
+    "nationalite": "Espagnole",
+    "image": "/images/fermin.jpg",
+    "indice": "Héros inattendu des JO 2024 avec l'Espagne, il a une frappe de balle redoutable.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "141",
+    "nom": "Benjamin Šeško",
+    "equipe": "RB Leipzig",
+    "position": "Attaquant",
+    "nationalite": "Slovène",
+    "image": "/images/sesko.jpg",
+    "indice": "Attaquant de très grande taille (1m95) mais doté d'une vitesse de pointe surprenante.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "142",
+    "nom": "Rico Lewis",
+    "equipe": "Manchester City",
+    "position": "Défenseur",
+    "nationalite": "Anglaise",
+    "image": "/images/ricolewis.jpg",
+    "indice": "Le chouchou tactique de Guardiola : officiellement latéral droit, il joue en fait partout au milieu.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "143",
+    "nom": "Estêvão",
+    "equipe": "Palmeiras",
+    "position": "Attaquant",
+    "nationalite": "Brésilienne",
+    "image": "/images/estevao.jpg",
+    "indice": "Surnommé 'Messinho' chez les jeunes, Chelsea a déjà sécurisé son transfert avant ses 18 ans.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "144",
+    "nom": "Rayan Cherki",
+    "equipe": "Olympique Lyonnais",
+    "position": "Milieu",
+    "nationalite": "Française",
+    "image": "/images/cherki.jpg",
+    "indice": "Le plus gros talent brut de l'académie OL depuis Benzema, capable de dribbler 5 joueurs dans une cabine téléphonique.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "145",
+    "nom": "Jeremie Frimpong",
+    "equipe": "Bayer Leverkusen",
+    "position": "Défenseur",
+    "nationalite": "Néerlandaise",
+    "image": "/images/frimpong.jpg",
+    "indice": "Piston droit ultra-offensif, il forme un duo dévastateur avec Grimaldo.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "146",
+    "nom": "Takefusa Kubo",
+    "equipe": "Real Sociedad",
+    "position": "Attaquant",
+    "nationalite": "Japonaise",
+    "image": "/images/kubo.jpg",
+    "indice": "Passé par la Masia ET le Real Madrid, il a enfin explosé à la Real Sociedad.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "147",
+    "nom": "Manuel Ugarte",
+    "equipe": "Manchester United",
+    "position": "Milieu",
+    "nationalite": "Uruguayenne",
+    "image": "/images/ugarte.jpg",
+    "indice": "Milieu récupérateur infatigable, il adore les tacles et le combat physique.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "148",
+    "nom": "Micky van de Ven",
+    "equipe": "Tottenham",
+    "position": "Défenseur",
+    "nationalite": "Néerlandaise",
+    "image": "/images/vandeven.jpg",
+    "indice": "Défenseur central qui a été flashé comme le joueur le plus rapide de toute la Premier League.",
+    "difficulte": "MEDIUM"
+  },
+  {
+    "id": "149",
+    "nom": "Pedro Neto",
+    "equipe": "Chelsea",
+    "position": "Attaquant",
+    "nationalite": "Portugaise",
+    "image": "/images/neto.jpg",
+    "indice": "Ailier explosif souvent blessé par le passé, Chelsea a misé gros sur lui en provenance des Wolves.",
+    "difficulte": "HARD"
+  },
+  {
+    "id": "150",
+    "nom": "Désiré Doué",
+    "equipe": "PSG",
+    "position": "Milieu",
+    "nationalite": "Française",
+    "image": "/images/doue.jpg",
+    "indice": "Pépite formée à Rennes, le PSG et le Bayern se sont battus pour lui à l'été 2024.",
     "difficulte": "HARD"
   }
 ]

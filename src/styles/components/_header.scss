@@ -1,0 +1,301 @@
+@import '../variables';
+@import '../mixins';
+
+.header {
+  background-color: rgba($color-white, 0.8);
+  border-bottom: 1px solid $color-slate-200;
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+  @include backdrop-blur($backdrop-blur-md);
+  @include transition(background-color border-color, $transition-base);
+  
+  @include dark-mode {
+    background-color: rgba($color-gray-900, 0.8);
+    border-bottom-color: $color-gray-700;
+  }
+  
+  &__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: $spacing-md $spacing-lg;
+    
+    @include respond-to(lg) {
+      padding: $spacing-md $spacing-xl;
+    }
+  }
+  
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    background: none;
+    border: none;
+    cursor: pointer;
+    @include transition(opacity, $transition-base);
+    
+    &:hover {
+      opacity: 0.8;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid $color-blue-600;
+      outline-offset: 2px;
+      border-radius: $radius-sm;
+    }
+  }
+  
+  &__logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    @include gradient-bg($color-blue-500, $color-purple-600, to bottom right);
+    border-radius: $radius-md;
+    @include flex-center;
+    
+    &-text {
+      color: $color-white;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-base;
+    }
+  }
+  
+  &__logo-text {
+    color: $color-slate-900;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+
+  &__nav {
+    display: none;
+    
+    @include respond-to(md) {
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+    }
+  }
+  
+  &__nav-item {
+    padding: $spacing-sm $spacing-md;
+    color: $color-slate-600;
+    background: none;
+    border: none;
+    border-radius: $radius-md;
+    cursor: pointer;
+    font-size: $font-size-base;
+    @include transition(background-color color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+    
+    &:hover {
+      background-color: $color-slate-100;
+      
+      @include dark-mode {
+        background-color: $color-gray-800;
+      }
+    }
+    
+    &--active {
+      color: $color-slate-900;
+      
+      @include dark-mode {
+        color: $color-white;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+
+  &__theme-toggle {
+    padding: $spacing-sm;
+    background: none;
+    border: none;
+    border-radius: $radius-md;
+    cursor: pointer;
+    @include flex-center;
+    @include transition(background-color, $transition-base);
+    @include focus-visible;
+    
+    &:hover {
+      background-color: $color-slate-100;
+      
+      @include dark-mode {
+        background-color: $color-gray-800;
+      }
+    }
+  }
+  
+  &__theme-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: $color-slate-600;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-yellow-500;
+    }
+  }
+
+  &__user-menu {
+    position: relative;
+  }
+  
+  &__user-trigger {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: $radius-full;
+    @include gradient-bg($color-blue-500, $color-purple-600, to bottom right);
+    border: none;
+    cursor: pointer;
+    @include flex-center;
+    color: $color-white;
+    font-weight: $font-weight-semibold;
+    @include transition(box-shadow, $transition-base);
+    @include focus-visible;
+    
+    &:hover {
+      box-shadow: $shadow-lg;
+    }
+  }
+  
+  &__user-initial {
+    font-size: $font-size-sm;
+  }
+
+  &__button {
+    @include button-base;
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    
+    &--primary {
+      @include gradient-bg($color-blue-600, $color-blue-700);
+      color: $color-white;
+      
+      &:hover:not(:disabled) {
+        @include gradient-bg($color-blue-700, $color-blue-800);
+      }
+    }
+    
+    &--secondary {
+      background-color: transparent;
+      border: 1px solid $color-blue-600;
+      color: $color-blue-600;
+      
+      &:hover:not(:disabled) {
+        background-color: $color-blue-600;
+        color: $color-white;
+      }
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + $spacing-sm);
+    right: 0;
+    min-width: 14rem;
+    background-color: $color-white;
+    border: 1px solid $color-slate-200;
+    border-radius: $radius-md;
+    box-shadow: $shadow-lg;
+    padding: $spacing-xs;
+    z-index: $z-dropdown;
+    @include transition(opacity transform, $transition-fast);
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+    }
+    
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      padding: $spacing-sm $spacing-md;
+      width: 100%;
+      background: none;
+      border: none;
+      border-radius: $radius-sm;
+      cursor: pointer;
+      font-size: $font-size-sm;
+      color: $color-slate-900;
+      text-align: left;
+      @include transition(background-color, $transition-fast);
+      
+      @include dark-mode {
+        color: $color-slate-300;
+      }
+      
+      &:hover {
+        background-color: $color-slate-100;
+        
+        @include dark-mode {
+          background-color: $color-gray-700;
+        }
+      }
+      
+      &--danger {
+        color: $color-red-600;
+        
+        @include dark-mode {
+          color: $color-red-400;
+        }
+      }
+      
+      &-icon {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+    
+    &-separator {
+      height: 1px;
+      background-color: $color-slate-200;
+      margin: $spacing-xs 0;
+      
+      @include dark-mode {
+        background-color: $color-gray-700;
+      }
+    }
+    
+    &-info {
+      padding: $spacing-sm $spacing-md;
+      
+      &-name {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $color-slate-900;
+        
+        @include dark-mode {
+          color: $color-white;
+        }
+      }
+      
+      &-role {
+        font-size: $font-size-xs;
+        color: $color-slate-500;
+        
+        @include dark-mode {
+          color: $color-slate-400;
+        }
+      }
+    }
+  }
+}
+

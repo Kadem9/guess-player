@@ -1,0 +1,50 @@
+@import '../variables';
+@import '../mixins';
+
+.dashboard {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: $spacing-xl $spacing-lg;
+  
+  @include respond-to(lg) {
+    padding: $spacing-2xl $spacing-xl;
+  }
+
+  &__welcome {
+    margin-bottom: $spacing-2xl;
+  }
+  
+  &__title {
+    color: $color-slate-900;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-md;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__subtitle {
+    color: $color-slate-600;
+    font-size: $font-size-base;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+    margin-top: $spacing-2xl;
+    
+    @include respond-to(lg) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+

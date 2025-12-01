@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import Navbar from './Navbar';
+import { Header } from './Header';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -9,9 +9,9 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="min-h-screen bg-base-200">
-      <Navbar />
-      <main className="container mx-auto px-4 py-6">
+    <div className="u-min-h-screen">
+      <Header />
+      <main>
         {children}
       </main>
     </div>

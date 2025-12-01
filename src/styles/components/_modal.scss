@@ -1,0 +1,113 @@
+@import '../variables';
+@import '../mixins';
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: $z-modal;
+  @include flex-center;
+  padding: $spacing-lg;
+  
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba($color-black, 0.5);
+    backdrop-filter: blur(4px);
+  }
+  
+  &__content {
+    position: relative;
+    background-color: $color-white;
+    border-radius: $radius-xl;
+    padding: $spacing-xl;
+    max-width: 28rem;
+    width: 100%;
+    box-shadow: $shadow-xl;
+    z-index: 1;
+    @include transition(background-color, $transition-base);
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+    }
+  }
+  
+  &__title {
+    color: $color-slate-900;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-md;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__message {
+    color: $color-slate-700;
+    font-size: $font-size-base;
+    margin-bottom: $spacing-lg;
+    line-height: 1.6;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-300;
+    }
+  }
+  
+  &__actions {
+    display: flex;
+    gap: $spacing-md;
+    justify-content: flex-end;
+  }
+  
+  &__button {
+    @include button-base;
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $radius-md;
+    font-weight: $font-weight-medium;
+    
+    &--primary {
+      background-color: $color-blue-600;
+      color: $color-white;
+      
+      &:hover:not(:disabled) {
+        background-color: $color-blue-700;
+      }
+    }
+    
+    &--secondary {
+      background-color: $color-slate-200;
+      color: $color-slate-900;
+      
+      @include dark-mode {
+        background-color: $color-gray-700;
+        color: $color-white;
+      }
+      
+      &:hover:not(:disabled) {
+        background-color: $color-slate-300;
+        
+        @include dark-mode {
+          background-color: $color-gray-600;
+        }
+      }
+    }
+    
+    &--danger {
+      background-color: $color-red-600;
+      color: $color-white;
+      
+      &:hover:not(:disabled) {
+        background-color: $color-red-700;
+      }
+    }
+  }
+}
+

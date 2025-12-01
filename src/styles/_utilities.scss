@@ -1,0 +1,202 @@
+@import './variables';
+@import './mixins';
+
+.u-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+  
+  @include respond-to(lg) {
+    padding: 0 $spacing-xl;
+  }
+}
+
+.u-flex {
+  display: flex;
+  
+  &--center {
+    @include flex-center;
+  }
+  
+  &--between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  &--column {
+    flex-direction: column;
+  }
+  
+  &--wrap {
+    flex-wrap: wrap;
+  }
+  
+  &--gap-sm {
+    gap: $spacing-sm;
+  }
+  
+  &--gap-md {
+    gap: $spacing-md;
+  }
+  
+  &--gap-lg {
+    gap: $spacing-lg;
+  }
+}
+
+.u-grid {
+  display: grid;
+  
+  &--cols-1 {
+    grid-template-columns: 1fr;
+  }
+  
+  &--cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  &--cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  @include respond-to(md) {
+    &--md-cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @include respond-to(lg) {
+    &--lg-cols-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
+.u-m {
+  &-auto { margin: auto; }
+  &-0 { margin: 0; }
+  &-sm { margin: $spacing-sm; }
+  &-md { margin: $spacing-md; }
+  &-lg { margin: $spacing-lg; }
+  &-xl { margin: $spacing-xl; }
+  
+  &t-auto { margin-top: auto; }
+  &t-0 { margin-top: 0; }
+  &t-sm { margin-top: $spacing-sm; }
+  &t-md { margin-top: $spacing-md; }
+  &t-lg { margin-top: $spacing-lg; }
+  &t-xl { margin-top: $spacing-xl; }
+  
+  &b-auto { margin-bottom: auto; }
+  &b-0 { margin-bottom: 0; }
+  &b-sm { margin-bottom: $spacing-sm; }
+  &b-md { margin-bottom: $spacing-md; }
+  &b-lg { margin-bottom: $spacing-lg; }
+  &b-xl { margin-bottom: $spacing-xl; }
+}
+
+.u-p {
+  &-0 { padding: 0; }
+  &-sm { padding: $spacing-sm; }
+  &-md { padding: $spacing-md; }
+  &-lg { padding: $spacing-lg; }
+  &-xl { padding: $spacing-xl; }
+  
+  &x-sm { padding-left: $spacing-sm; padding-right: $spacing-sm; }
+  &x-md { padding-left: $spacing-md; padding-right: $spacing-md; }
+  &x-lg { padding-left: $spacing-lg; padding-right: $spacing-lg; }
+  
+  &y-sm { padding-top: $spacing-sm; padding-bottom: $spacing-sm; }
+  &y-md { padding-top: $spacing-md; padding-bottom: $spacing-md; }
+  &y-lg { padding-top: $spacing-lg; padding-bottom: $spacing-lg; }
+}
+
+.u-text {
+  &-center { text-align: center; }
+  &-left { text-align: left; }
+  &-right { text-align: right; }
+  
+  &-xs { font-size: $font-size-xs; }
+  &-sm { font-size: $font-size-sm; }
+  &-base { font-size: $font-size-base; }
+  &-lg { font-size: $font-size-lg; }
+  &-xl { font-size: $font-size-xl; }
+  &-2xl { font-size: $font-size-2xl; }
+  &-3xl { font-size: $font-size-3xl; }
+  &-4xl { font-size: $font-size-4xl; }
+  &-5xl { font-size: $font-size-5xl; }
+  &-6xl { font-size: $font-size-6xl; }
+  
+  &-normal { font-weight: $font-weight-normal; }
+  &-medium { font-weight: $font-weight-medium; }
+  &-semibold { font-weight: $font-weight-semibold; }
+  &-bold { font-weight: $font-weight-bold; }
+  
+  &-truncate {
+    @include truncate;
+  }
+}
+
+.u-text {
+  &-white { color: $color-white; }
+  &-slate-600 { color: $color-slate-600; }
+  &-slate-700 { color: $color-slate-700; }
+  &-slate-900 { color: $color-slate-900; }
+  
+  @include dark-mode {
+    &-white { color: $color-white; }
+    &-slate-300 { color: $color-slate-300; }
+    &-slate-400 { color: $color-slate-400; }
+  }
+}
+
+.u-hidden {
+  display: none;
+  
+  &-md {
+    @include respond-to(md) {
+      display: none;
+    }
+  }
+}
+
+.u-visible {
+  display: block;
+  
+  &-md {
+    display: none;
+    
+    @include respond-to(md) {
+      display: block;
+    }
+  }
+}
+
+.u-relative { position: relative; }
+.u-absolute { position: absolute; }
+.u-fixed { position: fixed; }
+.u-sticky { position: sticky; }
+
+.u-z {
+  &-10 { z-index: 10; }
+  &-20 { z-index: 20; }
+  &-30 { z-index: 30; }
+  &-40 { z-index: 40; }
+  &-50 { z-index: 50; }
+}
+
+.u-overflow {
+  &-hidden { overflow: hidden; }
+  &-auto { overflow: auto; }
+  &-visible { overflow: visible; }
+}
+
+.u-pointer-events-none {
+  pointer-events: none;
+}
+
+.u-min-h-screen {
+  min-height: 100vh;
+}
+

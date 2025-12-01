@@ -1,0 +1,68 @@
+<mjml>
+  <mj-head>
+    <mj-title>Vérification de votre email - Guess Player</mj-title>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
+    <mj-attributes>
+      <mj-all font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" />
+      <mj-text color="#4b5563" font-size="16px" line-height="1.6" />
+      <mj-button background-color="#3b82f6" color="#ffffff" font-weight="600" border-radius="6px" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f3f4f6">
+    <!-- Header -->
+    <mj-section background-color="#3b82f6" padding="40px 20px">
+      <mj-column>
+        <mj-text align="center" color="#ffffff" font-size="28px" font-weight="700" padding="0">
+          🎮 Guess Player
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Main Content -->
+    <mj-section background-color="#ffffff" padding="40px" border-radius="0 0 8px 8px">
+      <mj-column>
+        <mj-text font-size="24px" font-weight="600" color="#1f2937" padding-bottom="20px">
+          Bonjour {{name}} 👋
+        </mj-text>
+
+        <mj-text padding-bottom="20px">
+          Merci de vous être inscrit sur <strong>Guess Player</strong> ! Pour activer votre compte et commencer à jouer, veuillez vérifier votre adresse email en cliquant sur le bouton ci-dessous.
+        </mj-text>
+
+        <!-- CTA Button -->
+        <mj-button href="{{verificationUrl}}" background-color="#3b82f6" padding="30px 0">
+          Vérifier mon email
+        </mj-button>
+
+        <mj-text padding-top="20px" font-size="14px" color="#6b7280">
+          Si le bouton ne fonctionne pas, copiez et collez ce lien dans votre navigateur :
+        </mj-text>
+
+        <mj-text padding-top="10px" font-size="14px">
+          <a href="{{verificationUrl}}" style="color: #3b82f6; text-decoration: underline; word-break: break-all;">
+            {{verificationUrl}}
+          </a>
+        </mj-text>
+
+        <mj-divider border-color="#e5e7eb" padding="30px 0 0" />
+
+        <mj-text padding-top="30px" font-size="12px" color="#9ca3af">
+          Ce lien expirera dans 24 heures. Si vous n'avez pas créé de compte sur Guess Player, vous pouvez ignorer cet email en toute sécurité.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#f9fafb" padding="30px 40px" border-radius="0 0 8px 8px">
+      <mj-column>
+        <mj-text align="center" font-size="12px" color="#6b7280" padding="0">
+          © {{year}} Guess Player. Tous droits réservés.
+        </mj-text>
+        <mj-text align="center" font-size="12px" color="#9ca3af" padding="10px 0 0">
+          Cet email a été envoyé automatiquement, merci de ne pas y répondre.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
+

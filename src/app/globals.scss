@@ -1,0 +1,39 @@
+@import '../styles/main';
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+[data-theme="dark"] {
+  --background: #111827;
+  --foreground: #ededed;
+}
+
+.u-text-balance {
+  text-wrap: balance;
+}
+
+[data-theme="light"] {
+  --fallback-p: #1e40af;
+  --fallback-pc: #ffffff;
+  --fallback-s: #374151;
+  --fallback-sc: #ffffff;
+  --fallback-a: #d97706;
+  --fallback-ac: #ffffff;
+  --fallback-n: #1f2937;
+  --fallback-nc: #ffffff;
+  --fallback-b1: #ffffff;
+  --fallback-b2: #f3f4f6;
+  --fallback-b3: #e5e7eb;
+  --fallback-bc: #1f2937;
+  --fallback-in: #0284c7;
+  --fallback-inc: #ffffff;
+  --fallback-su: #059669;
+  --fallback-suc: #ffffff;
+  --fallback-wa: #d97706;
+  --fallback-wac: #ffffff;
+  --fallback-er: #dc2626;
+  --fallback-erc: #ffffff;
+}
+

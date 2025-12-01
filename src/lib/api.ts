@@ -1,5 +1,3 @@
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
-
 let authToken: string | null = null;
 
 export function setAuthToken(token: string | null) {
@@ -7,23 +5,24 @@ export function setAuthToken(token: string | null) {
 }
 
 export async function apiCall(endpoint: string, options: RequestInit = {}) {
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options.headers,
+    ...(options.headers as Record<string, string> || {}),
   };
 
+  // ajout du token dans les cookies
   if (authToken) {
-    // @ts-ignore
     headers['Authorization'] = `Bearer ${authToken}`;
   }
 
-  const response = await fetch(`${BACKEND_URL}${endpoint}`, {
+  const response = await fetch(endpoint, {
     ...options,
     headers,
+    credentials: 'include',
   });
 
   if (!response.ok) {
-    const error = await response.json();
+    const error = await response.json().catch(() => ({ error: 'Erreur API' }));
     throw new Error(error.error || 'Erreur API');
   }
 
@@ -58,6 +57,10 @@ export const gameApi = {
   removePlayer: (id: string, playerId: string) => apiCall(`/api/games/${id}/remove-player`, {
     method: 'POST',
     body: JSON.stringify({ playerId }),
+  }),
+  
+  forfeit: (id: string) => apiCall(`/api/games/${id}/forfeit`, {
+    method: 'POST',
   }),
 };
 

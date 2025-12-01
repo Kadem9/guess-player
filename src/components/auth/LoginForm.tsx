@@ -114,7 +114,7 @@ export default function LoginForm() {
           <p className="text-sm">
             Pas encore de compte ?{' '}
             <button className="link link-primary" onClick={() => {/* TODO: basculer vers inscription */}}>
-              S'inscrire
+              S&apos;inscrire
             </button>
           </p>
         </div>

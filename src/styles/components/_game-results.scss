@@ -1,0 +1,266 @@
+@import '../variables';
+@import '../mixins';
+
+.game-results {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: $spacing-2xl $spacing-lg;
+
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+  }
+  
+  &__title {
+    color: $color-slate-900;
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-md;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__subtitle {
+    color: $color-slate-600;
+    font-size: $font-size-lg;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+
+  &__card {
+    @include card-base;
+    padding: $spacing-xl;
+    border: 1px solid $color-slate-200;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-lg;
+    @include transition(background-color border-color, $transition-base);
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+    }
+  }
+
+  &__leaderboard-title {
+    color: $color-slate-900;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__leaderboard-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #f59e0b;
+    
+    @include dark-mode {
+      color: #fbbf24;
+    }
+  }
+  
+  &__leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__player {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-lg;
+    border-radius: $radius-md;
+    @include transition(all, $transition-base);
+    
+    &--winner {
+      @include gradient-bg(rgba(#f59e0b, 0.1), rgba(#d97706, 0.1));
+      border: 2px solid rgba(#f59e0b, 0.3);
+      
+      @include dark-mode {
+        @include gradient-bg(rgba(#f59e0b, 0.2), rgba(#d97706, 0.2));
+        border-color: rgba(#f59e0b, 0.4);
+      }
+    }
+    
+    &--second {
+      background-color: rgba($color-slate-500, 0.1);
+      border: 1px solid rgba($color-slate-500, 0.2);
+      
+      @include dark-mode {
+        background-color: rgba($color-slate-500, 0.2);
+        border-color: rgba($color-slate-500, 0.3);
+      }
+    }
+    
+    &--third {
+      background-color: rgba(#b45309, 0.1);
+      border: 1px solid rgba(#b45309, 0.2);
+      
+      @include dark-mode {
+        background-color: rgba(#b45309, 0.2);
+        border-color: rgba(#b45309, 0.3);
+      }
+    }
+    
+    &--default {
+      background-color: $color-slate-50;
+      border: 1px solid $color-slate-200;
+      
+      @include dark-mode {
+        background-color: rgba($color-gray-700, 0.5);
+        border-color: $color-gray-700;
+      }
+    }
+    
+    &--current {
+      border: 2px solid $color-blue-600;
+      
+      @include dark-mode {
+        border-color: $color-blue-400;
+      }
+    }
+  }
+  
+  &__player-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+  
+  &__player-rank {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    display: flex;
+    align-items: center;
+    
+    &-icon {
+      width: 2rem;
+      height: 2rem;
+      
+      &--gold {
+        color: #f59e0b;
+        
+        @include dark-mode {
+          color: #fbbf24;
+        }
+      }
+      
+      &--silver {
+        color: $color-slate-500;
+        
+        @include dark-mode {
+          color: $color-slate-400;
+        }
+      }
+      
+      &--bronze {
+        color: #b45309;
+        
+        @include dark-mode {
+          color: #d97706;
+        }
+      }
+    }
+    
+    &-number {
+      color: $color-slate-500;
+      font-size: $font-size-base;
+      
+      @include dark-mode {
+        color: $color-slate-400;
+      }
+    }
+  }
+  
+  &__player-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__player-name {
+    color: $color-slate-900;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__player-username {
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &__player-right {
+    text-align: right;
+  }
+  
+  &__player-score {
+    color: $color-blue-600;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-blue-400;
+    }
+  }
+  
+  &__player-score-label {
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-md;
+    justify-content: center;
+    margin-top: $spacing-xl;
+  }
+  
+  &__button {
+    @include button-base;
+    padding: $spacing-md 2rem;
+    border-radius: $radius-xl;
+    font-weight: $font-weight-medium;
+    box-shadow: $shadow-lg;
+    
+    &--primary {
+      @include gradient-bg($color-blue-600, $color-blue-700);
+      color: $color-white;
+      
+      &:hover:not(:disabled) {
+        @include gradient-bg($color-blue-700, $color-blue-800);
+        box-shadow: $shadow-xl;
+      }
+    }
+  }
+}
+

@@ -1,0 +1,135 @@
+@import '../variables';
+@import '../mixins';
+
+.action-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-lg;
+  
+  @include respond-to(md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  &__card {
+    @include card-base;
+    padding: $spacing-lg;
+    border: 1px solid $color-slate-200;
+    border-radius: $radius-xl;
+    @include transition(all, $transition-base);
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+    }
+    
+    &:hover {
+      box-shadow: $shadow-xl;
+      transform: translateY(-2px);
+    }
+  }
+  
+  &__icon-wrapper {
+    width: 3rem;
+    height: 3rem;
+    border-radius: $radius-md;
+    @include flex-center;
+    margin-bottom: $spacing-md;
+    @include transition(transform, $transition-base);
+    
+    &--blue {
+      @include gradient-bg($color-blue-500, $color-blue-600, to bottom right);
+    }
+    
+    &--purple {
+      @include gradient-bg($color-purple-500, $color-purple-600, to bottom right);
+    }
+    
+    &--amber {
+      @include gradient-bg(#f59e0b, #d97706, to bottom right);
+    }
+  }
+  
+  &__card:hover &__icon-wrapper {
+    transform: scale(1.1);
+  }
+  
+  &__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: $color-white;
+  }
+  
+  &__card-title {
+    color: $color-slate-900;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__card-description {
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-lg;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &__button {
+    @include button-base;
+    width: 100%;
+    padding: $spacing-md;
+    border-radius: $radius-xl;
+    font-weight: $font-weight-medium;
+    box-shadow: $shadow-sm;
+    @include transition(all, $transition-base);
+    
+    &--primary {
+      @include gradient-bg($color-blue-500, $color-blue-600);
+      color: $color-white;
+      
+      &:hover:not(:disabled) {
+        @include gradient-bg($color-blue-600, $color-blue-700);
+        box-shadow: $shadow-md;
+      }
+    }
+    
+    &--secondary {
+      @include gradient-bg($color-purple-500, $color-purple-600);
+      color: $color-white;
+      
+      &:hover:not(:disabled) {
+        @include gradient-bg($color-purple-600, $color-purple-700);
+        box-shadow: $shadow-md;
+      }
+    }
+    
+    &--outline {
+      background-color: $color-white;
+      border: 1px solid $color-slate-200;
+      color: $color-slate-900;
+      
+      @include dark-mode {
+        background-color: $color-gray-700;
+        border-color: $color-gray-600;
+        color: $color-white;
+      }
+      
+      &:hover:not(:disabled) {
+        background-color: $color-slate-50;
+        
+        @include dark-mode {
+          background-color: $color-gray-600;
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,453 @@
+@import '../variables';
+@import '../mixins';
+
+.game-lobby {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: $spacing-2xl $spacing-lg;
+
+  &__back {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    background: none;
+    border: none;
+    color: $color-slate-600;
+    cursor: pointer;
+    margin-bottom: $spacing-xl;
+    font-size: $font-size-base;
+    @include transition(color, $transition-base);
+    @include focus-visible;
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+    
+    &:hover {
+      color: $color-slate-900;
+      
+      @include dark-mode {
+        color: $color-white;
+      }
+    }
+    
+    &-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+    
+    @include respond-to(lg) {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__card {
+    @include card-base;
+    padding: $spacing-lg;
+    border: 1px solid $color-slate-200;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-lg;
+    @include transition(background-color border-color, $transition-base);
+    
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__title {
+    color: $color-slate-900;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__status {
+    background-color: rgba(#f59e0b, 0.1);
+    color: #b45309;
+    padding: $spacing-xs $spacing-md;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    
+    @include dark-mode {
+      background-color: rgba(#f59e0b, 0.3);
+      color: #fbbf24;
+    }
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+  }
+  
+  &__stat {
+    background-color: $color-slate-50;
+    border-radius: $radius-xl;
+    padding: $spacing-md;
+    
+    @include dark-mode {
+      background-color: rgba($color-gray-700, 0.5);
+    }
+  }
+  
+  &__stat-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__stat-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    
+    &--blue {
+      color: $color-blue-600;
+      
+      @include dark-mode {
+        color: $color-blue-400;
+      }
+    }
+    
+    &--purple {
+      color: $color-purple-600;
+      
+      @include dark-mode {
+        color: $color-purple-400;
+      }
+    }
+  }
+  
+  &__stat-label {
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &__stat-value {
+    color: $color-slate-900;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+
+  &__players-title {
+    color: $color-slate-900;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-lg;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__players-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+  
+  &__player {
+    background-color: $color-slate-50;
+    border-radius: $radius-xl;
+    padding: $spacing-md;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    @include dark-mode {
+      background-color: rgba($color-gray-700, 0.5);
+    }
+  }
+  
+  &__player-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+  
+  &__player-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    @include gradient-bg($color-blue-500, $color-purple-600, to bottom right);
+    border-radius: $radius-full;
+    @include flex-center;
+    color: $color-white;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-sm;
+  }
+  
+  &__player-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__player-name {
+    color: $color-slate-900;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__player-username {
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &__player-right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+  
+  &__badge {
+    padding: $spacing-xs $spacing-md;
+    border-radius: $radius-md;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    
+    &--host {
+      background-color: rgba($color-blue-600, 0.1);
+      color: $color-blue-800;
+      
+      @include dark-mode {
+        background-color: rgba($color-blue-600, 0.3);
+        color: $color-blue-400;
+      }
+    }
+  }
+  
+  &__player-score {
+    color: $color-slate-600;
+    font-size: $font-size-base;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+
+  &__start {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  &__start-button {
+    @include button-base;
+    padding: $spacing-md 2rem;
+    border-radius: $radius-xl;
+    font-weight: $font-weight-medium;
+    box-shadow: $shadow-lg;
+    
+    &--primary {
+      @include gradient-bg($color-blue-600, $color-blue-700);
+      color: $color-white;
+      
+      &:hover:not(:disabled) {
+        @include gradient-bg($color-blue-700, $color-blue-800);
+        box-shadow: $shadow-xl;
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__code-title {
+    color: $color-slate-900;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-md;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__code-display {
+    background-color: $color-slate-50;
+    border-radius: $radius-xl;
+    padding: $spacing-lg;
+    text-align: center;
+    margin-bottom: $spacing-md;
+    
+    @include dark-mode {
+      background-color: rgba($color-gray-700, 0.5);
+    }
+  }
+  
+  &__code-value {
+    color: $color-slate-900;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    font-family: monospace;
+    margin-bottom: $spacing-md;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__code-hint {
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &__copy-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    background: none;
+    border: none;
+    color: $color-blue-600;
+    cursor: pointer;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    @include transition(all, $transition-base);
+    @include focus-visible;
+    
+    @include dark-mode {
+      color: $color-blue-400;
+    }
+    
+    &:hover {
+      background-color: rgba($color-blue-600, 0.1);
+      
+      @include dark-mode {
+        background-color: rgba($color-blue-600, 0.2);
+      }
+    }
+    
+    &-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &__rules-title {
+    color: $color-slate-900;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-md;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__rules-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    color: $color-slate-700;
+    font-size: $font-size-sm;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-slate-300;
+    }
+  }
+  
+  &__rules-item {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-sm;
+    
+    &-bullet {
+      color: $color-blue-600;
+      margin-top: 0.25rem;
+      flex-shrink: 0;
+      
+      @include dark-mode {
+        color: $color-blue-400;
+      }
+    }
+  }
+
+  &__waiting {
+    padding: $spacing-md;
+    background-color: rgba($color-blue-600, 0.1);
+    border: 1px solid rgba($color-blue-600, 0.2);
+    border-radius: $radius-md;
+    color: $color-blue-800;
+    font-size: $font-size-sm;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    
+    @include dark-mode {
+      background-color: rgba($color-blue-600, 0.2);
+      border-color: rgba($color-blue-600, 0.3);
+      color: $color-blue-400;
+    }
+    
+    &-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+

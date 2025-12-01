@@ -91,10 +91,10 @@ export async function POST(
 
     // Mettre à jour le statut de la partie
     const updatedGame = await prisma.game.update({
-      where: { id: gameId },
+      where: { id: game.id },
       data: {
         status: 'IN_PROGRESS',
-        currentTurn: 1,
+        currentTurn: 0,
       },
       include: {
         creator: {

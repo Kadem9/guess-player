@@ -1,0 +1,75 @@
+@import './variables';
+@import './mixins';
+@import './utilities';
+
+@import './components/header';
+@import './components/hero';
+@import './components/dashboard';
+@import './components/action-cards';
+@import './components/recent-games';
+@import './components/user-stats';
+@import './components/create-game';
+@import './components/join-game';
+@import './components/leaderboard';
+@import './components/game-lobby';
+@import './components/game-play';
+@import './components/game-results';
+@import './components/auth';
+@import './components/modal';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-family-base;
+  color: $color-slate-900;
+  background-color: $color-white;
+  line-height: 1.5;
+  @include transition(background-color color, $transition-base);
+  
+  @include dark-mode {
+    color: $color-white;
+    background-color: $color-gray-900;
+  }
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  
+  body {
+    color: $color-white;
+    background-color: $color-gray-900;
+  }
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  
+  body {
+    color: $color-slate-900;
+    background-color: $color-white;
+  }
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid $color-blue-600;
+  outline-offset: 2px;
+}
+
