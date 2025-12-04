@@ -381,6 +381,20 @@ export function GamePlay({ gameId }: GamePlayProps) {
     }
   }, [timeLeft, showResult, playWarning]);
 
+  // Passage automatique au joueur suivant après affichage du résultat
+  useEffect(() => {
+    if (!showResult) return;
+
+    // Attendre 3 secondes puis passer automatiquement au joueur suivant
+    const autoNextTimer = setTimeout(() => {
+      handleNextPlayer();
+    }, 3000);
+
+    return () => {
+      clearTimeout(autoNextTimer);
+    };
+  }, [showResult, handleNextPlayer]);
+
   const handleSubmitGuess = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!guess.trim() || !currentPlayer || !game || !user) return;
@@ -611,13 +625,16 @@ export function GamePlay({ gameId }: GamePlayProps) {
                     </div>
 
                     {isMyTurn && (
-                      <button
-                        onClick={handleNextPlayer}
-                        className="game-play__next-button"
-                        disabled={submitting}
-                      >
-                        Joueur suivant
-                      </button>
+                      <div className="game-play__auto-next">
+                        <p>Passage automatique au joueur suivant dans 3 secondes...</p>
+                        <button
+                          onClick={handleNextPlayer}
+                          className="game-play__next-button game-play__next-button--manual"
+                          disabled={submitting}
+                        >
+                          Passer maintenant
+                        </button>
+                      </div>
                     )}
                   </div>
                 )}
