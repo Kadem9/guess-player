@@ -10,17 +10,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
     }
 
-    // Vérifier la connexion à la base de données
-    try {
-      await prisma.$connect();
-    } catch (error) {
-      console.error('Erreur de connexion à la base de données:', error);
-      return NextResponse.json(
-        { error: 'Base de données non disponible' },
-        { status: 503 }
-      );
-    }
-
     // Récupérer les paramètres de la requête
     const body = await request.json();
     const { 

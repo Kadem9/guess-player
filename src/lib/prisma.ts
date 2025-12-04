@@ -7,7 +7,7 @@ const globalForPrisma = globalThis as unknown as {
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: ['query'],
+    log: [], // Logs désactivés pour ne voir que les logs Socket.io
   });
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;

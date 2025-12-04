@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email?token=${emailToken}`;
+    const verificationUrl = `${process.env.URL_MAIL || 'http://localhost:3000'}/verify-email?token=${emailToken}`;
     
     const emailResult = await EmailService.sendVerificationEmail(email, {
       name: `${prenom} ${nom}`,

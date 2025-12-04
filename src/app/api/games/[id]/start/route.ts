@@ -22,17 +22,6 @@ export async function POST(
       );
     }
 
-    // Vérifier la connexion à la base de données
-    try {
-      await prisma.$connect();
-    } catch (error) {
-      console.error('Erreur de connexion à la base de données:', error);
-      return NextResponse.json(
-        { error: 'Base de données non disponible' },
-        { status: 503 }
-      );
-    }
-
     // Récupérer la partie (support des codes courts)
     let game;
     if (gameId.length === 8) {
@@ -119,6 +108,18 @@ export async function POST(
         },
       },
     });
+
+    // Émettre un événement Socket.io via le serveur backend
+    try {
+      const socketUrl = process.env.SOCKET_URL || 'http://localhost:3001';
+      await fetch(`${socketUrl}/emit/game-started`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId: game.id }),
+      });
+    } catch (error) {
+      console.error('Erreur émission Socket.io:', error);
+    }
 
     return NextResponse.json({
       success: true,

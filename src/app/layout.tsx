@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.scss'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { GameProvider } from '@/contexts/GameContext'
+import { SocketProvider } from '@/contexts/SocketContext'
 import MainLayout from '@/components/layout/MainLayout'
 
 export const metadata: Metadata = {
@@ -18,11 +19,13 @@ export default function RootLayout({
     <html lang="fr">
       <body>
         <AuthProvider>
-          <GameProvider>
-            <MainLayout>
-              {children}
-            </MainLayout>
-          </GameProvider>
+          <SocketProvider>
+            <GameProvider>
+              <MainLayout>
+                {children}
+              </MainLayout>
+            </GameProvider>
+          </SocketProvider>
         </AuthProvider>
       </body>
     </html>

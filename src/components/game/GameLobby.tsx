@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Copy, Users, Calendar, Check, Clock } from 'lucide-react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { ArrowLeft, Copy, Users, Calendar, Check, Clock, Trophy } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSocketContext } from '@/contexts/SocketContext';
 import { gameApi } from '@/lib/api';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
@@ -43,6 +44,7 @@ interface GameLobbyProps {
 
 export function GameLobby({ gameId }: GameLobbyProps) {
   const { user, isLoading } = useAuth();
+  const { socket, isConnected, joinGame, leaveGame } = useSocketContext();
   const router = useRouter();
   const [game, setGame] = useState<Game | null>(null);
   const [isHost, setIsHost] = useState(false);
@@ -83,13 +85,61 @@ export function GameLobby({ gameId }: GameLobbyProps) {
     }
   }, [gameId, router]);
 
+  // Chargement initial
   useEffect(() => {
     if (user && gameId) {
       fetchGame();
-      const interval = setInterval(fetchGame, 3000);
-      return () => clearInterval(interval);
     }
-  }, [user, gameId, fetchGame]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, gameId]);
+
+  // Extraire l'ID complet de la partie de manière stable
+  const fullGameId = useMemo(() => game?.id, [game?.id]);
+
+  // Rejoindre la room Socket.io avec l'ID complet de la partie
+  useEffect(() => {
+    if (isConnected && fullGameId) {
+      joinGame(fullGameId);
+
+      return () => {
+        leaveGame(fullGameId);
+      };
+    }
+  }, [isConnected, fullGameId, joinGame, leaveGame]);
+
+  // Écouter les événements Socket.io
+  useEffect(() => {
+    if (!socket || !game) return;
+
+    const handleGameUpdated = ({ gameId: updatedGameId }: { gameId: string }) => {
+      if (updatedGameId.toLowerCase() === game.id.toLowerCase()) {
+        // Recharger les données de la partie
+        fetch(`/api/games/${gameId}`, { credentials: 'include' })
+          .then(res => res.json())
+          .then(data => {
+            if (data.game) {
+              setGame(data.game);
+              setIsHost(data.isHost);
+            }
+          })
+          .catch(err => console.error('Erreur rechargement partie:', err));
+      }
+    };
+
+    const handleGameStarted = ({ gameId: startedGameId }: { gameId: string }) => {
+      if (startedGameId.toLowerCase() === game.id.toLowerCase()) {
+        router.push(`/game/${game.id}/play`);
+      }
+    };
+
+    socket.on('game-updated', handleGameUpdated);
+    socket.on('game-started', handleGameStarted);
+
+    return () => {
+      socket.off('game-updated', handleGameUpdated);
+      socket.off('game-started', handleGameStarted);
+    };
+  }, [socket, game?.id, gameId, router]);
 
   const handleStartGame = async () => {
     setStarting(true);
@@ -105,7 +155,9 @@ export function GameLobby({ gameId }: GameLobbyProps) {
         throw new Error(data.error || 'Erreur lors du démarrage');
       }
 
-      router.push(`/game/${gameId}/play`);
+      // L'API émet déjà l'événement Socket.io game-started
+      // Tous les joueurs (y compris l'hôte) recevront l'événement et redirigeront
+      // On ne met pas setStarting(false) car la redirection va se faire via l'événement
     } catch (error: any) {
       setError(error.message);
       setStarting(false);
@@ -284,9 +336,13 @@ export function GameLobby({ gameId }: GameLobbyProps) {
                         Hôte
                       </span>
                     )}
-                    <span className="game-lobby__player-score">
-                      {player.victories || 0}
-                    </span>
+                    <div className="game-lobby__player-stats">
+                      <Trophy className="game-lobby__player-stats-icon" size={16} />
+                      <span className="game-lobby__player-score">
+                        {player.victories || 0}
+                      </span>
+                      <span className="game-lobby__player-stats-label">victoire{(player.victories || 0) > 1 ? 's' : ''}</span>
+                    </div>
                   </div>
                 </div>
               ))}

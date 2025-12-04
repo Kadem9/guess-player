@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { ArrowLeft, Clock, Check, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSocketContext } from '@/contexts/SocketContext';
 import { useTimerSound } from '@/hooks/useTimerSound';
 import { checkAnswer } from '@/utils/gameUtils';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
@@ -47,6 +48,7 @@ interface GamePlayProps {
 
 export function GamePlay({ gameId }: GamePlayProps) {
   const { user, isLoading } = useAuth();
+  const { socket, isConnected, joinGame, leaveGame, emitAnswerSubmitted, emitTurnChanged, emitPlayerForfeit } = useSocketContext();
   const router = useRouter();
   const [game, setGame] = useState<Game | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
@@ -107,6 +109,12 @@ export function GamePlay({ gameId }: GamePlayProps) {
 
       if (!response.ok) {
         throw new Error(data.error || 'Erreur lors de l\'abandon');
+      }
+
+      // Émettre l'événement Socket.io pour forfait
+      const playerInGame = game.players.find(p => p.userId === user.id);
+      if (playerInGame) {
+        emitPlayerForfeit(gameId, playerInGame.id);
       }
 
       // Rediriger vers les résultats
@@ -235,20 +243,90 @@ export function GamePlay({ gameId }: GamePlayProps) {
         body: JSON.stringify({ turn: nextTurn }),
         credentials: 'include',
       });
+
+      // Émettre l'événement Socket.io pour changement de tour
+      emitTurnChanged(gameId, nextTurn);
       
       await fetchGame();
     } catch (error) {
       console.error('Erreur changement de tour:', error);
     }
-  }, [game, user, gameId, fetchGame, router]);
+  }, [game, user, gameId, fetchGame, router, emitTurnChanged]);
 
+  // Chargement initial
   useEffect(() => {
     if (user && gameId) {
       fetchGame();
-      const interval = setInterval(fetchGame, 4000);
-      return () => clearInterval(interval);
     }
-  }, [user, gameId, fetchGame]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, gameId]);
+
+  // Extraire l'ID complet de la partie de manière stable
+  const fullGameId = useMemo(() => game?.id, [game?.id]);
+
+  // Rejoindre la room Socket.io avec l'ID complet de la partie
+  useEffect(() => {
+    if (isConnected && fullGameId) {
+      joinGame(fullGameId);
+
+      return () => {
+        leaveGame(fullGameId);
+      };
+    }
+  }, [isConnected, fullGameId, joinGame, leaveGame]);
+
+  // Écouter les événements Socket.io
+  useEffect(() => {
+    if (!socket || !game) return;
+
+    const handleGameUpdated = ({ gameId: updatedGameId }: { gameId: string }) => {
+      if (updatedGameId.toLowerCase() === game.id.toLowerCase()) {
+        // Recharger les données de la partie
+        fetch(`/api/games/${gameId}`, { credentials: 'include' })
+          .then(res => res.json())
+          .then(data => {
+            if (data.game) {
+              if (data.game.status === 'FINISHED') {
+                router.push(`/game/${gameId}/results`);
+                return;
+              }
+              setGame(data.game);
+            }
+          })
+          .catch(err => console.error('Erreur rechargement partie:', err));
+      }
+    };
+
+    const handleTurnUpdated = ({ gameId: updatedGameId }: { gameId: string }) => {
+      if (updatedGameId.toLowerCase() === game.id.toLowerCase()) {
+        // Recharger pour le nouveau tour
+        fetch(`/api/games/${gameId}`, { credentials: 'include' })
+          .then(res => res.json())
+          .then(data => {
+            if (data.game) {
+              setGame(data.game);
+            }
+          })
+          .catch(err => console.error('Erreur rechargement partie:', err));
+      }
+    };
+
+    const handleGameFinished = ({ gameId: finishedGameId }: { gameId: string }) => {
+      if (finishedGameId.toLowerCase() === game.id.toLowerCase()) {
+        router.push(`/game/${game.id}/results`);
+      }
+    };
+
+    socket.on('game-updated', handleGameUpdated);
+    socket.on('turn-updated', handleTurnUpdated);
+    socket.on('game-finished', handleGameFinished);
+
+    return () => {
+      socket.off('game-updated', handleGameUpdated);
+      socket.off('turn-updated', handleTurnUpdated);
+      socket.off('game-finished', handleGameFinished);
+    };
+  }, [socket, game?.id, gameId, router]);
 
   // Reset du chrono
   useEffect(() => {
@@ -326,8 +404,20 @@ export function GamePlay({ gameId }: GamePlayProps) {
           body: JSON.stringify({ playerId: user.id, isCorrect: true }),
           credentials: 'include',
         });
+
+        // Émettre l'événement Socket.io
+        const playerInGame = game.players.find(p => p.userId === user.id);
+        if (playerInGame) {
+          emitAnswerSubmitted(gameId, playerInGame.id, true);
+        }
       } catch (error) {
         console.error('Erreur mise à jour score:', error);
+      }
+    } else {
+      // Émettre également pour les mauvaises réponses
+      const playerInGame = game.players.find(p => p.userId === user.id);
+      if (playerInGame) {
+        emitAnswerSubmitted(gameId, playerInGame.id, false);
       }
     }
     

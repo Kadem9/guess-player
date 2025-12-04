@@ -267,9 +267,44 @@
     }
   }
   
+  &__player-stats {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-sm;
+    background-color: rgba($color-slate-200, 0.5);
+    border-radius: $radius-md;
+    @include transition(background-color, $transition-base);
+    
+    @include dark-mode {
+      background-color: rgba($color-gray-700, 0.5);
+    }
+  }
+  
+  &__player-stats-icon {
+    color: $color-yellow-600;
+    flex-shrink: 0;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: #fbbf24;
+    }
+  }
+  
   &__player-score {
-    color: $color-slate-600;
+    color: $color-slate-900;
     font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    @include transition(color, $transition-base);
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &__player-stats-label {
+    color: $color-slate-600;
+    font-size: $font-size-xs;
     @include transition(color, $transition-base);
     
     @include dark-mode {
