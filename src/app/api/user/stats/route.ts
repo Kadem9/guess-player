@@ -60,7 +60,16 @@ export async function GET(request: NextRequest) {
         // Vérifier si c'est une victoire (score le plus élevé)
         const sortedPlayers = [...game.players].sort((a, b) => b.score - a.score);
         const winner = sortedPlayers[0];
-        if (winner && winner.userId === user.id) {
+        const secondPlace = sortedPlayers[1];
+        
+        // Une victoire compte seulement si :
+        // 1. Le joueur est premier
+        // 2. Il a un score > 0
+        // 3. Il a un score strictement supérieur au deuxième (pas d'égalité)
+        if (winner && 
+            winner.userId === user.id && 
+            winner.score > 0 &&
+            (!secondPlace || winner.score > secondPlace.score)) {
           victoires++;
         }
       }

@@ -152,7 +152,16 @@ export async function GET(
             // Trier les joueurs par score pour déterminer le gagnant
             const sortedPlayers = [...finishedGame.players].sort((a, b) => b.score - a.score);
             const winner = sortedPlayers[0];
-            if (winner && winner.userId === player.userId) {
+            const secondPlace = sortedPlayers[1];
+            
+            // Une victoire compte seulement si :
+            // 1. Le joueur est premier
+            // 2. Il a un score > 0
+            // 3. Il a un score strictement supérieur au deuxième (pas d'égalité)
+            if (winner && 
+                winner.userId === player.userId && 
+                winner.score > 0 &&
+                (!secondPlace || winner.score > secondPlace.score)) {
               victories++;
             }
           }

@@ -27,13 +27,32 @@ export function checkAnswer(guess: string, correctPlayer: Player): boolean {
   const normalizedGuess = normalizeString(guess);
   const normalizedName = normalizeString(correctPlayer.nom);
   
+  // Longueur minimale requise pour éviter les faux positifs (au moins 3 caractères)
+  const MIN_LENGTH = 3;
+  if (normalizedGuess.length < MIN_LENGTH) {
+    return false;
+  }
+  
   // Correspondance exacte
   if (normalizedGuess === normalizedName) {
     return true;
   }
   
+  // Extraire les mots du nom complet et de la réponse
+  const nameWords = normalizedName.split(' ').filter(word => word.length > 0);
+  const guessWords = normalizedGuess.split(' ').filter(word => word.length > 0);
+  
+  // Vérifie si un mot de la réponse correspond exactement à un mot du nom
+  const hasExactWordMatch = guessWords.some(guessWord => 
+    guessWord.length >= MIN_LENGTH && nameWords.some(nameWord => nameWord === guessWord)
+  );
+  if (hasExactWordMatch) {
+    return true;
+  }
+  
   // vérifie si le nom complet contient la réponse (ex: "Angel Di Maria" contient "Di Maria")
-  if (normalizedName.includes(normalizedGuess) && normalizedGuess.length >= 3) {
+  // Exige au moins 4 caractères pour les correspondances partielles
+  if (normalizedName.includes(normalizedGuess) && normalizedGuess.length >= 4) {
     return true;
   }
   
@@ -42,30 +61,34 @@ export function checkAnswer(guess: string, correctPlayer: Player): boolean {
     return true;
   }
   
-  // Extraire les mots du nom complet et de la réponse
-  const nameWords = normalizedName.split(' ').filter(word => word.length > 0);
-  const guessWords = normalizedGuess.split(' ').filter(word => word.length > 0);
-  
-  // Si la réponse contient au moins 2 mots et qu'ils correspondent tous au nom
+  // Si la réponse contient au moins 2 mots et qu'ils correspondent tous au nom (correspondance exacte des mots)
   if (guessWords.length >= 2) {
     const allWordsMatch = guessWords.every(guessWord => 
-      nameWords.some(nameWord => nameWord === guessWord || nameWord.includes(guessWord) || guessWord.includes(nameWord))
+      guessWord.length >= MIN_LENGTH && nameWords.some(nameWord => nameWord === guessWord)
     );
     if (allWordsMatch) {
       return true;
     }
   }
   
-  // Vérifier si le dernier mot (nom de famille) correspond
+  // Vérifier si le nom de famille correspond (dernier mot)
   if (nameWords.length > 0 && guessWords.length > 0) {
     const lastName = nameWords[nameWords.length - 1];
     const guessLastWord = guessWords[guessWords.length - 1];
     
-    // Si le dernier mot de la réponse correspond au nom de famille
-    if (lastName === guessLastWord || lastName.includes(guessLastWord) || guessLastWord.includes(lastName)) {
-      // Vérifier aussi si c'est un nom de famille commun (au moins 4 caractères pour éviter les faux positifs)
-      if (lastName.length >= 4 || guessLastWord.length >= 4) {
-        return true;
+    // Correspondance exacte du nom de famille
+    if (guessLastWord.length >= MIN_LENGTH && lastName === guessLastWord) {
+      return true;
+    }
+    
+    // Correspondance partielle seulement si le mot tapé fait au moins 4 caractères
+    // et représente au moins 70% du nom de famille
+    if (guessLastWord.length >= 4) {
+      const minMatchLength = Math.ceil(lastName.length * 0.7);
+      if (guessLastWord.length >= minMatchLength) {
+        if (lastName.startsWith(guessLastWord) || guessLastWord.startsWith(lastName)) {
+          return true;
+        }
       }
     }
   }
