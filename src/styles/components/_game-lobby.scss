@@ -312,6 +312,63 @@
     }
   }
 
+  &__remove-button {
+    @include button-base;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border-radius: $radius-md;
+    background-color: transparentize($color-red-600, 0.9);
+    color: $color-red-600;
+    border: 1px solid transparentize($color-red-600, 0.8);
+    @include flex-center;
+    cursor: pointer;
+    @include transition(all, $transition-base);
+    @include focus-visible;
+    
+    @include dark-mode {
+      background-color: transparentize($color-red-600, 0.8);
+      border-color: transparentize($color-red-600, 0.7);
+      color: $color-red-400;
+    }
+    
+    &:hover:not(:disabled) {
+      background-color: transparentize($color-red-600, 0.7);
+      border-color: transparentize($color-red-600, 0.6);
+      transform: scale(1.05);
+      
+      @include dark-mode {
+        background-color: transparentize($color-red-600, 0.6);
+        border-color: transparentize($color-red-600, 0.5);
+      }
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    &-spinner {
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid transparentize($color-red-600, 0.7);
+      border-top-color: $color-red-600;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      
+      @include dark-mode {
+        border-color: transparentize($color-red-400, 0.7);
+        border-top-color: $color-red-400;
+      }
+    }
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   &__start {
     display: flex;
     justify-content: flex-end;

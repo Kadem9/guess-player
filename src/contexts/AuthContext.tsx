@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, AuthContextType, RegisterData } from '@/types';
 import { setAuthToken } from '@/lib/api';
 
-// contexte d'authent
+// contexte auth
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [token]);
 
-  // on vérifie si l'utilisateur est connecté au chargement
+  // vérifier si user connecté au chargement
   useEffect(() => {
     if (!hasCheckedAuth) {
       checkAuth();
@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setToken(data.token);
         }
       } else {
-        // Pas de token ou token invalide, c'est normal si pas connecté
+        // pas de token ou token invalide, normal si pas connecté
         setUser(null);
         setToken(null);
       }
@@ -90,7 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setToken(data.token);
       }
       
-      // On refait une vérif complète après la connexion
+      // refaire vérif complète après connexion
       await checkAuth();
     } catch (error: any) {
       console.error('Erreur de connexion:', error);
@@ -100,7 +100,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Fonction d'inscription
+  // fonction inscription
   const register = async (userData: RegisterData): Promise<{ message: string }> => {
     setIsLoading(true);
     try {
@@ -116,7 +116,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error(data.error || 'Erreur d\'inscription');
       }
 
-      // Retourner le message de succès pour l'affichage
+      // retourner message succès pr affichage
       return { message: data.message };
     } catch (error: any) {
       console.error('Erreur d\'inscription:', error);

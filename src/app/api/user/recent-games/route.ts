@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Récupérer les 3 dernières parties terminées où l'utilisateur a joué
+    // récup 3 dernières parties terminées où user a joué
     const recentGames = await prisma.game.findMany({
       where: {
         status: 'FINISHED',
@@ -50,12 +50,12 @@ export async function GET(request: NextRequest) {
       take: 3
     });
 
-    // Formater les données pr le front
+    // formater données pr front
     const formattedGames = recentGames.map(game => {
-      // Trouver le joueur de l'utilisateur dans cette partie
+      // trouver joueur de user dans cette partie
       const userPlayer = game.players.find(p => p.userId === user.id);
       
-      // Déterminer le gagnant
+      // déterminer gagnant
       const sortedPlayers = [...game.players].sort((a, b) => b.score - a.score);
       const winner = sortedPlayers[0];
       const isWinner = winner && winner.userId === user.id;

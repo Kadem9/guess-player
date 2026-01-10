@@ -23,7 +23,7 @@ export async function POST(
       );
     }
 
-    // Recherche de la partie
+    // recherche partie
     let game;
     if (gameId.length === 8) {
       game = await prisma.game.findFirst({
@@ -75,7 +75,7 @@ export async function POST(
       );
     }
 
-    // Vérifier que la partie est en cours
+    // vérifier que partie est en cours
     if (game.status !== 'IN_PROGRESS') {
       return NextResponse.json(
         { error: 'La partie n\'est pas en cours' },
@@ -83,7 +83,7 @@ export async function POST(
       );
     }
 
-    // Vérifier que l'utilisateur est dans la partie
+    // vérifier que user est dans partie
     const playerInGame = game.players.find(p => p.userId === user.id);
     if (!playerInGame) {
       return NextResponse.json(
@@ -92,18 +92,18 @@ export async function POST(
       );
     }
 
-    // Retirer le joueur qui abandonne
+    // retirer joueur qui abandonne
     await prisma.gamePlayer.delete({
       where: {
         id: playerInGame.id
       }
     });
 
-    // Vérifier s'il reste des joueurs
+    // vérifier s'il reste joueurs
     const remainingPlayers = game.players.filter(p => p.userId !== user.id);
     
     if (remainingPlayers.length === 0) {
-      // Plus de joueurs, annuler la partie
+      // plus de joueurs, annuler partie
       await prisma.game.update({
         where: { id: game.id },
         data: {
@@ -118,11 +118,11 @@ export async function POST(
       });
     }
 
-    // Il reste au moins un joueur, donner la victoire au joueur avec le score le plus élevé
+    // il reste min un joueur, donner victoire au joueur avec score le plus élevé
     const sortedPlayers = [...remainingPlayers].sort((a, b) => b.score - a.score);
     const winner = sortedPlayers[0];
 
-    // Terminer la partie
+    // terminer partie
     await prisma.game.update({
       where: { id: game.id },
       data: {

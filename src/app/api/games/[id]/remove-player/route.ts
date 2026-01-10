@@ -32,7 +32,7 @@ export async function POST(
       );
     }
 
-    // Recherche de la partie
+    // recherche partie
     let game;
     if (gameId.length === 8) {
       game = await prisma.game.findFirst({
@@ -62,7 +62,7 @@ export async function POST(
       );
     }
 
-    // Vérifier que la partie n'est pas déjà commencée
+    // vérifier que partie n'est pas déjà commencée
     if (game.status !== 'WAITING') {
       return NextResponse.json(
         { error: 'Impossible de retirer un joueur d\'une partie en cours' },
@@ -70,7 +70,7 @@ export async function POST(
       );
     }
 
-    // Vérifier que l'utilisateur est l'hôte
+    // vérifier que user est hôte
     const isHost = game.players.some(p => p.userId === user.id && p.isHost);
     if (!isHost) {
       return NextResponse.json(
@@ -79,8 +79,8 @@ export async function POST(
       );
     }
 
-    // Vérifier que le joueur à retirer n'est pas l'hôte
-    const playerToRemove = game.players.find(p => p.userId === playerId);
+    // vérifier que joueur à retirer n'est pas hôte
+    const playerToRemove = game.players.find(p => p.id === playerId);
     if (!playerToRemove) {
       return NextResponse.json(
         { error: 'Joueur non trouvé dans cette partie' },
@@ -95,12 +95,29 @@ export async function POST(
       );
     }
 
-    // Retirer le joueur
+    // retirer joueur
     await prisma.gamePlayer.delete({
       where: {
         id: playerToRemove.id
       }
     });
+
+    // note: on ne change pas le statut de la partie
+    // elle reste en WAITING même s'il reste moins de 2 joueurs
+    // l'hôte pourra toujours inviter d'autres joueurs
+    // le bouton "Lancer" sera désactivé si moins de 2 joueurs
+
+    // émettre event socket pr notifier les autres
+    try {
+      const socketUrl = process.env.SOCKET_URL || 'http://localhost:3001';
+      await fetch(`${socketUrl}/emit/game-updated`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId: game.id }),
+      });
+    } catch (error) {
+      console.error('Erreur émission Socket.io:', error);
+    }
 
     return NextResponse.json({
       success: true,

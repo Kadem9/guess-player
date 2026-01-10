@@ -7,7 +7,7 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Vérifier l'authentification
+    // vérifier auth
     const user = await verifyTokenFromRequest(request);
     if (!user) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
@@ -22,10 +22,10 @@ export async function POST(
       );
     }
 
-    // Récupérer la partie (support des codes courts)
+    // récup partie (support codes courts)
     let game;
     if (gameId.length === 8) {
-      // Recherche par les 8 premiers caractères
+      // recherche par 8 premiers caractères
       game = await prisma.game.findFirst({
         where: { 
           id: {
@@ -37,7 +37,7 @@ export async function POST(
         },
       });
     } else {
-      // Recherche par ID complet
+      // recherche par id complet
       game = await prisma.game.findUnique({
         where: { id: gameId },
         include: {
@@ -53,7 +53,7 @@ export async function POST(
       );
     }
 
-    // Vérifier que l'utilisateur est l'hôte
+    // vérifier que user est hôte
     const hostPlayer = game.players.find(player => player.userId === user.id && player.isHost);
     if (!hostPlayer) {
       return NextResponse.json(
@@ -62,7 +62,7 @@ export async function POST(
       );
     }
 
-    // Vérifier que la partie est en attente
+    // vérifier que partie est en attente
     if (game.status !== 'WAITING') {
       return NextResponse.json(
         { error: 'Cette partie ne peut pas être démarrée' },
@@ -70,7 +70,7 @@ export async function POST(
       );
     }
 
-    // Vérifier qu'il y a au moins 2 joueurs
+    // vérifier qu'il y a min 2 joueurs
     if (game.players.length < 2) {
       return NextResponse.json(
         { error: 'Il faut au moins 2 joueurs pour commencer' },
@@ -78,7 +78,7 @@ export async function POST(
       );
     }
 
-    // Mettre à jour le statut de la partie
+    // mettre à jour statut partie
     const updatedGame = await prisma.game.update({
       where: { id: game.id },
       data: {
@@ -109,7 +109,7 @@ export async function POST(
       },
     });
 
-    // Émettre un événement Socket.io via le serveur backend
+    // emit event socket via serveur backend
     try {
       const socketUrl = process.env.SOCKET_URL || 'http://localhost:3001';
       await fetch(`${socketUrl}/emit/game-started`, {

@@ -1,6 +1,90 @@
 @import '../variables';
 @import '../mixins';
 
+// bandeau partie active
+.action-cards__active-game {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-lg;
+  background: linear-gradient(135deg, transparentize($color-blue-500, 0.9) 0%, transparentize($color-purple-500, 0.9) 100%);
+  border: 1px solid transparentize($color-blue-500, 0.7);
+  border-radius: $radius-xl;
+  
+  @include dark-mode {
+    background: linear-gradient(135deg, transparentize($color-blue-500, 0.8) 0%, transparentize($color-purple-500, 0.8) 100%);
+    border-color: transparentize($color-blue-400, 0.6);
+  }
+  
+  &-content {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+  
+  &-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: $color-blue-500;
+    flex-shrink: 0;
+    
+    @include dark-mode {
+      color: $color-blue-400;
+    }
+  }
+  
+  &-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+  
+  &-title {
+    font-weight: $font-weight-semibold;
+    color: $color-slate-900;
+    font-size: $font-size-sm;
+    
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+  
+  &-code {
+    font-size: $font-size-xs;
+    color: $color-slate-600;
+    
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+  
+  &-button {
+    @include button-base;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-lg;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-sm;
+    @include gradient-bg($color-blue-500, $color-purple-500);
+    color: $color-white;
+    @include transition(all, $transition-base);
+    
+    &:hover {
+      @include gradient-bg($color-blue-600, $color-purple-600);
+      box-shadow: $shadow-md;
+    }
+    
+    &-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+
 .action-cards {
   display: grid;
   grid-template-columns: 1fr;
@@ -25,6 +109,16 @@
     &:hover {
       box-shadow: $shadow-xl;
       transform: translateY(-2px);
+    }
+    
+    &--disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      
+      &:hover {
+        box-shadow: none;
+        transform: none;
+      }
     }
   }
   
@@ -128,6 +222,22 @@
         @include dark-mode {
           background-color: $color-gray-600;
         }
+      }
+    }
+    
+    &--disabled {
+      background: $color-slate-300;
+      color: $color-slate-500;
+      cursor: not-allowed;
+      box-shadow: none;
+      
+      @include dark-mode {
+        background: $color-gray-600;
+        color: $color-slate-400;
+      }
+      
+      &:hover {
+        box-shadow: none;
       }
     }
   }

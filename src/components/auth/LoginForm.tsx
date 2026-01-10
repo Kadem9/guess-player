@@ -39,7 +39,7 @@ export default function LoginForm() {
     
     try {
       await login(email, password);
-      // TODO: redirection vers dashboard après connexion
+      // todo: redirection vers dashboard après connexion
     } catch (error: any) {
       setErrors({ general: error.message || 'Erreur de connexion' });
     } finally {

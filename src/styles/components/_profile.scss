@@ -1,0 +1,268 @@
+@import '../variables';
+@import '../mixins';
+
+.profile {
+  min-height: 100vh;
+  padding: $spacing-2xl $spacing-lg;
+  background: linear-gradient(135deg, transparentize($color-blue-500, 0.95) 0%, transparentize($color-purple-500, 0.95) 100%);
+  @include transition(background, $transition-base);
+
+  @include dark-mode {
+    background: linear-gradient(135deg, transparentize($color-gray-900, 0.3) 0%, transparentize($color-gray-800, 0.3) 100%);
+  }
+
+  &__container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  &__back {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    background: none;
+    border: none;
+    color: $color-slate-600;
+    cursor: pointer;
+    margin-bottom: $spacing-xl;
+    font-size: $font-size-base;
+    @include transition(color, $transition-base);
+    @include focus-visible;
+
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+
+    &:hover {
+      color: $color-slate-900;
+
+      @include dark-mode {
+        color: $color-white;
+      }
+    }
+
+    &-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  &__header {
+    @include card-base;
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    padding: $spacing-xl;
+    margin-bottom: $spacing-xl;
+    border: 1px solid $color-slate-200;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-lg;
+    @include transition(all, $transition-base);
+
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+    }
+  }
+
+  &__avatar {
+    width: 5rem;
+    height: 5rem;
+    border-radius: $radius-full;
+    @include gradient-bg($color-blue-500, $color-purple-600, to bottom right);
+    @include flex-center;
+    color: $color-white;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    flex-shrink: 0;
+    box-shadow: $shadow-md;
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__name {
+    color: $color-slate-900;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-xs;
+    @include transition(color, $transition-base);
+
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+
+  &__username {
+    color: $color-slate-600;
+    font-size: $font-size-base;
+    @include transition(color, $transition-base);
+
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+
+  &__stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to(lg) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  &__stat-card {
+    @include card-base;
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-lg;
+    border: 1px solid $color-slate-200;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-md;
+    @include transition(all, $transition-base);
+
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+    }
+
+    &:hover {
+      box-shadow: $shadow-lg;
+      transform: translateY(-2px);
+    }
+  }
+
+  &__stat-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: $radius-lg;
+    @include flex-center;
+    flex-shrink: 0;
+
+    &--blue {
+      @include gradient-bg($color-blue-500, $color-blue-600, to bottom right);
+      color: $color-white;
+    }
+
+    &--green {
+      @include gradient-bg(#10b981, #059669, to bottom right);
+      color: $color-white;
+    }
+
+    &--purple {
+      @include gradient-bg($color-purple-500, $color-purple-600, to bottom right);
+      color: $color-white;
+    }
+
+    &--red {
+      @include gradient-bg($color-red-600, $color-red-700, to bottom right);
+      color: $color-white;
+    }
+  }
+
+  &__stat-content {
+    flex: 1;
+  }
+
+  &__stat-label {
+    color: $color-slate-600;
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-xs;
+    @include transition(color, $transition-base);
+
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+
+  &__stat-value {
+    color: $color-slate-900;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    @include transition(color, $transition-base);
+
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+
+  &__stat-desc {
+    color: $color-slate-500;
+    font-size: $font-size-xs;
+    margin-top: $spacing-xs;
+    @include transition(color, $transition-base);
+
+    @include dark-mode {
+      color: $color-slate-500;
+    }
+  }
+
+  &__empty {
+    @include card-base;
+    padding: $spacing-3xl;
+    text-align: center;
+    border: 1px solid $color-slate-200;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-md;
+    @include transition(all, $transition-base);
+
+    @include dark-mode {
+      background-color: $color-gray-800;
+      border-color: $color-gray-700;
+    }
+  }
+
+  &__empty-icon {
+    color: $color-slate-400;
+    margin: 0 auto $spacing-lg;
+    opacity: 0.5;
+  }
+
+  &__empty-title {
+    color: $color-slate-900;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-sm;
+    @include transition(color, $transition-base);
+
+    @include dark-mode {
+      color: $color-white;
+    }
+  }
+
+  &__empty-text {
+    color: $color-slate-600;
+    font-size: $font-size-base;
+    margin-bottom: $spacing-xl;
+    @include transition(color, $transition-base);
+
+    @include dark-mode {
+      color: $color-slate-400;
+    }
+  }
+
+  &__empty-button {
+    @include button-base;
+    padding: $spacing-md $spacing-xl;
+    border-radius: $radius-xl;
+    font-weight: $font-weight-medium;
+    @include gradient-bg($color-blue-500, $color-purple-500);
+    color: $color-white;
+    box-shadow: $shadow-md;
+    @include transition(all, $transition-base);
+
+    &:hover:not(:disabled) {
+      @include gradient-bg($color-blue-600, $color-purple-600);
+      box-shadow: $shadow-lg;
+      transform: translateY(-2px);
+    }
+  }
+}

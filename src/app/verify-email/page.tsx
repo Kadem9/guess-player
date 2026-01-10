@@ -43,7 +43,7 @@ function VerifyEmailContent() {
       setStatus('success');
       setMessage(data.message || 'Email vérifié avec succès');
 
-      // Rediriger vers la page de connexion après 3 secondes
+      // rediriger vers page connexion après 3s
       setTimeout(() => {
         router.push('/login');
       }, 3000);

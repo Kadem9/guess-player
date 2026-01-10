@@ -118,7 +118,7 @@ export function Header() {
                     <button
                       className="header__dropdown-item"
                       onClick={() => {
-                        router.push('/dashboard');
+                        router.push('/profile');
                         setIsDropdownOpen(false);
                       }}
                     >

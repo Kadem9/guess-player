@@ -8,6 +8,7 @@ import { useSocketContext } from '@/contexts/SocketContext';
 import { useTimerSound } from '@/hooks/useTimerSound';
 import { checkAnswer } from '@/utils/gameUtils';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
+import { Chat } from '@/components/game/Chat';
 import { Player } from '@/types';
 
 interface GamePlayer {
@@ -111,13 +112,13 @@ export function GamePlay({ gameId }: GamePlayProps) {
         throw new Error(data.error || 'Erreur lors de l\'abandon');
       }
 
-      // Émettre l'événement Socket.io pour forfait
+      // emit event socket pr forfait
       const playerInGame = game.players.find(p => p.userId === user.id);
       if (playerInGame) {
         emitPlayerForfeit(gameId, playerInGame.id);
       }
 
-      // Rediriger vers les résultats
+      // redir vers résultats
       router.push(`/game/${gameId}/results`);
     } catch (error: any) {
       console.error('Erreur abandon:', error);
@@ -144,6 +145,21 @@ export function GamePlay({ gameId }: GamePlayProps) {
       }
 
       if (data.game.status === 'FINISHED') {
+        router.push(`/game/${gameId}/results`);
+        return;
+      }
+
+      // vérifier si max tours atteint (même si status pas encore FINISHED)
+      // maxTurns = tours par joueur, donc total = maxTurns * nombre de joueurs
+      // currentTurn commence à 0, donc avec 2 joueurs et 5 tours/joueur = 10 tours (0-9)
+      // la partie se termine quand currentTurn = 10 (après le 10ème tour)
+      const totalTurnsNeeded = data.game.maxTurns * data.game.players.length;
+      if (data.game.currentTurn >= totalTurnsNeeded) {
+        // terminer partie côté serveur
+        await fetch(`/api/games/${gameId}/finish`, {
+          method: 'POST',
+          credentials: 'include',
+        });
         router.push(`/game/${gameId}/results`);
         return;
       }
@@ -219,7 +235,11 @@ export function GamePlay({ gameId }: GamePlayProps) {
     
     const nextTurn = game.currentTurn + 1;
     
-    if (nextTurn >= game.maxTurns) {
+    // maxTurns = tours par joueur, donc total = maxTurns * nombre de joueurs
+    // currentTurn commence à 0, donc avec 2 joueurs et 5 tours/joueur = 10 tours (0-9)
+    // la partie se termine quand currentTurn = 10 (après le 10ème tour)
+    const totalTurnsNeeded = game.maxTurns * game.players.length;
+    if (nextTurn >= totalTurnsNeeded) {
       try {
         await fetch(`/api/games/${gameId}/finish`, {
           method: 'POST',
@@ -244,7 +264,7 @@ export function GamePlay({ gameId }: GamePlayProps) {
         credentials: 'include',
       });
 
-      // Émettre l'événement Socket.io pour changement de tour
+      // emit event socket pr changement tour
       emitTurnChanged(gameId, nextTurn);
       
       await fetchGame();
@@ -253,7 +273,7 @@ export function GamePlay({ gameId }: GamePlayProps) {
     }
   }, [game, user, gameId, fetchGame, router, emitTurnChanged]);
 
-  // Chargement initial
+  // chargement initial
   useEffect(() => {
     if (user && gameId) {
       fetchGame();
@@ -261,10 +281,10 @@ export function GamePlay({ gameId }: GamePlayProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, gameId]);
 
-  // Extraire l'ID complet de la partie de manière stable
+  // id complet de la partie
   const fullGameId = useMemo(() => game?.id, [game?.id]);
 
-  // Rejoindre la room Socket.io avec l'ID complet de la partie
+  // join room socket avec id complet
   useEffect(() => {
     if (isConnected && fullGameId) {
       joinGame(fullGameId);
@@ -275,19 +295,32 @@ export function GamePlay({ gameId }: GamePlayProps) {
     }
   }, [isConnected, fullGameId, joinGame, leaveGame]);
 
-  // Écouter les événements Socket.io
+  // écouter events socket
   useEffect(() => {
     if (!socket || !game) return;
 
     const handleGameUpdated = ({ gameId: updatedGameId }: { gameId: string }) => {
       if (updatedGameId.toLowerCase() === game.id.toLowerCase()) {
-        // Recharger les données de la partie
+        // reload données partie
         fetch(`/api/games/${gameId}`, { credentials: 'include' })
           .then(res => res.json())
           .then(data => {
             if (data.game) {
               if (data.game.status === 'FINISHED') {
                 router.push(`/game/${gameId}/results`);
+                return;
+              }
+              // vérifier si max tours atteint
+              // tour = tous les joueurs ont joué une fois
+              const totalTurnsNeeded = data.game.maxTurns * data.game.players.length;
+              if (data.game.currentTurn >= totalTurnsNeeded) {
+                // terminer partie côté serveur
+                fetch(`/api/games/${gameId}/finish`, {
+                  method: 'POST',
+                  credentials: 'include',
+                }).then(() => {
+                  router.push(`/game/${gameId}/results`);
+                });
                 return;
               }
               setGame(data.game);
@@ -299,11 +332,29 @@ export function GamePlay({ gameId }: GamePlayProps) {
 
     const handleTurnUpdated = ({ gameId: updatedGameId }: { gameId: string }) => {
       if (updatedGameId.toLowerCase() === game.id.toLowerCase()) {
-        // Recharger pour le nouveau tour
+        // reload pr nouveau tour
         fetch(`/api/games/${gameId}`, { credentials: 'include' })
           .then(res => res.json())
           .then(data => {
             if (data.game) {
+              // vérifier si partie terminée
+              if (data.game.status === 'FINISHED') {
+                router.push(`/game/${gameId}/results`);
+                return;
+              }
+              // vérifier si max tours atteint (même si status pas encore FINISHED)
+              // maxTurns = tours par joueur, donc total = maxTurns * nombre de joueurs
+              const totalTurnsNeeded = data.game.maxTurns * data.game.players.length;
+              if (data.game.currentTurn >= totalTurnsNeeded) {
+                // terminer partie côté serveur
+                fetch(`/api/games/${gameId}/finish`, {
+                  method: 'POST',
+                  credentials: 'include',
+                }).then(() => {
+                  router.push(`/game/${gameId}/results`);
+                });
+                return;
+              }
               setGame(data.game);
             }
           })
@@ -328,9 +379,24 @@ export function GamePlay({ gameId }: GamePlayProps) {
     };
   }, [socket, game?.id, gameId, router]);
 
-  // Reset du chrono
+  // reset chrono
   useEffect(() => {
     if (game && game.status === 'IN_PROGRESS' && !showResult) {
+      // vérifier si partie terminée (max tours atteint)
+      // maxTurns = tours par joueur, donc total = maxTurns * nombre de joueurs
+      // currentTurn commence à 0, donc avec 2 joueurs et 5 tours/joueur = 10 tours (0-9)
+      // la partie se termine quand currentTurn = 10 (après le 10ème tour)
+      const totalTurnsNeeded = game.maxTurns * game.players.length;
+      if (game.currentTurn >= totalTurnsNeeded) {
+        fetch(`/api/games/${gameId}/finish`, {
+          method: 'POST',
+          credentials: 'include',
+        }).then(() => {
+          router.push(`/game/${gameId}/results`);
+        });
+        return;
+      }
+
       const currentIndex = game.currentTurn % game.players.length;
       const currentTurnPlayer = game.players[currentIndex];
       const isMyTurn = currentTurnPlayer?.userId === user?.id;
@@ -340,10 +406,23 @@ export function GamePlay({ gameId }: GamePlayProps) {
         setTimeLeft(initialTime);
       }
     }
-  }, [game?.currentTurn, showResult, game?.status, user?.id]);
+  }, [game?.currentTurn, game?.maxTurns, game?.status, showResult, user?.id, gameId, router]);
 
   useEffect(() => {
     if (!game || game.status !== 'IN_PROGRESS' || showResult || !user) {
+      return;
+    }
+
+    // vérifier si partie terminée (max tours atteint)
+    // tour = tous les joueurs ont joué une fois
+    const totalTurnsNeeded = game.maxTurns * game.players.length;
+    if (game.currentTurn >= totalTurnsNeeded) {
+      fetch(`/api/games/${gameId}/finish`, {
+        method: 'POST',
+        credentials: 'include',
+      }).then(() => {
+        router.push(`/game/${gameId}/results`);
+      });
       return;
     }
 
@@ -358,7 +437,7 @@ export function GamePlay({ gameId }: GamePlayProps) {
     if (timeLeft <= 0) {
       setShowResult(true);
       setIsCorrect(false);
-      // On récup la photo du joueur quand le tps est écoulé
+      // récup photo joueur qd tps écoulé
       if (currentPlayer?.nom) {
         fetchPlayerPhoto(currentPlayer.nom);
       }
@@ -374,18 +453,71 @@ export function GamePlay({ gameId }: GamePlayProps) {
     };
   }, [timeLeft, game?.status, game?.currentTurn, showResult, user?.id]);
 
-  // Son d'alerte à 10 secondes
+  // son alerte à 10s
   useEffect(() => {
     if (timeLeft === 10 && !showResult) {
       playWarning();
     }
   }, [timeLeft, showResult, playWarning]);
 
-  // Passage automatique au joueur suivant après affichage du résultat
+  // vérification périodique si partie terminée (pr joueurs en attente)
+  useEffect(() => {
+    if (!game || game.status !== 'IN_PROGRESS' || !user) {
+      return;
+    }
+
+    // vérifier si partie terminée (max tours atteint)
+    // tour = tous les joueurs ont joué une fois
+    const totalTurnsNeeded = game.maxTurns * game.players.length;
+    if (game.currentTurn >= totalTurnsNeeded) {
+      fetch(`/api/games/${gameId}/finish`, {
+        method: 'POST',
+        credentials: 'include',
+      }).then(() => {
+        router.push(`/game/${gameId}/results`);
+      });
+      return;
+    }
+
+    // vérifier périodiquement (toutes les 2s) si partie terminée
+    const checkInterval = setInterval(() => {
+      fetch(`/api/games/${gameId}`, { credentials: 'include' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.game) {
+            // si partie terminée ou max tours atteint
+            // maxTurns = tours par joueur, donc total = maxTurns * nombre de joueurs
+            // currentTurn commence à 0, donc avec 2 joueurs et 5 tours/joueur = 10 tours (0-9)
+            // la partie se termine quand currentTurn = 10 (après le 10ème tour)
+            const totalTurnsNeeded = data.game.maxTurns * data.game.players.length;
+            if (data.game.status === 'FINISHED' || data.game.currentTurn >= totalTurnsNeeded) {
+              if (data.game.status !== 'FINISHED') {
+                // terminer partie si pas encore terminée
+                fetch(`/api/games/${gameId}/finish`, {
+                  method: 'POST',
+                  credentials: 'include',
+                }).then(() => {
+                  router.push(`/game/${gameId}/results`);
+                });
+              } else {
+                router.push(`/game/${gameId}/results`);
+              }
+            }
+          }
+        })
+        .catch(err => console.error('Erreur vérification partie:', err));
+    }, 2000); // vérifier toutes les 2 secondes
+
+    return () => {
+      clearInterval(checkInterval);
+    };
+  }, [game?.id, game?.status, game?.currentTurn, game?.maxTurns, gameId, user, router]);
+
+  // passage auto au joueur suivant après résultat
   useEffect(() => {
     if (!showResult) return;
 
-    // Attendre 3 secondes puis passer automatiquement au joueur suivant
+    // attendre 3s puis passer auto au suivant
     const autoNextTimer = setTimeout(() => {
       handleNextPlayer();
     }, 3000);
@@ -405,7 +537,7 @@ export function GamePlay({ gameId }: GamePlayProps) {
     setIsCorrect(correct);
     setShowResult(true);
 
-    // Récupérer la photo du joueur seulement après la réponse
+    // récup photo joueur après réponse
     if (currentPlayer?.nom) {
       fetchPlayerPhoto(currentPlayer.nom);
     }
@@ -419,7 +551,7 @@ export function GamePlay({ gameId }: GamePlayProps) {
           credentials: 'include',
         });
 
-        // Émettre l'événement Socket.io
+        // emit event socket
         const playerInGame = game.players.find(p => p.userId === user.id);
         if (playerInGame) {
           emitAnswerSubmitted(gameId, playerInGame.id, true);
@@ -428,7 +560,7 @@ export function GamePlay({ gameId }: GamePlayProps) {
         console.error('Erreur mise à jour score:', error);
       }
     } else {
-      // Émettre également pour les mauvaises réponses
+      // emit aussi pr mauvaises réponses
       const playerInGame = game.players.find(p => p.userId === user.id);
       if (playerInGame) {
         emitAnswerSubmitted(gameId, playerInGame.id, false);
@@ -515,7 +647,7 @@ export function GamePlay({ gameId }: GamePlayProps) {
         </button>
 
         <div className="game-play__turn-badge">
-          Tour {game.currentTurn + 1}
+          Tour {Math.floor(game.currentTurn / game.players.length) + 1}
         </div>
       </div>
 
@@ -709,6 +841,7 @@ export function GamePlay({ gameId }: GamePlayProps) {
               </li>
             </ul>
           </div>
+
         </div>
       </div>
 
@@ -722,6 +855,8 @@ export function GamePlay({ gameId }: GamePlayProps) {
         onConfirm={confirmForfeit}
         onCancel={() => setShowForfeitModal(false)}
       />
+
+      <Chat gameId={game?.id || gameId} />
     </main>
   );
 }

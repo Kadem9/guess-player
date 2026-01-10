@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Vérifier l'authentification
+    // vérifier auth
     const user = await verifyTokenFromRequest(request);
     if (!user) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
@@ -22,7 +22,7 @@ export async function GET(
       );
     }
 
-    // Vérifier la connexion à la base de données
+    // vérifier connexion bdd
     try {
       await prisma.$connect();
     } catch (error) {
@@ -33,10 +33,10 @@ export async function GET(
       );
     }
 
-    // Récupérer la partie avec tous les détails (support des codes courts)
+    // récup partie avec tous détails (support codes courts)
     let game;
     if (gameId.length === 8) {
-      // Recherche par les 8 premiers caractères
+      // recherche par 8 premiers caractères
       game = await prisma.game.findFirst({
         where: { 
           id: {
@@ -75,7 +75,7 @@ export async function GET(
         },
       });
     } else {
-      // Recherche par ID complet
+      // recherche par id complet
       game = await prisma.game.findUnique({
         where: { id: gameId },
         include: {
@@ -118,20 +118,23 @@ export async function GET(
       );
     }
 
-    // Vérifier que l'utilisateur est dans cette partie
+    // vérifier que user est dans cette partie ou est le créateur
     const userInGame = game.players.find(player => player.userId === user.id);
-    if (!userInGame) {
+    const isCreator = game.creatorId === user.id;
+    
+    // permettre accès si user est dans partie OU si partie annulée et user est créateur
+    if (!userInGame && !(game.status === 'CANCELLED' && isCreator)) {
       return NextResponse.json(
         { error: 'Vous n\'êtes pas autorisé à voir cette partie' },
         { status: 403 }
       );
     }
 
-    // Déterminer si l'utilisateur est l'hôte
-    const isHost = userInGame.isHost;
+    // déterminer si user est hôte (soit via player, soit créateur si partie annulée)
+    const isHost = userInGame?.isHost || (game.status === 'CANCELLED' && isCreator);
 
-    // Calculer les victoires pour chaque joueur
-    // Récupérer toutes les parties terminées pour calculer les victoires
+    // calculer victoires pr chaque joueur
+    // récup toutes parties terminées pr calculer victoires
     const finishedGames = await prisma.game.findMany({
       where: {
         status: 'FINISHED'
@@ -141,40 +144,43 @@ export async function GET(
       }
     });
 
-    // Calculer les victoires pour chaque joueur de la partie actuelle
-    const playersWithStats = await Promise.all(
-      game.players.map(async (player) => {
-        let victories = 0;
+    // calculer victoires pr chaque joueur de partie actuelle
+    // si partie annulée et pas de joueurs, retourner tableau vide
+    const playersWithStats = game.players.length > 0 
+      ? await Promise.all(
+          game.players.map(async (player) => {
+            let victories = 0;
 
-        finishedGames.forEach(finishedGame => {
-          const playerInGame = finishedGame.players.find(p => p.userId === player.userId);
-          if (playerInGame) {
-            // Trier les joueurs par score pour déterminer le gagnant
-            const sortedPlayers = [...finishedGame.players].sort((a, b) => b.score - a.score);
-            const winner = sortedPlayers[0];
-            const secondPlace = sortedPlayers[1];
-            
-            // Une victoire compte seulement si :
-            // 1. Le joueur est premier
-            // 2. Il a un score > 0
-            // 3. Il a un score strictement supérieur au deuxième (pas d'égalité)
-            if (winner && 
-                winner.userId === player.userId && 
-                winner.score > 0 &&
-                (!secondPlace || winner.score > secondPlace.score)) {
-              victories++;
-            }
-          }
-        });
+            finishedGames.forEach(finishedGame => {
+              const playerInGame = finishedGame.players.find(p => p.userId === player.userId);
+              if (playerInGame) {
+                // trier joueurs par score pr déterminer gagnant
+                const sortedPlayers = [...finishedGame.players].sort((a, b) => b.score - a.score);
+                const winner = sortedPlayers[0];
+                const secondPlace = sortedPlayers[1];
+                
+                // victoire compte seulement si :
+                // 1. joueur est premier
+                // 2. il a score > 0
+                // 3. il a score strictement supérieur au deuxième (pas égalité)
+                if (winner && 
+                    winner.userId === player.userId && 
+                    winner.score > 0 &&
+                    (!secondPlace || winner.score > secondPlace.score)) {
+                  victories++;
+                }
+              }
+            });
 
-        return {
-          ...player,
-          victories
-        };
-      })
-    );
+            return {
+              ...player,
+              victories
+            };
+          })
+        )
+      : [];
 
-    // Remplacer les joueurs par ceux avec les statistiques
+    // remplacer joueurs par ceux avec stats
     const gameWithStats = {
       ...game,
       players: playersWithStats

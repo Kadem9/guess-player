@@ -31,7 +31,6 @@ function compileTemplate(templateName) {
   }
 
   fs.writeFileSync(htmlPath, html, 'utf-8');
-  console.log(`${templateName}.mjml compilé → ${templateName}.html`);
 }
 
 // Compiler tous les templates
@@ -40,10 +39,7 @@ const templateFiles = fs.readdirSync(templatesDir)
   .map(file => file.replace('.mjml', ''));
 
 if (templateFiles.length === 0) {
-  console.log('Aucun template MJML trouvé');
 } else {
-  console.log(`Compilation de ${templateFiles.length} template(s)...\n`);
   templateFiles.forEach(compileTemplate);
-  console.log('Compilation terminée !');
 }
 

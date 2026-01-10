@@ -4,13 +4,13 @@ import { verifyTokenFromRequest } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    // Vérifier l'authentification
+    // vérifier auth
     const user = await verifyTokenFromRequest(request);
     if (!user) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
     }
 
-    // Récupérer les paramètres de la requête
+    // récup paramètres requête
     const body = await request.json();
     const { 
       maxPlayers = 4, 
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       timePerTurn = 30 
     } = body;
 
-    // Créer une nouvelle partie
+    // créer nouvelle partie
     const game = await prisma.game.create({
       data: {
         creatorId: user.id,
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Ajouter le créateur comme premier joueur (hôte)
+    // ajouter créateur comme premier joueur (hôte)
     await prisma.gamePlayer.create({
       data: {
         gameId: game.id,
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Récupérer la partie avec les joueurs
+    // récup partie avec joueurs
     const gameWithPlayers = await prisma.game.findUnique({
       where: { id: game.id },
       include: {

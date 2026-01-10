@@ -1,2 +1,2 @@
-// j'ai déplacé dans
+// déplacé dans
 // scripts/compile-email-templates.js

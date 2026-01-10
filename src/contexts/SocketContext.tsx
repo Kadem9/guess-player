@@ -7,13 +7,14 @@ import { useSocket } from '@/hooks/useSocket';
 interface SocketContextType {
   socket: Socket | null;
   isConnected: boolean;
-  joinGame: (gameId: string) => void;
+  joinGame: (gameId: string, userId?: string, isHost?: boolean) => void;
   leaveGame: (gameId: string) => void;
   emitStartGame: (gameId: string) => void;
   emitAnswerSubmitted: (gameId: string, playerId: string, isCorrect: boolean) => void;
   emitTurnChanged: (gameId: string, turn: number) => void;
   emitPlayerForfeit: (gameId: string, playerId: string) => void;
   emitGameEnded: (gameId: string) => void;
+  emitChatMessage: (gameId: string, userId: string, username: string, message: string) => void;
 }
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
@@ -21,10 +22,11 @@ const SocketContext = createContext<SocketContextType | undefined>(undefined);
 export function SocketProvider({ children }: { children: React.ReactNode }) {
   const { socket, isConnected } = useSocket();
 
-  const joinGame = useCallback((gameId: string) => {
+  const joinGame = useCallback((gameId: string, userId?: string, isHost?: boolean) => {
     const normalizedGameId = gameId.toLowerCase();
     if (socket) {
-      socket.emit('join-game', normalizedGameId);
+      // envoyer les infos utilisateur pour que le serveur puisse gérer la déconnexion
+      socket.emit('join-game', { gameId: normalizedGameId, userId, isHost });
     }
   }, [socket]);
 
@@ -70,6 +72,19 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     }
   }, [socket]);
 
+  const emitChatMessage = useCallback((gameId: string, userId: string, username: string, message: string) => {
+    const normalizedGameId = gameId.toLowerCase();
+    if (socket && socket.connected) {
+      socket.emit('chat-message', {
+        gameId: normalizedGameId,
+        userId,
+        username,
+        message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }, [socket]);
+
   const value: SocketContextType = useMemo(() => ({
     socket,
     isConnected,
@@ -80,7 +95,8 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     emitTurnChanged,
     emitPlayerForfeit,
     emitGameEnded,
-  }), [socket, isConnected, joinGame, leaveGame, emitStartGame, emitAnswerSubmitted, emitTurnChanged, emitPlayerForfeit, emitGameEnded]);
+    emitChatMessage,
+  }), [socket, isConnected, joinGame, leaveGame, emitStartGame, emitAnswerSubmitted, emitTurnChanged, emitPlayerForfeit, emitGameEnded, emitChatMessage]);
 
   return (
     <SocketContext.Provider value={value}>

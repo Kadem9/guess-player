@@ -8,7 +8,7 @@ const { setupEmitRoutes } = require('./routes/emitRoutes');
 const app = express();
 const httpServer = createServer(app);
 
-// Configuration CORS
+// config cors
 app.use(cors({
   origin: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   credentials: true,
@@ -16,7 +16,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// Configuration Socket.io
+// config socket.io
 const io = new Server(httpServer, {
   cors: {
     origin: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
@@ -24,16 +24,15 @@ const io = new Server(httpServer, {
   },
 });
 
-// handlers Socket.io
+// handlers socket.io
 setupGameSocketHandlers(io);
 
-// routes HTTP
+// routes http
 setupEmitRoutes(app, io);
 
 const PORT = process.env.SOCKET_PORT || 3001;
 
 httpServer.listen(PORT, () => {
-  console.log(`Serveur WebSocket Socket.io lancé sur le port ${PORT}`);
 });
 
 

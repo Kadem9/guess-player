@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Récupérer toutes les parties terminées où l'utilisateur a joué
+    // récup toutes parties terminées où user a joué
     const finishedGames = await prisma.game.findMany({
       where: {
         status: 'FINISHED',
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    // Calculer les statistiques
+    // calculer stats
     const partiesJouees = finishedGames.length;
     
     let victoires = 0;
@@ -52,20 +52,20 @@ export async function GET(request: NextRequest) {
     let scoreMoyen = 0;
 
     finishedGames.forEach(game => {
-      // Trouver le joueur dans cette partie
+      // trouver joueur dans cette partie
       const playerInGame = game.players.find(p => p.userId === user.id);
       if (playerInGame) {
         scoreTotal += playerInGame.score;
 
-        // Vérifier si c'est une victoire (score le plus élevé)
+        // vérifier si c'est victoire (score le plus élevé)
         const sortedPlayers = [...game.players].sort((a, b) => b.score - a.score);
         const winner = sortedPlayers[0];
         const secondPlace = sortedPlayers[1];
         
-        // Une victoire compte seulement si :
-        // 1. Le joueur est premier
-        // 2. Il a un score > 0
-        // 3. Il a un score strictement supérieur au deuxième (pas d'égalité)
+        // victoire compte seulement si :
+        // 1. joueur est premier
+        // 2. il a score > 0
+        // 3. il a score strictement supérieur au deuxième (pas égalité)
         if (winner && 
             winner.userId === user.id && 
             winner.score > 0 &&

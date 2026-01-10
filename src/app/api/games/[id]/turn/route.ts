@@ -69,6 +69,38 @@ export async function POST(
       );
     }
 
+    // vérifier si on a atteint le nombre max de tours
+    // maxTurns = tours par joueur, donc total = maxTurns * nombre de joueurs
+    // currentTurn commence à 0, donc avec 2 joueurs et 5 tours/joueur = 10 tours (0-9)
+    // la partie se termine quand currentTurn = 10 (après le 10ème tour)
+    const totalTurnsNeeded = game.maxTurns * game.players.length;
+    if (turn >= totalTurnsNeeded) {
+      await prisma.game.update({
+        where: { id: game.id },
+        data: {
+          status: 'FINISHED'
+        }
+      });
+
+      // émettre event socket pr notifier tous les joueurs
+      try {
+        const socketUrl = process.env.SOCKET_URL || 'http://localhost:3001';
+        await fetch(`${socketUrl}/emit/game-ended`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ gameId: game.id }),
+        });
+      } catch (error) {
+        console.error('Erreur émission Socket.io:', error);
+      }
+
+      return NextResponse.json({
+        success: true,
+        gameFinished: true,
+        message: 'Partie terminée (nombre de tours max atteint)'
+      });
+    }
+
     const updatedGame = await prisma.game.update({
       where: { id: game.id },
       data: {

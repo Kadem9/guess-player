@@ -80,7 +80,7 @@ export default function RegisterForm() {
       const result = await register(formData);
       setSuccessMessage(result.message);
       setErrors({});
-      // je reset le formulaire
+      // reset formulaire
       setFormData({
         nom: '',
         prenom: '',

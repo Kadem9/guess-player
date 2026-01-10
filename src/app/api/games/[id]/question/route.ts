@@ -25,7 +25,7 @@ export async function POST(
       );
     }
 
-    // Recherche de la partie
+    // recherche partie
     let game;
     if (gameId.length === 8) {
       game = await prisma.game.findFirst({
@@ -57,7 +57,7 @@ export async function POST(
       );
     }
 
-    // Vérifier que l'utilisateur est dans cette partie
+    // vérifier que user est dans cette partie
     const userInGame = game.players.find(p => p.userId === user.id);
     if (!userInGame) {
       return NextResponse.json(
@@ -66,12 +66,12 @@ export async function POST(
       );
     }
 
-    // Vérifier si une question existe déjà pour le tour actuel
+    // vérifier si question existe déjà pr tour actuel
     const currentRound = game.currentTurn + 1;
     const existingQuestion = game.questions.find(q => q.round === currentRound);
 
     if (existingQuestion) {
-      // Une question existe déjà pour ce tour, la retourner
+      // question existe déjà pr ce tour, la retourner
       const difficulty = game.difficulty as Difficulty;
       const allPlayers = getPlayersByDifficulty(difficulty);
       const existingPlayer = allPlayers.find(p => p.id === existingQuestion.playerId);
@@ -85,20 +85,20 @@ export async function POST(
       }
     }
 
-    // Récupérer les joueurs déjà utilisés dans cette partie
+    // récup joueurs déjà utilisés dans cette partie
     const usedPlayerIds = game.questions.map(q => q.playerId);
     
-    // Obtenir tous les joueurs disponibles selon la difficulté
+    // obtenir tous joueurs disponibles selon difficulté
     const difficulty = game.difficulty as Difficulty;
     const allPlayers = getPlayersByDifficulty(difficulty);
     
-    // Filtrer les joueurs non utilisés
+    // filtrer joueurs non utilisés
     const availablePlayers = allPlayers.filter(p => !usedPlayerIds.includes(p.id));
     
-    // Vérifier s'il reste assez de joueurs pour le tour suivant seulement
-    // On continue tant qu'il reste au moins 1 joueur disponible
+    // vérifier s'il reste assez de joueurs pr tour suivant
+    // on continue tant qu'il reste min 1 joueur disponible
     if (availablePlayers.length === 0) {
-      // Plus de joueurs disponibles, terminer la partie
+      // plus de joueurs disponibles, terminer partie
       await prisma.game.update({
         where: { id: game.id },
         data: {
@@ -113,11 +113,11 @@ export async function POST(
       });
     }
 
-    // Sélectionner un joueur aléatoire parmi les disponibles
+    // sélectionner joueur aléatoire parmi disponibles
     const randomIndex = Math.floor(Math.random() * availablePlayers.length);
     const selectedPlayer = availablePlayers[randomIndex];
 
-    // Stocker la question dans la base de données
+    // stocker question dans bdd
     await prisma.question.create({
       data: {
         gameId: game.id,

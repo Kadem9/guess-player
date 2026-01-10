@@ -41,16 +41,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Générer un nouveau token
+    // générer nouveau token
     const emailToken = generateEmailToken();
 
-    // Mettre à jour le token dans la base de données
+    // mettre à jour token dans bdd
     await prisma.user.update({
       where: { id: user.id },
       data: { emailToken }
     });
 
-    // Envoyer l'email de vérification
+    // envoyer email vérification
     const verificationUrl = `${process.env.URL_MAIL || 'http://localhost:3000'}/verify-email?token=${emailToken}`;
     
     const emailResult = await EmailService.sendVerificationEmail(email, {

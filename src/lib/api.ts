@@ -10,7 +10,7 @@ export async function apiCall(endpoint: string, options: RequestInit = {}) {
     ...(options.headers as Record<string, string> || {}),
   };
 
-  // ajout du token dans les cookies
+  // ajout token dans cookies
   if (authToken) {
     headers['Authorization'] = `Bearer ${authToken}`;
   }

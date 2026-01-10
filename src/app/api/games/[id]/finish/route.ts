@@ -23,7 +23,7 @@ export async function POST(
       );
     }
 
-    // Recherche de la partie
+    // recherche partie
     let game;
     if (gameId.length === 8) {
       game = await prisma.game.findFirst({
@@ -47,7 +47,7 @@ export async function POST(
       );
     }
 
-    // Terminer la partie
+    // terminer partie
     await prisma.game.update({
       where: { id: game.id },
       data: {

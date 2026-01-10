@@ -4,7 +4,7 @@ import { verifyTokenFromRequest } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    // Vérifier l'authentification
+    // vérifier auth
     const user = await verifyTokenFromRequest(request);
     if (!user) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
@@ -20,10 +20,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Vérifier que la partie existe (support des codes courts)
+    // vérifier que partie existe (support codes courts)
     let game;
     if (gameId.length === 8) {
-      // Recherche par les 8 premiers caractères
+      // recherche par 8 premiers caractères
       game = await prisma.game.findFirst({
         where: { 
           id: {
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
         },
       });
     } else {
-      // Recherche par ID complet
+      // recherche par id complet
       game = await prisma.game.findUnique({
         where: { id: gameId },
         include: {
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Vérifier que la partie est en attente
+    // vérifier que partie est en attente
     if (game.status !== 'WAITING') {
       return NextResponse.json(
         { error: 'Cette partie n\'accepte plus de nouveaux joueurs' },
@@ -59,10 +59,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Vérifier que l'utilisateur n'est pas déjà dans la partie
+    // vérifier que user n'est pas déjà dans partie
     const existingPlayer = game.players.find(player => player.userId === user.id);
     if (existingPlayer) {
-      // Le joueur est déjà dans la partie, on retourne la partie complète
+      // joueur déjà dans partie, retourner partie complète
       const fullGame = await prisma.game.findUnique({
         where: { id: game.id },
         include: {
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Vérifier le nombre maximum de joueurs
+    // vérifier nombre max joueurs
     if (game.players.length >= game.maxPlayers) {
       return NextResponse.json(
         { error: 'Cette partie est complète' },
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Ajouter le joueur à la partie
+    // ajouter joueur à partie
     const gamePlayer = await prisma.gamePlayer.create({
       data: {
         gameId: game.id,
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Récupérer la partie mise à jour avec tous les joueurs
+    // récup partie mise à jour avec tous joueurs
     const updatedGame = await prisma.game.findUnique({
       where: { id: game.id },
       include: {
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Émettre un événement Socket.io via le serveur backend
+    // emit event socket via serveur backend
     try {
       const socketUrl = process.env.SOCKET_URL || 'http://localhost:3001';
       await fetch(`${socketUrl}/emit/game-updated`, {

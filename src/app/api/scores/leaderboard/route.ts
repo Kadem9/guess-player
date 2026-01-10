@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Récupérer toutes les parties terminées avec leurs joueurs
+    // récup toutes parties terminées avec leurs joueurs
     const finishedGames = await prisma.game.findMany({
       where: {
         status: 'FINISHED'
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    // Calculer les statistiques pour chaque joueur
+    // calculer stats pr chaque joueur
     const playerStats = new Map<string, {
       userId: string;
       username: string;
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     }>();
 
     finishedGames.forEach(game => {
-      // Trier les joueurs par score pour déterminer le gagnant
+      // trier joueurs par score pr déterminer gagnant
       const sortedPlayers = [...game.players].sort((a, b) => b.score - a.score);
       const winner = sortedPlayers[0];
 
@@ -69,28 +69,28 @@ export async function GET(request: NextRequest) {
         stats.totalScore += player.score;
         stats.gamesPlayed += 1;
 
-        // Si c'est le gagnant de cette partie
+        // si c'est gagnant de cette partie
         if (winner && winner.userId === userId) {
           stats.wins += 1;
         }
       });
     });
 
-    // Convertir en tableau et trier par score total (puis par victoires en cas d'égalité)
+    // convertir en tableau et trier par score total (puis par victoires en cas égalité)
     const leaderboard = Array.from(playerStats.values())
       .sort((a, b) => {
-        // D'abord par score total
+        // d'abord par score total
         if (b.totalScore !== a.totalScore) {
           return b.totalScore - a.totalScore;
         }
-        // En cas d'égalité, par nombre de victoires
+        // en cas égalité, par nombre victoires
         if (b.wins !== a.wins) {
           return b.wins - a.wins;
         }
-        // En cas d'égalité encore, par nombre de parties jouées
+        // en cas égalité encore, par nombre parties jouées
         return b.gamesPlayed - a.gamesPlayed;
       })
-      .slice(0, 5) // Top 5 seulement
+      .slice(0, 5) // top 5 seulement
       .map((entry, index) => ({
         rank: index + 1,
         username: entry.username,

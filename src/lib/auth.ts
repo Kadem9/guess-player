@@ -41,7 +41,7 @@ export async function verifyTokenFromRequest(request: any): Promise<User | null>
     if (authHeader && authHeader.startsWith('Bearer ')) {
       token = authHeader.substring(7);
     } else {
-      // sinn depuis les cookies car on l'enregistre aussi
+      // sinon depuis cookies car on l'enregistre aussi
       token = request.cookies.get('auth-token')?.value || null;
     }
 

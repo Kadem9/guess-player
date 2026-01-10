@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { ArrowLeft, Copy, Users, Calendar, Check, Clock, Trophy } from 'lucide-react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { ArrowLeft, Copy, Users, Calendar, Check, Clock, Trophy, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSocketContext } from '@/contexts/SocketContext';
 import { gameApi } from '@/lib/api';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
+import { Chat } from '@/components/game/Chat';
 
 interface GamePlayer {
   id: string;
@@ -53,6 +54,8 @@ export function GameLobby({ gameId }: GameLobbyProps) {
   const [starting, setStarting] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showForfeitModal, setShowForfeitModal] = useState(false);
+  const [removingPlayerId, setRemovingPlayerId] = useState<string | null>(null);
+  const leavingRef = useRef(false);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -85,7 +88,7 @@ export function GameLobby({ gameId }: GameLobbyProps) {
     }
   }, [gameId, router]);
 
-  // Chargement initial
+  // chargement initial
   useEffect(() => {
     if (user && gameId) {
       fetchGame();
@@ -93,36 +96,65 @@ export function GameLobby({ gameId }: GameLobbyProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, gameId]);
 
-  // Extraire l'ID complet de la partie de manière stable
+  // id complet de la partie
   const fullGameId = useMemo(() => game?.id, [game?.id]);
 
-  // Rejoindre la room Socket.io avec l'ID complet de la partie
+  // join room socket avec id complet et infos utilisateur
   useEffect(() => {
-    if (isConnected && fullGameId) {
-      joinGame(fullGameId);
+    if (isConnected && fullGameId && user && game) {
+      const playerInGame = game.players.find(p => p.userId === user.id);
+      const userIsHost = playerInGame?.isHost || false;
+      
+      joinGame(fullGameId, user.id, userIsHost);
 
       return () => {
         leaveGame(fullGameId);
+        // le serveur socket gère le retrait de la DB quand le socket se déconnecte
       };
     }
-  }, [isConnected, fullGameId, joinGame, leaveGame]);
+  }, [isConnected, fullGameId, joinGame, leaveGame, user?.id, game?.players]);
 
-  // Écouter les événements Socket.io
+  // note: la déconnexion est gérée côté serveur socket
+  // quand un socket se déconnecte, le serveur appelle l'API pour retirer le joueur
+
+  // écouter events socket
   useEffect(() => {
     if (!socket || !game) return;
 
     const handleGameUpdated = ({ gameId: updatedGameId }: { gameId: string }) => {
       if (updatedGameId.toLowerCase() === game.id.toLowerCase()) {
-        // Recharger les données de la partie
+        // reload données partie
         fetch(`/api/games/${gameId}`, { credentials: 'include' })
           .then(res => res.json())
           .then(data => {
             if (data.game) {
+              // si partie annulée, rediriger au dashboard
+              if (data.game.status === 'CANCELLED') {
+                router.push('/dashboard');
+                return;
+              }
+              
+              // vérifier si l'utilisateur est toujours dans la partie
+              const userStillInGame = data.game.players.some((p: any) => p.userId === user?.id);
+              if (!userStillInGame) {
+                router.push('/dashboard');
+                return;
+              }
+              
               setGame(data.game);
               setIsHost(data.isHost);
+            } else {
+              // si pas de game retourné, l'utilisateur n'est plus dans la partie
+              router.push('/dashboard');
             }
           })
-          .catch(err => console.error('Erreur rechargement partie:', err));
+          .catch(err => {
+            console.error('[CLIENT] [LOBBY] Erreur rechargement partie:', err);
+            // si erreur 403, l'utilisateur n'a plus accès
+            if (err.message?.includes('403') || err.message?.includes('Non autorisé')) {
+              router.push('/dashboard');
+            }
+          });
       }
     };
 
@@ -155,9 +187,9 @@ export function GameLobby({ gameId }: GameLobbyProps) {
         throw new Error(data.error || 'Erreur lors du démarrage');
       }
 
-      // L'API émet déjà l'événement Socket.io game-started
-      // Tous les joueurs (y compris l'hôte) recevront l'événement et redirigeront
-      // On ne met pas setStarting(false) car la redirection va se faire via l'événement
+      // api emit déjà event socket game-started
+      // tous les joueurs (y compris hôte) recevront event et redirigeront
+      // on met pas setStarting(false) car redirection va se faire via event
     } catch (error: any) {
       setError(error.message);
       setStarting(false);
@@ -226,17 +258,99 @@ export function GameLobby({ gameId }: GameLobbyProps) {
 
   const gameCode = game.id.slice(0, 8).toUpperCase();
 
-  const handleLeaveGame = () => {
-    if (!game || !user) return;
+  const handleLeaveGame = async () => {
+    if (!game || !user) {
+      return;
+    }
 
-    // Si la partie est en cours, afficher le modal de confirmation
+    if (leavingRef.current) {
+      return;
+    }
+
+    leavingRef.current = true;
+
+    // si partie en cours, afficher modal confirmation
     if (game.status === 'IN_PROGRESS') {
+      leavingRef.current = false;
       setShowForfeitModal(true);
       return;
     }
 
-    // Si la partie est en attente, simplement retourner au dashboard
+    // si partie en attente, retirer le joueur immédiatement
+    if (game.status === 'WAITING') {
+      try {
+        const response = await fetch(`/api/games/${gameId}/leave`, {
+          method: 'POST',
+          credentials: 'include',
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // si partie annulée (hôte parti ou plus assez de joueurs), rediriger direct
+          if (data.gameCancelled) {
+            router.push('/dashboard');
+            return;
+          }
+          // sinon, event socket déjà émis par l'api, les autres joueurs seront notifiés
+          // rediriger après un court délai pour laisser le temps à l'event socket d'être émis
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 100);
+          return;
+        } else {
+          leavingRef.current = false;
+          console.error('[CLIENT] [LOBBY] Erreur quitter partie:', data.error);
+        }
+      } catch (error) {
+        leavingRef.current = false;
+        console.error('[CLIENT] [LOBBY] Erreur quitter partie:', error);
+      }
+    }
+
+    // fallback: redirection directe si pas WAITING
     router.push('/dashboard');
+  };
+
+  const handleRemovePlayer = async (playerId: string) => {
+    if (!game || !isHost || game.status !== 'WAITING') return;
+
+    setRemovingPlayerId(playerId);
+    try {
+      const response = await fetch(`/api/games/${gameId}/remove-player`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playerId }),
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // émettre event socket pr notifier les autres
+        const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001';
+        try {
+          await fetch(`${socketUrl}/emit/game-updated`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gameId: game.id }),
+          });
+        } catch (socketError) {
+          console.error('Erreur émission socket:', socketError);
+        }
+
+        // recharger les données
+        await fetchGame();
+      } else {
+        console.error('Erreur exclusion joueur:', data.error);
+        alert(data.error || 'Erreur lors de l\'exclusion du joueur');
+      }
+    } catch (error) {
+      console.error('Erreur exclusion joueur:', error);
+      alert('Erreur lors de l\'exclusion du joueur');
+    } finally {
+      setRemovingPlayerId(null);
+    }
   };
 
   const confirmForfeit = async () => {
@@ -256,7 +370,7 @@ export function GameLobby({ gameId }: GameLobbyProps) {
         throw new Error(data.error || 'Erreur lors de l\'abandon');
       }
 
-      // Rediriger vers les résultats
+      // redir vers résultats
       router.push(`/game/${gameId}/results`);
     } catch (error: any) {
       console.error('Erreur abandon:', error);
@@ -343,6 +457,20 @@ export function GameLobby({ gameId }: GameLobbyProps) {
                       </span>
                       <span className="game-lobby__player-stats-label">victoire{(player.victories || 0) > 1 ? 's' : ''}</span>
                     </div>
+                    {isHost && game.status === 'WAITING' && !player.isHost && (
+                      <button
+                        onClick={() => handleRemovePlayer(player.id)}
+                        disabled={removingPlayerId === player.id}
+                        className="game-lobby__remove-button"
+                        title="Exclure ce joueur"
+                      >
+                        {removingPlayerId === player.id ? (
+                          <div className="game-lobby__remove-button-spinner"></div>
+                        ) : (
+                          <X size={16} />
+                        )}
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -357,7 +485,7 @@ export function GameLobby({ gameId }: GameLobbyProps) {
                   disabled={starting || game.players.length < 2}
                   className="game-lobby__start-button game-lobby__start-button--primary"
                 >
-                  {starting ? 'Démarrage...' : 'Lancer la partie'}
+                  {starting ? 'Démarrage...' : game.players.length < 2 ? 'En attente de joueurs...' : 'Lancer la partie'}
                 </button>
               ) : (
                 <div className="game-lobby__waiting">
@@ -430,6 +558,7 @@ export function GameLobby({ gameId }: GameLobbyProps) {
               </li>
             </ul>
           </div>
+
         </div>
       </div>
 
@@ -443,6 +572,8 @@ export function GameLobby({ gameId }: GameLobbyProps) {
         onConfirm={confirmForfeit}
         onCancel={() => setShowForfeitModal(false)}
       />
+
+      <Chat gameId={game?.id || gameId} />
     </main>
   );
 }

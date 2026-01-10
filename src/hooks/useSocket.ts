@@ -11,11 +11,12 @@ export function useSocket() {
     const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001';
     
     const socketInstance = io(SOCKET_URL, {
-      transports: ['websocket', 'polling'],
-      timeout: 5000,
+      transports: ['polling', 'websocket'], // polling en premier pr fallback
+      timeout: 10000,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
-      reconnectionAttempts: 3,
+      reconnectionAttempts: 5,
+      autoConnect: true,
     });
 
     socketInstance.on('connect', () => {
@@ -28,6 +29,7 @@ export function useSocket() {
 
     socketInstance.on('connect_error', (error) => {
       console.error('Socket.io connection error:', error.message);
+      setIsConnected(false);
     });
 
     setSocket(socketInstance);

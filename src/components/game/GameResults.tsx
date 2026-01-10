@@ -141,7 +141,7 @@ export function GameResults({ gameId }: GameResultsProps) {
           {isWinner ? 'Félicitations !' : 'Partie terminée !'}
         </h1>
         <p className="game-results__subtitle">
-          {game.currentTurn} tours joués
+          {game.maxTurns} tours joués
         </p>
       </div>
 
