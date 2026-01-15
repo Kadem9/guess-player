@@ -41,3 +41,6 @@ README.md
 /src/generated/prisma
 
 backend/node_modules
+
+# PM2 logs
+/logs
