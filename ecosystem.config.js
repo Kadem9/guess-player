@@ -1,3 +1,7 @@
+// Lit les variables d'environnement du système
+const frontendPort = process.env.FRONTEND_PORT || 3002;
+const backendPort = process.env.BACKEND_PORT || 3003;
+
 module.exports = {
   apps: [
     {
@@ -9,7 +13,8 @@ module.exports = {
       exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
-        PORT: 3002  // Change ce port si nécessaire
+        // Port du frontend - défini via FRONTEND_PORT ou 3002 par défaut
+        PORT: frontendPort
       },
       error_file: './logs/frontend-error.log',
       out_file: './logs/frontend-out.log',
@@ -28,7 +33,8 @@ module.exports = {
       exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
-        SOCKET_PORT: 3003  // Change ce port si nécessaire
+        // Port du backend Socket.io - défini via BACKEND_PORT ou 3003 par défaut
+        SOCKET_PORT: backendPort
       },
       error_file: '../logs/backend-error.log',
       out_file: '../logs/backend-out.log',

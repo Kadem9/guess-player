@@ -72,69 +72,69 @@ export function ActionCards() {
         </div>
       )}
 
-      <div className="action-cards">
+    <div className="action-cards">
         <div className={`action-cards__card ${activeGame ? 'action-cards__card--disabled' : ''}`}>
-          <div className="action-cards__icon-wrapper action-cards__icon-wrapper--blue">
-            <Plus className="action-cards__icon" />
-          </div>
-          <h3 className="action-cards__card-title">
-            Créer une partie
-          </h3>
-          <p className="action-cards__card-description">
+        <div className="action-cards__icon-wrapper action-cards__icon-wrapper--blue">
+          <Plus className="action-cards__icon" />
+        </div>
+        <h3 className="action-cards__card-title">
+          Créer une partie
+        </h3>
+        <p className="action-cards__card-description">
             {activeGame 
               ? 'Terminez votre partie en cours pour en créer une nouvelle'
               : 'Lancez une nouvelle partie et invitez vos amis'
             }
-          </p>
-          <button 
+        </p>
+        <button 
             onClick={() => !activeGame && router.push('/game/create')}
             disabled={!!activeGame || loading}
             className={`action-cards__button ${activeGame ? 'action-cards__button--disabled' : 'action-cards__button--primary'}`}
-          >
+        >
             {activeGame ? 'Indisponible' : 'Créer'}
-          </button>
-        </div>
+        </button>
+      </div>
 
         <div className={`action-cards__card ${activeGame ? 'action-cards__card--disabled' : ''}`}>
-          <div className="action-cards__icon-wrapper action-cards__icon-wrapper--purple">
-            <UserPlus className="action-cards__icon" />
-          </div>
-          <h3 className="action-cards__card-title">
-            Rejoindre une partie
-          </h3>
-          <p className="action-cards__card-description">
+        <div className="action-cards__icon-wrapper action-cards__icon-wrapper--purple">
+          <UserPlus className="action-cards__icon" />
+        </div>
+        <h3 className="action-cards__card-title">
+          Rejoindre une partie
+        </h3>
+        <p className="action-cards__card-description">
             {activeGame 
               ? 'Terminez votre partie en cours pour en rejoindre une autre'
               : 'Entrez le code d\'une partie existante'
             }
-          </p>
-          <button 
+        </p>
+        <button 
             onClick={() => !activeGame && router.push('/game/join')}
             disabled={!!activeGame || loading}
             className={`action-cards__button ${activeGame ? 'action-cards__button--disabled' : 'action-cards__button--secondary'}`}
-          >
+        >
             {activeGame ? 'Indisponible' : 'Rejoindre'}
-          </button>
-        </div>
-
-        <div className="action-cards__card">
-          <div className="action-cards__icon-wrapper action-cards__icon-wrapper--amber">
-            <Trophy className="action-cards__icon" />
-          </div>
-          <h3 className="action-cards__card-title">
-            Classement
-          </h3>
-          <p className="action-cards__card-description">
-            Consultez les meilleurs joueurs
-          </p>
-          <button 
-            onClick={() => router.push('/leaderboard')}
-            className="action-cards__button action-cards__button--outline"
-          >
-            Voir
-          </button>
-        </div>
+        </button>
       </div>
+
+      <div className="action-cards__card">
+        <div className="action-cards__icon-wrapper action-cards__icon-wrapper--amber">
+          <Trophy className="action-cards__icon" />
+        </div>
+        <h3 className="action-cards__card-title">
+          Classement
+        </h3>
+        <p className="action-cards__card-description">
+          Consultez les meilleurs joueurs
+        </p>
+        <button 
+          onClick={() => router.push('/leaderboard')}
+          className="action-cards__button action-cards__button--outline"
+        >
+          Voir
+        </button>
+      </div>
+    </div>
     </>
   );
 }

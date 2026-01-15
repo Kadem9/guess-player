@@ -34,7 +34,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
         if (typeof valueToStore === 'string') {
           window.localStorage.setItem(key, valueToStore);
         } else {
-          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
         }
       }
     } catch (error) {
